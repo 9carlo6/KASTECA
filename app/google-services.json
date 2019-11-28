@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "734535263538",
+    "firebase_url": "https://kasteca.firebaseio.com",
+    "project_id": "kasteca",
+    "storage_bucket": "kasteca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:734535263538:android:7add1c7ddd9ac6c822632b",
+        "android_client_info": {
+          "package_name": "com.kasteca"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "734535263538-r34n3ak9d3s79dklkbu8f13rlnkq8jak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3TlFTQ6toarL9RudY-9dp5CjvGpe-qQM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "734535263538-r34n3ak9d3s79dklkbu8f13rlnkq8jak.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
