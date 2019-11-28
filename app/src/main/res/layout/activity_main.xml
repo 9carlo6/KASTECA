@@ -4,6 +4,111 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+
     tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/imageViewLogoUnisannio"
+        android:layout_width="76dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/logo_unisannio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="44dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="350dp"
+        android:layout_height="97dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="91dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/logo_kasteca"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="16dp" />
+
+
+    <EditText
+        android:id="@+id/Email_Edit_Text"
+        android:layout_width="286dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="49dp"
+        android:layout_marginTop="59dp"
+        android:layout_marginEnd="49dp"
+        android:hint="@string/Email_title"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/colorWhiteRed"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <EditText
+        android:id="@+id/Password_Edit_Text"
+        android:layout_width="286dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="49dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="49dp"
+        android:hint="@string/Password_title"
+        android:inputType="textPassword"
+        android:textColor="@color/colorWhiteRed"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Email_Edit_Text" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="286dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="49dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="49dp"
+        android:background="@color/colorPrimary"
+        android:onClick="login"
+        android:text="@string/Login_title"
+        android:textColor="@color/colorWhiteRed"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Password_Edit_Text" />
+
+    <TextView
+        android:id="@+id/New_Account_Title"
+        android:layout_width="214dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="85dp"
+        android:text="@string/Create_New_Account_Title"
+        android:textColor="@color/colorWhiteRed"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
+
+    <ProgressBar
+        android:id="@+id/progress_circular_main"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="155dp"
+        android:layout_marginTop="47dp"
+        android:layout_marginEnd="156dp"
+        android:indeterminateTint="@android:color/white"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/New_Account_Title"
+        android:layout_marginLeft="155dp"
+        android:layout_marginRight="156dp" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

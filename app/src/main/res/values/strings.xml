@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">KASTECA</string>
+
+    <string name="Email_title">Email</string>
+    <string name="Password_title">Password</string>
+    <string name="Login_title">LOGIN</string>
+    <string name="Create_New_Account_Title">No account yet? Create one</string>
+
+
 </resources>
