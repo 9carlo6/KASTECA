@@ -1,10 +1,18 @@
 <resources>
     <string name="app_name">KASTECA</string>
 
-    <string name="Email_title">Email</string>
-    <string name="Password_title">Password</string>
-    <string name="Login_title">LOGIN</string>
-    <string name="Create_New_Account_Title">No account yet? Create one</string>
+    <!-- stringhe per la MainActivity -->
+    <string name="Email_text">Email</string>
+    <string name="Password_text">Password</string>
+    <string name="Login_text">LOGIN</string>
+    <string name="Create_New_Account_Text">No account yet? Create one</string>
+    <string name="Insert_correct_data">Please, insert correct data</string>
+    <string name="Try_Again">Please, Try Again</string>
+    <string name="Login_Failed">Login Failed</string>
+    <string name="Login_Successful">Login Successful</string>
+
+    <string name="Registration_Failed">Registration Failed</string>
+
 
 
 </resources>
