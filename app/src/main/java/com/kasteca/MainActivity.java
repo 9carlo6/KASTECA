@@ -46,10 +46,12 @@ public class MainActivity extends AppCompatActivity {
         password_edit_text = findViewById(R.id.Password_Edit_Text);
         password_edit_text.setText("password");// lo teniamo per velocizzare, ma andra cancellato
         email_edit_text.setText(prefs.getString(LAST_USER,""));
+
+        // testo che rimanda all'activity per la creazione di un nuovo account (RegistrationActivity)
         create_new_account_text.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                //Intent intent = new Intent(getApplicationContext(), CreateAccountActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                                             // per ogni documento controllo presente nella collezione 'Docenti' controllo
                                             // se l'id dell'utente (appena loggato) è associato a un docente
                                             if (currentUser1.getUid().equalsIgnoreCase(document.getData().get("id").toString())) {
-                                                //Intent intent = new Intent(getApplicationContext(), StudenteActiviy.class);
+                                                //Intent intent = new Intent(getApplicationContext(), DocenteActiviy.class);
                                                 //intent.putExtra("studente", true);
                                                 //startActivity(intent);
                                             }
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                                             // per ogni documento controllo presente nella collezione 'Docenti' controllo
                                             // se l'id dell'utente (appena loggato) è associato a un docente
                                             if (currentUser1.getUid().equalsIgnoreCase(document.getData().get("id").toString())) {
-                                                //Intent intent = new Intent(getApplicationContext(), MayorActivity.class);
+                                                //Intent intent = new Intent(getApplicationContext(), StudenteActiviy.class);
                                                 //intent.putExtra("mayor", true);
                                                 //startActivity(intent);
                                             }
