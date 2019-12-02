@@ -42,6 +42,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="116dp"
         android:text="@string/Docente_Studente_Switch_Text"
+        android:textColor="@color/colorGeneralText"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -130,6 +131,7 @@
         android:hint="@string/Matricola_Text"
         android:textColor="@color/colorGeneralText"
         android:textSize="18sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
@@ -153,7 +155,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextMatricola" />
 
     <TextView
-        android:id="@+id/Already_Member_Title"
+        android:id="@+id/textViewAccountAlreadyExists"
         android:layout_width="184dp"
         android:layout_height="21dp"
         android:layout_marginStart="8dp"
