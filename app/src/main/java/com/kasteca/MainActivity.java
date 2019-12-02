@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         create_new_account_text = findViewById(R.id.New_Account_Text);
         prefs= getPreferences(MODE_PRIVATE);
         email_edit_text = findViewById(R.id.Email_Edit_Text);

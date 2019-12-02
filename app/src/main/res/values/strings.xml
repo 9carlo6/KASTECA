@@ -13,15 +13,28 @@
 
     <!-- stringhe per la RegistrationActivity -->
     <string name="Registration_Failed">Registrazione fallita</string>
+    <string name="Registration_successful">Registrazione avvenuta con successo</string>
     <string name="Docente_Studente_Switch_Text">Sei uno studente?</string>
     <string name="Name_Text">Nome</string>
     <string name="Surname_Text">Cognome</string>
     <string name="Matricola_Text">Matricola</string>
     <string name="Create_Account_Text">CREA ACCOUNT</string>
     <string name="Already_A_Member_Text">Sei già iscritto? Vai al Login</string>
+    <string name="Not_Correct_Fields">I campi non sono stati riempiti correttamente</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 
-
-
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
 
 
 </resources>
