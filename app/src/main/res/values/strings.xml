@@ -1,10 +1,27 @@
 <resources>
     <string name="app_name">KASTECA</string>
 
-    <string name="Email_title">Email</string>
-    <string name="Password_title">Password</string>
-    <string name="Login_title">LOGIN</string>
-    <string name="Create_New_Account_Title">No account yet? Create one</string>
+    <!-- stringhe per la MainActivity -->
+    <string name="Email_text">Email</string>
+    <string name="Password_text">Password</string>
+    <string name="Login_text">LOGIN</string>
+    <string name="Create_New_Account_Text">Non hai ancora un account? Creane uno</string>
+    <string name="Insert_correct_data">Perfavore, inserisci i dati corretti</string>
+    <string name="Try_Again">Perfavore, riprova</string>
+    <string name="Login_Failed">Login fallito</string>
+    <string name="Login_Successful">Login eseguito con successo!</string>
+
+    <!-- stringhe per la RegistrationActivity -->
+    <string name="Registration_Failed">Registrazione fallita</string>
+    <string name="Docente_Studente_Switch_Text">Sei uno studente?</string>
+    <string name="Name_Text">Nome</string>
+    <string name="Surname_Text">Cognome</string>
+    <string name="Matricola_Text">Matricola</string>
+    <string name="Create_Account_Text">CREA ACCOUNT</string>
+    <string name="Already_A_Member_Text">Sei già iscritto? Vai al Login</string>
+
+
+
 
 
 </resources>

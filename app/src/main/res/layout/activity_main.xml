@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-
+    android:background="@color/colorBackground"
     tools:context=".MainActivity">
 
     <ImageView
@@ -41,9 +40,9 @@
         android:layout_marginStart="49dp"
         android:layout_marginTop="59dp"
         android:layout_marginEnd="49dp"
-        android:hint="@string/Email_title"
+        android:hint="@string/Email_text"
         android:inputType="textEmailAddress"
-        android:textColor="@color/colorWhiteRed"
+        android:textColor="@color/colorGeneralText"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,9 +55,9 @@
         android:layout_marginStart="49dp"
         android:layout_marginTop="13dp"
         android:layout_marginEnd="49dp"
-        android:hint="@string/Password_title"
+        android:hint="@string/Password_text"
         android:inputType="textPassword"
-        android:textColor="@color/colorWhiteRed"
+        android:textColor="@color/colorGeneralText"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,43 +70,28 @@
         android:layout_marginStart="49dp"
         android:layout_marginTop="17dp"
         android:layout_marginEnd="49dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorButton"
         android:onClick="login"
-        android:text="@string/Login_title"
-        android:textColor="@color/colorWhiteRed"
+        android:text="@string/Login_text"
+        android:textColor="@color/colorGeneralText"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Password_Edit_Text" />
 
     <TextView
-        android:id="@+id/New_Account_Title"
+        android:id="@+id/New_Account_Text"
         android:layout_width="214dp"
         android:layout_height="0dp"
         android:layout_marginStart="85dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="85dp"
-        android:text="@string/Create_New_Account_Title"
-        android:textColor="@color/colorWhiteRed"
+        android:text="@string/Create_New_Account_Text"
+        android:textColor="@color/colorGeneralText"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button" />
-
-    <ProgressBar
-        android:id="@+id/progress_circular_main"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="155dp"
-        android:layout_marginTop="47dp"
-        android:layout_marginEnd="156dp"
-        android:indeterminateTint="@android:color/white"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/New_Account_Title"
-        android:layout_marginLeft="155dp"
-        android:layout_marginRight="156dp" />
 
 
 
