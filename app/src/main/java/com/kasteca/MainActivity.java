@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //prova push master
-    //prova icescrum
+    //prova icescrum 2
     private static String LAST_USER = "last_user";
 
     private TextView create_new_account_text;
