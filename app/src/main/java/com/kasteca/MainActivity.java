@@ -27,6 +27,8 @@ import com.google.firebase.firestore.Source;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    //prova push master
     private static String LAST_USER = "last_user";
 
     private TextView create_new_account_text;
