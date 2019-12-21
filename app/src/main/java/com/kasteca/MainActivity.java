@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     //prova push master
     //prova icescrum 2
-    //prova gilab milestone 2
+    //prova gilab milestone 3
     private static String LAST_USER = "last_user";
 
     private TextView create_new_account_text;
