@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         prefs= getPreferences(MODE_PRIVATE);
         email_edit_text = findViewById(R.id.Email_Edit_Text);
         password_edit_text = findViewById(R.id.Password_Edit_Text);
-        password_edit_text.setText("password"); // lo teniamo per velocizzare, ma andra cancellato
+        password_edit_text.setText("password");// lo teniamo per velocizzare, ma andra cancellato
         email_edit_text.setText(prefs.getString(LAST_USER,""));
 
         // testo che rimanda all'activity per la creazione di un nuovo account (RegistrationActivity)
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                                 // questo serve per conservare l'email dell'ultimo utente che fa l'accesso sul dispositivo
                                 SharedPreferences.Editor editor = prefs.edit();
                                 editor.putString(LAST_USER, mail);
-                                editor.commit();
+                                editor.apply();
 
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                                 CollectionReference docenti = db.collection("Docenti");
