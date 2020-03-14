@@ -9,11 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -89,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 Source source = Source.SERVER;
 
-                                // controlla se l'utente che ha eseguito l'accesso è uno studente
+                                // controlla se l'utente che ha eseguito l'accesso è un docente
                                 docenti.get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
