@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this,
                                         getResources().getString(R.string.Login_Successful), Toast.LENGTH_LONG).show();
 
-                                // questo serve per conservare l'email dell'ultimo utente che fa l'accesso sul dispositivo 
+                                // questo serve per conservare l'email dell'ultimo utente che fa l'accesso sul dispositivo
                                 SharedPreferences.Editor editor = prefs.edit();
                                 editor.putString(LAST_USER, mail);
                                 editor.apply();
