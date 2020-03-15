@@ -1,5 +1,8 @@
 language: android
 dist: trusty
+jdk: oraclejdk8
+sudo: false
+
 android:
   components:
     # Uncomment the lines below if you want to
@@ -33,4 +36,10 @@ cache:
     - $HOME/.android/build-cache
 
 before_install:
- - chmod +x gradlew
+  - chmod +x gradlew
+ 
+before_script:
+  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
