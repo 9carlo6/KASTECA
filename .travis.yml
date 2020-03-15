@@ -1,5 +1,7 @@
 language: android
 dist: trusty
+jdk: oraclejdk8
+
 android:
   components:
     # Uncomment the lines below if you want to
@@ -23,3 +25,17 @@ android:
     - sys-img-x86-android-29
     - sys-img-armeabi-v7a-android-17
  
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
+
+before_install:
+  - chmod +x gradlew
+  
+ script:
+   - ./gradlew build connectedCheck
