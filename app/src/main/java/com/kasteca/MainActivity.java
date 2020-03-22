@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // se i campi non sono vuoti o invalidi allora procede con il login
-        if(!mail.equalsIgnoreCase("")&& mail.contains("@")&& !pwd.equalsIgnoreCase("") && email_edit_text.getText()!=null && password_edit_text.getText() != null ) {
+        if(ControlloCampi(mail, pwd) && email_edit_text.getText()!=null && password_edit_text.getText() != null) {
             mAuth.signInWithEmailAndPassword(mail, pwd)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -135,6 +136,14 @@ public class MainActivity extends AppCompatActivity {
         }else{
             showAlert(getResources().getString(R.string.Insert_correct_data));
         }
+    }
+
+
+    public boolean ControlloCampi(String mail, String pwd){
+        if(!mail.equalsIgnoreCase("")&& mail.contains("@")&& !pwd.equalsIgnoreCase("")){
+            return true;
+        }
+        return false;
     }
 
     // questa funzione serve per mostrare un dialog nel caso di LOGIN FALLITO

@@ -145,7 +145,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 Map<String, Object> obj = new HashMap<>();
                                 obj.put("nome", nome);
                                 obj.put("cognome", cognome);
-                                //obj.put("lista_corsi", null);
+                                obj.put("lista_corsi", null);
                                 obj.put("email", mail);
 
                                 docenti.document(userID).set(obj); // il nome del documente è lo stesso dell'id legato all'email
