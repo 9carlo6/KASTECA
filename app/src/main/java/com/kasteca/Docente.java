@@ -17,6 +17,9 @@ public class Docente {
         this.lista_corsi = lista_corsi;
     }
 
+    public Docente() {
+    }
+
     public String getId() {
         return id;
     }

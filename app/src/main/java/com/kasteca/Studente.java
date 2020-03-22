@@ -19,6 +19,9 @@ public class Studente {
         this.lista_corsi = lista_corsi;
     }
 
+    public Studente() {
+    }
+
     public String getId() {
         return id;
     }
