@@ -9,22 +9,28 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="59dp"
+        android:layout_height="55dp"
         android:src="@mipmap/ic_launcher_round" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:id="@+id/nome_cognome_docente_nav_header"
+        android:id="@+id/nome_cognome_nav_header"
         android:text="@string/nome_drower"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/email_docente_nav_header"
+        android:id="@+id/email_nav_header"
         android:text="@string/email_drower" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/matricola_nav_header"
+        android:text="@string/matricola_drower" />
 
 </LinearLayout>

@@ -130,9 +130,20 @@ public class MainActivity extends AppCompatActivity {
                                             // per ogni documento controllo presente nella collezione 'Docenti' controllo
                                             // se l'id dell'utente (appena loggato) è associato a un docente
                                             if (currentUser1.getUid().equalsIgnoreCase(document.getId())) {
-                                                //Intent intent = new Intent(getApplicationContext(), StudenteActiviy.class);
-                                                //intent.putExtra();
-                                                //startActivity(intent);
+                                                Intent intent = new Intent(getApplicationContext(), LogStudenteActivity.class);
+
+                                                //scarico i dati relativi al docente e li carico in un nuovo oggetto Docente
+                                                //per passare un oggetto bisogna usare la classe Bundle
+                                                studente = new Bundle();
+
+                                                studente.putString("nome", document.getData().get("nome").toString());
+                                                studente.putString("cognome", document.getData().get("cognome").toString());
+                                                studente.putString("email", document.getData().get("email").toString());
+                                                studente.putString("matricola", document.getData().get("matricola").toString());
+                                                studente.putStringArrayList("lista_corsi", (ArrayList<String>) document.getData().get("lista_corsi"));
+
+                                                intent.putExtras(studente);
+                                                startActivity(intent);
                                             }
                                         }
                                     }

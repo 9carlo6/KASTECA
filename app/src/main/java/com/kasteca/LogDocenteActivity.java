@@ -6,15 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -25,8 +23,8 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
     private Bundle bundleDocente;
     private Docente docente;
 
-    private TextView nome_cognome_docente_TextView;
-    private TextView email_docente_TextView;
+    private TextView nome_cognome_TextView;
+    private TextView email_TextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +35,7 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view_docente);
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -46,9 +44,9 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         toggle.syncState();
 
         if (savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new CorsiFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_corsi);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
+                    new CorsiDocenteFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_corsi_docente);
         }
 
         //recuper il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
@@ -60,11 +58,11 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         docente.setLista_corsi(bundleDocente.getStringArrayList("lista_corsi"));
 
         View header=navigationView.getHeaderView(0);
-        nome_cognome_docente_TextView = (TextView)header.findViewById(R.id.nome_cognome_docente_nav_header);
-        email_docente_TextView = (TextView)header.findViewById(R.id.email_docente_nav_header);
+        nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
+        email_TextView = header.findViewById(R.id.email_nav_header);
         //setto le info del menu a tendina con i dati relativi al docente
-        nome_cognome_docente_TextView.setText(docente.getNome() + " " + docente.getCognome());
-        email_docente_TextView.setText(docente.getEmail());
+        nome_cognome_TextView.setText(docente.getNome() + " " + docente.getCognome());
+        email_TextView.setText(docente.getEmail());
 
 
     }
@@ -72,9 +70,9 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
-            case R.id.nav_corsi:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new CorsiFragment()).commit();
+            case R.id.nav_corsi_docente:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
+                        new CorsiDocenteFragment()).commit();
                 break;
         }
 

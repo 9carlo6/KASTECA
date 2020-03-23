@@ -39,7 +39,10 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="nome_drower">nome</string>
-    <string name="email_drower">nome</string>
+    <string name="email_drower">email</string>
 
+    <!-- stringhe per la LogStudenteActivity -->
+    <string name="menu_iscrizione_corso">Iscrizione ad un Corso</string>
+    <string name="matricola_drower">matricola</string>
 
 </resources>
