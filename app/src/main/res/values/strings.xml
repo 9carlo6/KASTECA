@@ -44,5 +44,6 @@
     <!-- stringhe per la LogStudenteActivity -->
     <string name="menu_iscrizione_corso">Iscrizione ad un Corso</string>
     <string name="matricola_drower">matricola</string>
+    <string name="logut">Logut</string>
 
 </resources>

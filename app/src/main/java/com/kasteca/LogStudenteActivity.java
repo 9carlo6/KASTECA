@@ -9,6 +9,8 @@ package com.kasteca;
         import androidx.navigation.ui.AppBarConfiguration;
 
         import android.os.Bundle;
+        import android.view.Menu;
+        import android.view.MenuInflater;
         import android.view.MenuItem;
         import android.view.View;
         import android.widget.TextView;
@@ -92,5 +94,18 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings_menu_studente, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+
+        }
+        return true;
+    }
 }
