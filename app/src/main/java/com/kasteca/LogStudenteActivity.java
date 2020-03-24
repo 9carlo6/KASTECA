@@ -8,6 +8,7 @@ package com.kasteca;
         import androidx.drawerlayout.widget.DrawerLayout;
         import androidx.navigation.ui.AppBarConfiguration;
 
+        import android.content.Intent;
         import android.os.Bundle;
         import android.view.Menu;
         import android.view.MenuInflater;
@@ -16,6 +17,7 @@ package com.kasteca;
         import android.widget.TextView;
 
         import com.google.android.material.navigation.NavigationView;
+        import com.google.firebase.auth.FirebaseAuth;
 
 public class LogStudenteActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -104,8 +106,18 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-
+            case R.id.action_logout:
+                Logout();
+                break;
         }
         return true;
+    }
+
+    public void Logout(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        finish();
+        startActivity(intent);
     }
 }
