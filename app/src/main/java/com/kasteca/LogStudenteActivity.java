@@ -81,6 +81,9 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente,
                         new CorsiDocenteFragment()).commit();
                 break;
+            case R.id.nav_logout:
+                Logout();
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -96,14 +99,14 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         }
     }
 
-    @Override
+/*    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.settings_menu_studente, menu);
         return super.onCreateOptionsMenu(menu);
-    }
+    }*/
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_logout:
@@ -111,7 +114,7 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
                 break;
         }
         return true;
-    }
+    }*/
 
     public void Logout(){
         FirebaseAuth mAuth = FirebaseAuth.getInstance();

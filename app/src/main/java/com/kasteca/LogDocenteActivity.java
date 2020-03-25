@@ -78,6 +78,9 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
                         new CorsiDocenteFragment()).commit();
                 break;
+            case R.id.nav_logout:
+                Logout();
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -93,14 +96,14 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         }
     }
 
-    @Override
+/*    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.settings_menu_docente, menu);
         return super.onCreateOptionsMenu(menu);
-    }
+    }*/
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_logout:
@@ -108,7 +111,7 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
                 break;
         }
         return true;
-    }
+    }*/
 
     public void Logout(){
         FirebaseAuth mAuth = FirebaseAuth.getInstance();

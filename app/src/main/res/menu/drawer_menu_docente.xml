@@ -12,7 +12,10 @@
             android:id="@+id/nav_aggiungi_corso"
             android:icon="@drawable/ic_aggiungi_corso"
             android:title="@string/menu_aggiungi_corso" />
-
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/logout"/>
     </group>
 
 
