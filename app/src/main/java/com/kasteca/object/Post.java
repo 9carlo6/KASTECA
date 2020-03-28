@@ -1,6 +1,5 @@
-package com.kasteca;
+package com.kasteca.object;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
