@@ -1,4 +1,4 @@
-package com.kasteca;
+package com.kasteca.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.kasteca.R;
 
 public class CorsiDocenteFragment extends Fragment {
 

@@ -1,5 +1,7 @@
 package com.kasteca;
 
+import com.kasteca.activity.MainActivity;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,7 +11,7 @@ public class MainActivityTest {
     private MainActivity mn;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mn = new MainActivity();
     }
 

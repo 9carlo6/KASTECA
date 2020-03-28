@@ -9,6 +9,7 @@
     <string name="Insert_correct_data">Perfavore, inserisci i dati corretti</string>
     <string name="Try_Again">Perfavore, riprova</string>
     <string name="Login_Failed">Login fallito</string>
+    <string name="Dialog_neutral_button_login_failed">OK</string>
     <string name="Login_Successful">Login eseguito con successo!</string>
 
     <!-- stringhe per la RegistrationActivity -->

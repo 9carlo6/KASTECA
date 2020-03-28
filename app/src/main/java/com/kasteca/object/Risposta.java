@@ -1,4 +1,4 @@
-package com.kasteca;
+package com.kasteca.object;
 
 import java.util.Date;
 

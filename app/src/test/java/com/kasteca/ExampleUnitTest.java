@@ -1,5 +1,7 @@
 package com.kasteca;
 
+import com.kasteca.activity.MainActivity;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
