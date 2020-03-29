@@ -10,25 +10,38 @@ import androidx.navigation.ui.AppBarConfiguration;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 import com.kasteca.fragment.CorsiDocenteFragment;
+import com.kasteca.object.Corso;
 import com.kasteca.object.Docente;
 import com.kasteca.R;
+
+import java.util.ArrayList;
 
 public class LogDocenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
     private Bundle bundleDocente;
-    private Docente docente;
+    private static Docente docente;
 
     private TextView nome_cognome_TextView;
     private TextView email_TextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +72,13 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         docente.setNome(bundleDocente.getString("nome"));
         docente.setCognome(bundleDocente.getString("cognome"));
         docente.setEmail(bundleDocente.getString("email"));
-        docente.setLista_corsi(bundleDocente.getStringArrayList("lista_corsi"));
+        ArrayList<String> corsi=bundleDocente.getStringArrayList("lista_corsi");
+        //docente.setLista_corsi(bundleDocente.getStringArrayList("lista_corsi"));
+        docente.setId(bundleDocente.getString("id"));
+
+        //metodo per l'aggiunta dei corsi nella classe docente
+        if(recuperoCorsi(corsi))
+            Log.d("AGGIUNTA CORSI","Aggiunta corsi è terminata con successo.");
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
@@ -69,6 +88,57 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         email_TextView.setText(docente.getEmail());
 
 
+    }
+
+
+    boolean recuperoCorsi(ArrayList<String> corsi){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference corsiReference = db.collection("Corsi");
+        //QuerySnapshot q =db.collection("Corsi").whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(),  idCorso);
+                //where(firebase.firestore.FieldPath.documentId(), '==', "scindv");
+        Source source = Source.SERVER;
+
+        //Per ogni id corso che abbiamo, facciamo una query, lo cerchiamo e lo aggiungiamo alla classe studente.
+        for(String idCorso: corsi) {
+            corsiReference.whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(),idCorso).get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                    if (task.isSuccessful()) {
+                        //FirebaseAuth mAuth1 = FirebaseAuth.getInstance();
+                        //FirebaseUser user = mAuth1.getCurrentUser();
+
+                        //Per ogni corso controllo se è del docente
+                        for (DocumentSnapshot document : task.getResult()) {
+
+                            //if (user.getUid().equalsIgnoreCase(document.get("id").toString())) {
+
+                            //Creiamo corso
+                                Corso corso = new Corso(
+                                        document.getData().get("nome_corso").toString(),
+                                        document.getData().get("anno_accademico").toString(),
+                                        document.getData().get("descrizione").toString(),
+                                        LogDocenteActivity.docente,
+                                        document.getData().get("codice").toString(),
+                                        document.get("id").toString());
+                                //aggiungo il corso al docente
+                                docente.addCorso(corso);
+                            //}
+                        }
+
+                    }
+
+                }
+
+            });
+
+        }
+
+        //Controllo se la lista dei corsi del docente è stata creata senza problemi
+        if(docente.getLista_corsi() != null)
+            return true;
+        else
+            return false;
     }
 
     @Override

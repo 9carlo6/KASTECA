@@ -22,7 +22,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.kasteca.R;
+import com.kasteca.fragment.CorsiDocenteFragment;
+import com.kasteca.object.Corso;
+import com.kasteca.object.Docente;
 
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -109,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                                                 docente.putString("cognome", document.getData().get("cognome").toString());
                                                 docente.putString("email", document.getData().get("email").toString());
                                                 docente.putStringArrayList("lista_corsi", (ArrayList<String>) document.getData().get("lista_corsi"));
+                                                docente.putString("id", currentUser1.getUid());
 
                                                 intent.putExtras(docente);
                                                 startActivity(intent);

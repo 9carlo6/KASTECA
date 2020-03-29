@@ -7,10 +7,11 @@ public class Corso {
 
     private String nome;
     private String descrizione;
+    private String anno_accademico;
     private Docente docente;
     //id e codice potrebbero essere la stessa cosa?
-    private String codice;
-    private String id;
+    private String codice;      //codice deciso dal docente
+    private String id;          //id firebase
     private ArrayList<Post> posts;
     private ArrayList<Studente> studenti;
 
@@ -22,8 +23,9 @@ public class Corso {
 
     }
 
-    public Corso(String nome, String descrizione, Docente docente, String codice) {
+    public Corso(String nome, String anno_accademico, String descrizione, Docente docente, String codice) {
         this.nome = nome;
+        this.anno_accademico= anno_accademico;
         this.descrizione = descrizione;
         this.docente = docente;
         this.codice = codice;
@@ -32,8 +34,20 @@ public class Corso {
         this.studenti= new ArrayList<Studente>();
     }
 
-    public Corso(String nome, String descrizione, Docente docente, String codice, String id, ArrayList<Post> posts, ArrayList<Studente> studenti) {
+    public Corso(String nome, String anno_accademico, String descrizione, Docente docente, String codice, String id) {
         this.nome = nome;
+        this.anno_accademico= anno_accademico;
+        this.descrizione = descrizione;
+        this.docente = docente;
+        this.codice = codice;
+        this.id = id;
+        this.posts= new ArrayList<Post>();
+        this.studenti= new ArrayList<Studente>();
+    }
+
+    public Corso(String nome, String anno_accademico, String descrizione, Docente docente, String codice, String id, ArrayList<Post> posts, ArrayList<Studente> studenti) {
+        this.nome = nome;
+        this.anno_accademico= anno_accademico;
         this.descrizione = descrizione;
         this.docente = docente;
         this.codice = codice;
@@ -104,6 +118,8 @@ public class Corso {
         return studenti;
     }
 
-
+    public String getAnno_accademico() {
+        return anno_accademico;
+    }
 
 }

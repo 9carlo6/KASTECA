@@ -7,9 +7,9 @@ public class Docente {
     private String nome;
     private String cognome;
     private String email;
-    private ArrayList<String> lista_corsi;
+    private ArrayList<Corso> lista_corsi= null;     //Per evitare accessi sbagliati e per verificare che sia riempita correttamente.
 
-    public Docente(String id, String nome, String cognome, String email, ArrayList<String> lista_corsi) {
+    public Docente(String id, String nome, String cognome, String email, ArrayList<Corso> lista_corsi) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -18,6 +18,12 @@ public class Docente {
     }
 
     public Docente() {
+    }
+
+    //metodo per l'aggiunta dei corsi nella classe studente
+    public void addCorso(Corso corso){
+        if(lista_corsi!=null)
+            lista_corsi.add(corso);
     }
 
     public String getId() {
@@ -52,11 +58,11 @@ public class Docente {
         this.email = email;
     }
 
-    public ArrayList<String> getLista_corsi() {
+    public ArrayList<Corso> getLista_corsi() {
         return lista_corsi;
     }
 
-    public void setLista_corsi(ArrayList<String> lista_corsi) {
+    public void setLista_corsi(ArrayList<Corso> lista_corsi) {
         this.lista_corsi = lista_corsi;
     }
 }
