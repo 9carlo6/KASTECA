@@ -47,4 +47,12 @@
     <string name="matricola_drower">matricola</string>
     <string name="logout">Logout</string>
 
+    <!-- stringhe per la NewPostActivity -->
+    <string name="testo_post">Scrivi qualcosa</string>
+    <string name="link">Link</string>
+    <string name="pdf">Pdf</string>
+    <string name="spinner_tag">Tag:</string>
+    <string name="upload_failed">Upload fallito</string>
+    <string name="missing_data">Perfavore, inserisci i dati mancanti.</string>
+
 </resources>

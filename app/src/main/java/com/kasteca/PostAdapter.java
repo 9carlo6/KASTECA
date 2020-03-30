@@ -44,7 +44,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     // Crea nuove view (invocato dal layout manager)
     @Override
     public PostAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
+        // crea una nuova view
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.post_item, parent, false);
         PostAdapter.ViewHolder vh = new PostAdapter.ViewHolder(v);
@@ -58,7 +58,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         holder.tag.setText(posts.get(position).getTag());
 
         if(posts.get(position).getPdf() != null){
-            //holder.icon_post.setImageResource(R.drawable.);
+            //holder.icon_post.setImageResource(R.drawable.pdf_icon);
+        }
+        else if (posts.get(position).getLink() != null){
+            //holder.icon_post.setImageResource(R.drawable.link_icon);
+        }
+        else{
+            //holder.icon_post.setImageResource(R.drawable.other_icon);
         }
     }
 
