@@ -122,4 +122,18 @@ public class Corso {
         return anno_accademico;
     }
 
+
+    @Override
+    public String toString() {
+        return "Corso{" +
+                "nome='" + nome + '\'' +
+                ", descrizione='" + descrizione + '\'' +
+                ", anno_accademico='" + anno_accademico + '\'' +
+                ", docente=" + docente +
+                ", codice='" + codice + '\'' +
+                ", id='" + id + '\'' +
+                ", posts=" + posts +
+                ", studenti=" + studenti +
+                '}';
+    }
 }

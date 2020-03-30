@@ -31,8 +31,12 @@ import com.kasteca.object.Docente;
 import com.kasteca.R;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class LogDocenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String LOG = "DEBUG CORSI";
 
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
@@ -78,7 +82,7 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
 
         //metodo per l'aggiunta dei corsi nella classe docente
         if(recuperoCorsi(corsi))
-            Log.d("AGGIUNTA CORSI","Aggiunta corsi è terminata con successo.");
+            Log.d(LOG,"Aggiunta corsi è terminata con successo.");
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
@@ -91,55 +95,111 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
     }
 
 
-    boolean recuperoCorsi(ArrayList<String> corsi){
+    boolean recuperoCorsi(ArrayList<String> corsi) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
         //QuerySnapshot q =db.collection("Corsi").whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(),  idCorso);
-                //where(firebase.firestore.FieldPath.documentId(), '==', "scindv");
+        //where(firebase.firestore.FieldPath.documentId(), '==', "scindv");
         Source source = Source.SERVER;
 
-        //Per ogni id corso che abbiamo, facciamo una query, lo cerchiamo e lo aggiungiamo alla classe studente.
-        for(String idCorso: corsi) {
-            corsiReference.whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(),idCorso).get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+        Log.e(LOG, "Lista codici corsi: ");
 
-                    if (task.isSuccessful()) {
-                        //FirebaseAuth mAuth1 = FirebaseAuth.getInstance();
-                        //FirebaseUser user = mAuth1.getCurrentUser();
+        if (!corsi.isEmpty()) {
+            //Per ogni id corso che abbiamo, facciamo una query, lo cerchiamo e lo aggiungiamo alla classe studente.
+            for (String idCorso : corsi) {
+                Log.e(LOG, "Codice corso: " + idCorso);
+                corsiReference.whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(), idCorso).get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-                        //Per ogni corso controllo se è del docente
-                        for (DocumentSnapshot document : task.getResult()) {
+                        if (task.isSuccessful()) {
+                            //FirebaseAuth mAuth1 = FirebaseAuth.getInstance();
+                            //FirebaseUser user = mAuth1.getCurrentUser();
+                            if (task.getResult() == null) {
+                                Log.e(LOG, "risultato della query null");
+                            } else {
+                                List<DocumentSnapshot> testDocuments = task.getResult().getDocuments();
+                                for (DocumentSnapshot d : testDocuments) {
+                                    Log.e(LOG, d.getData().toString());
+                                    Log.e(LOG, d.getData().get("codice").toString());
+                                    Log.e(LOG, d.getData().get("descrizione").toString());
+                                    Log.e(LOG, d.getData().get("anno_accademico").toString());
+                                    Log.e(LOG, d.getData().get("nome_corso").toString());
+                                    Log.e(LOG, d.getId());
+                                }
 
-                            //if (user.getUid().equalsIgnoreCase(document.get("id").toString())) {
+                                //Per ogni corso controllo se è del docente
+                                for (DocumentSnapshot document : task.getResult().getDocuments()) {
 
-                            //Creiamo corso
-                                Corso corso = new Corso(
-                                        document.getData().get("nome_corso").toString(),
-                                        document.getData().get("anno_accademico").toString(),
-                                        document.getData().get("descrizione").toString(),
-                                        LogDocenteActivity.docente,
-                                        document.getData().get("codice").toString(),
-                                        document.get("id").toString());
-                                //aggiungo il corso al docente
-                                docente.addCorso(corso);
-                            //}
+                                    //if (user.getUid().equalsIgnoreCase(document.get("id").toString())) {
+                                    //Controllo del risultato della query:
+                                    if (document == null) {
+                                        Log.e(LOG, "risultato della query null: document == null");
+                                    } else {
+                                        List<DocumentSnapshot> corsi = task.getResult().getDocuments();
+                                        for (DocumentSnapshot d : corsi) {
+                                            Log.e(LOG, d.getData().toString());
+                                            Map<String, Object> c = d.getData();
+                                            Corso corso = new Corso(
+                                                    c.get("nome_corso").toString(),
+                                                    c.get("anno_accademico").toString(),
+                                                    c.get("descrizione").toString(),
+                                                    LogDocenteActivity.docente,
+                                                    c.get("codice").toString(),
+                                                    d.getId());
+                                            Log.e(LOG, "Corso: " + corso.toString());
+                                            if (docente.getLista_corsi() == null)
+                                                docente.setLista_corsi(new ArrayList<Corso>());
+                                            docente.addCorso(corso);
+
+                                        }
+                                    }
+                                /*
+                                if(document!= null){
+                                    //Creiamo corso
+                                    Corso corso = new Corso(
+                                            document.getData().get("nome_corso").toString(),
+                                            document.getData().get("anno_accademico").toString(),
+                                            document.getData().get("descrizione").toString(),
+                                            LogDocenteActivity.docente,
+                                            document.getData().get("codice").toString(),
+                                            document.get("id").toString());
+                                    Log.e(LOG, "Corso: " + corso.toString());
+                                    //aggiungo il corso al docente
+                                    if (docente.getLista_corsi() == null)
+                                        docente.setLista_corsi(new ArrayList<Corso>());
+                                    docente.addCorso(corso);
+                                }else{
+                                    Log.e(LOG,"Document nullo");
+                                }
+                                */
+                                    //}
+                                }
+
+                            }
+
                         }
-
                     }
+                });
 
-                }
 
-            });
+                //Controllo se la lista dei corsi del docente è stata creata senza problemi
+                if (docente.getLista_corsi() != null)
+                    return true;
+                else
+                    return false;
+            }
 
+            return true;
+        } else {
+            Log.e(LOG, "Nessun corso presente per questo docente.");
+            return false;
         }
 
-        //Controllo se la lista dei corsi del docente è stata creata senza problemi
-        if(docente.getLista_corsi() != null)
-            return true;
-        else
-            return false;
     }
+
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

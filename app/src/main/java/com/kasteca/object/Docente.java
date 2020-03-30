@@ -65,4 +65,15 @@ public class Docente {
     public void setLista_corsi(ArrayList<Corso> lista_corsi) {
         this.lista_corsi = lista_corsi;
     }
+
+    @Override
+    public String toString() {
+        return "Docente{" +
+                "id='" + id + '\'' +
+                ", nome='" + nome + '\'' +
+                ", cognome='" + cognome + '\'' +
+                ", email='" + email + '\'' +
+                ", lista_corsi=" + lista_corsi +
+                '}';
+    }
 }

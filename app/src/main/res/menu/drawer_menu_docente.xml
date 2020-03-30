@@ -8,7 +8,7 @@
             android:id="@+id/nav_corsi_docente"
             android:icon="@drawable/ic_corsi"
             android:title="@string/menu_corsi"
-            android:onClickListener= />
+                             />
         <item
             android:id="@+id/nav_aggiungi_corso"
             android:icon="@drawable/ic_aggiungi_corso"
