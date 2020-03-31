@@ -1,5 +1,6 @@
 package com.kasteca.object;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -15,10 +16,10 @@ public class Post implements Parcelable {
     private Date data;
     private ArrayList<String> lista_commenti;
     private String link;
-    private String pdf;
+    private Uri pdf;
 
     //Costruttori
-    public Post(String id, String tag, String testo, String corso, Date data, String link, String pdf) {
+    public Post(String id, String tag, String testo, String corso, Date data, String link, Uri pdf) {
         this.id = id;
         this.tag = tag;
         this.testo = testo;
@@ -29,7 +30,7 @@ public class Post implements Parcelable {
         this.pdf = pdf;
     }
 
-    public Post(String id, String tag, String testo, String corso, Date data, String link, String pdf, ArrayList<String> commenti) {
+    public Post(String id, String tag, String testo, String corso, Date data, String link, Uri pdf, ArrayList<String> commenti) {
         this.id = id;
         this.tag = tag;
         this.testo = testo;
@@ -51,7 +52,7 @@ public class Post implements Parcelable {
         corso = in.readString();
         lista_commenti = in.createStringArrayList();
         link = in.readString();
-        pdf = in.readString();
+        pdf = Uri.parse(in.readString());
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
@@ -101,7 +102,7 @@ public class Post implements Parcelable {
         return link;
     }
 
-    public String getPdf() {
+    public Uri getPdf() {
         return pdf;
     }
 
@@ -135,7 +136,7 @@ public class Post implements Parcelable {
         this.link = link;
     }
 
-    public void setPdf(String pdf) {
+    public void setPdf(Uri pdf) {
         this.pdf = pdf;
     }
 
@@ -152,6 +153,6 @@ public class Post implements Parcelable {
         dest.writeString(corso);
         dest.writeStringList(lista_commenti);
         dest.writeString(link);
-        dest.writeString(pdf);
+        dest.writeString(pdf.toString());
     }
 }

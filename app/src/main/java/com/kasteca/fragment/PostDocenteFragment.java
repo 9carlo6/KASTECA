@@ -3,8 +3,8 @@ package com.kasteca.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Source;
 import com.kasteca.PostAdapter;
 import com.kasteca.R;
 import com.kasteca.activity.NewPostActivity;
@@ -41,15 +42,17 @@ public class PostDocenteFragment extends Fragment implements PostAdapter.OnPostL
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        View view = inflater.inflate(R.layout.fragment_post_docente_scrolling, container, false);
         corso_id = "";
         post_ids = new ArrayList<>();
         posts = new ArrayList<>();
 
+        Source source = Source.SERVER;
+
         //Recupero dei post del corso
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRefCorso = db.collection("Corsi").document(corso_id);
-        docRefCorso.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        docRefCorso.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -64,7 +67,7 @@ public class PostDocenteFragment extends Fragment implements PostAdapter.OnPostL
 
         for(String id : post_ids){
             DocumentReference docRefPost = db.collection("Post").document(id);
-            docRefPost.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            docRefPost.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
@@ -77,7 +80,7 @@ public class PostDocenteFragment extends Fragment implements PostAdapter.OnPostL
                                 corso_id,
                                 (Date) document.get("data"),
                                 (String) document.get("link"),
-                                (String) document.get("pdf"),
+                                Uri.parse((String) document.get("pdf")),
                                 (ArrayList<String>) document.get("lista_commenti")
                         );
 
@@ -100,12 +103,13 @@ public class PostDocenteFragment extends Fragment implements PostAdapter.OnPostL
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), NewPostActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(getActivity().getBaseContext(), NewPostActivity.class);
+                intent.putExtra("corso_id", corso_id);
+                getActivity().startActivity(intent);
             }
         });
 
-        return inflater.inflate(R.layout.fragment_post_docente_scrolling, container, false);
+        return view;
     }
 
     // Metodo in caso di recupero fallito dei post di un corso
@@ -124,8 +128,8 @@ public class PostDocenteFragment extends Fragment implements PostAdapter.OnPostL
     @Override
     public void onPostClick(int position) {
         Post post = posts.get(position);
-        Intent intent = new Intent(getContext(), PostActivity.class);
+        Intent intent = new Intent(getActivity().getBaseContext(), PostActivity.class);
         intent.putExtra("post", post);
-        startActivity(intent);
+        getActivity().startActivity(intent);
     }
 }

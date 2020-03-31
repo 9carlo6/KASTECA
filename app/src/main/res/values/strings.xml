@@ -54,6 +54,9 @@
     <string name="spinner_tag">Tag:</string>
     <string name="upload_failed">Upload fallito</string>
     <string name="missing_data">Perfavore, inserisci i dati mancanti.</string>
+    <string name="upload_pdf_fallito">Il pdf non è stato caricato.</string>
+    <string name="upload_pdf_successo">Il pdf è stato caricato.</string>
+    <string name="upload_successo">Il post è stato caricato.</string>
 
     <!-- stringhe per il PostDocenteFragment-->
     <string name="get_failed">Fallimento recupero dati</string>
@@ -63,6 +66,7 @@
     <string name="commenti">Commenti</string>
     <string name="no_activity">Nessun Web Browser trovato</string>
     <string name="download_webBrowser">Per favore, scarica un web browser.</string>
+    <string name="upload_post_error">Errore nel caricamento del nuovo post.</string>
 
 
 </resources>

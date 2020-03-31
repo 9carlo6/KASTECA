@@ -75,27 +75,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         }
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
-   /* @Override
-    public void onBindViewHolder(ArtistAdapter.ViewHolder holder, final int position) {
-
-        holder.description.setText(artists.get(position).getName());
-
-        holder.icon.setImageResource(R.drawable.ic_account_box_white_24dp);
-
-        holder.description.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent artistIntent = new Intent(context, ArtistActivity.class);
-                artistIntent.putExtra("id", artists.get(position).getId());
-                artistIntent.putExtra("name", artists.get(position).getName());
-                artistIntent.putExtra("year_started", artists.get(position).getYear_started());
-                artistIntent.putExtra("year_quit", artists.get(position).getYear_quit());
-                context.startActivity(artistIntent);
-            }
-        });
-    } */
-
     // Ritorna la dimensione del dataset (inocato dal layout manager)
     @Override
     public int getItemCount() {

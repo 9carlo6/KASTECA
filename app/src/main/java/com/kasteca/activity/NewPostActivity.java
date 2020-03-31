@@ -1,8 +1,11 @@
 package com.kasteca.activity;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,21 +13,40 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.kasteca.R;
+import com.kasteca.object.Post;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class NewPostActivity extends AppCompatActivity {
+    private int SELECT_FILE =100;
+    private Uri uriPdf;
+    private Uri downloadUrlPdf;
+    private String corso_id;
 
     private EditText testo_post_text;
     private EditText link_text;
@@ -32,15 +54,24 @@ public class NewPostActivity extends AppCompatActivity {
     private Spinner tags_spinner;
     private ArrayList<String> tags;
 
+    private String link;
+    private String testo;
+    private String tag;
+    private Date data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
+        if(getIntent().hasExtra("corso_id")) {
+            corso_id = getIntent().getStringExtra("corso_id");
+        }
         testo_post_text = findViewById(R.id.text_post__Edit_Text);
         link_text = findViewById(R.id.link_Edit_Text);
         pdf_text = findViewById(R.id.uri_pdf);
         tags_spinner = findViewById(R.id.tags_spinner);
+        uriPdf = null;
 
         tags = new ArrayList<>();
 
@@ -69,23 +100,43 @@ public class NewPostActivity extends AppCompatActivity {
     }
 
     public void uploadPdf(View v){
-
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("application/pdf");
+        startActivityForResult(intent, SELECT_FILE);
     }
 
-    public void uploadPost(View v){
-        String testo = testo_post_text.getText().toString();
-        String link = link_text.getText().toString();
-        String pdf = pdf_text.getText().toString();
-        String tag = tags_spinner.getSelectedItem().toString();
+    public  void onActivityResult(int requestCode, int resultCode, Intent ritorno){
+        super.onActivityResult(requestCode, resultCode, ritorno);
+
+        if(resultCode == Activity.RESULT_OK){
+            if(requestCode == SELECT_FILE){
+                uriPdf = ritorno.getData();
+                pdf_text.setText(uriPdf.toString());
+            }
+        }
+    }
+
+    // Metodo che viene chiamato quando si preme sul tasto dell'upload
+    public void upload(View v){
+        testo = testo_post_text.getText().toString();
+        link = link_text.getText().toString();
+        if(link.isEmpty()) link = null;
+        tag = tags_spinner.getSelectedItem().toString();
+        data = new Date();
 
         if((tag == null) || (testo == null) || (testo.isEmpty())){
             showAlert(getResources().getString(R.string.missing_data));
         }
+        else if(uriPdf != null){
+            uploadPdfToStorage();
+        }
         else{
-
+            downloadUrlPdf = null;
+            uploadPostToStorage();
         }
     }
 
+    // Metodo chiamato in caso di problemi durante l'upload
     public void showAlert(String s){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(getResources().getString(R.string.upload_failed));
@@ -96,6 +147,74 @@ public class NewPostActivity extends AppCompatActivity {
             }
         });
         alertDialog.show();
+    }
+
+    // Metodo chiamato se c'è un pdf da caricare nello storage remoto
+    public void uploadPdfToStorage(){
+        FirebaseStorage myStorage = FirebaseStorage.getInstance();
+        StorageReference rootStorageRef = myStorage.getReference();
+        StorageReference documentRef = rootStorageRef.child("pdf");
+
+        final StorageReference pdfRef = documentRef.child(uriPdf.getLastPathSegment());
+        final UploadTask uploadTask = pdfRef.putFile(uriPdf);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Nel caso di fallimento dell'upload
+                showAlert(getResources().getString(R.string.upload_failed));
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                pdfRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        downloadUrlPdf = uri;
+
+                        // Solo se il caricamento del pdf va a buon fine viene aggiunto al Database remoto il post appena creato
+                        uploadPostToStorage();
+                    }
+                });
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.upload_pdf_successo), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    // Metodo chiamato per aggiungere il nuovo post al Database remoto
+    public void uploadPostToStorage(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference postsRef = db.collection("Post");
+
+        Map<String, Object> newPost = new HashMap<>();
+
+        newPost.put("corso", corso_id);
+        newPost.put("data", data);
+        newPost.put("link", link);
+        newPost.put("pdf", downloadUrlPdf);
+        newPost.put("tag", tag);
+        newPost.put("testo", testo);
+        newPost.put("lista_commenti", new ArrayList<String>());
+
+        postsRef.add(newPost)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.upload_successo), Toast.LENGTH_LONG).show();
+                        /*Post post = new Post(documentReference.getId(),
+                                tag,
+                                testo,
+                                corso_id,
+                                data,
+                                link,
+                                downloadUrlPdf);*/
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showAlert(getResources().getString(R.string.upload_post_error));
+                    }
+                });
     }
 
 }
