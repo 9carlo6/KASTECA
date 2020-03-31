@@ -1,23 +1,30 @@
 package com.kasteca.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.kasteca.PostAdapter;
 import com.kasteca.R;
 import com.kasteca.activity.NewPostActivity;
 import com.kasteca.object.Post;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -31,35 +38,67 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class PostDocenteFragment extends Fragment {
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
+    private ArrayList<String> post_ids;
     private ArrayList<Post> posts;
+    private String corso_id;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_post_docente_scrolling, container, false);
 
+        corso_id = "";
+        post_ids = new ArrayList<>();
         posts = new ArrayList<>();
 
         //Recupero dei post del corso
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Post").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DocumentReference docRefCorso = db.collection("Corsi").document(corso_id);
+        docRefCorso.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-
-                    }
-                    Log.d(TAG, posts.toString());
+                    // Documento trovato
+                    DocumentSnapshot document = task.getResult();
+                    post_ids = (ArrayList<String>) document.getData().get("lista_post");
                 } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
+                    showAlert(getResources().getString(R.string.get_posts_failed));
                 }
             }
         });
+
+        for(String id : post_ids){
+            DocumentReference docRefPost = db.collection("Post").document(id);
+            docRefPost.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        // Documento trovato
+                        DocumentSnapshot document = task.getResult();
+                        Post post = new Post(
+                                document.getId(),
+                                (String) document.get("tag"),
+                                (String)  document.get("testo"),
+                                corso_id,
+                                (Date) document.get("data"),
+                                (String) document.get("link"),
+                                (String) document.get("pdf"),
+                                (ArrayList<String>) document.get("lista_commenti")
+                        );
+                        
+                        posts.add(post);
+                    } else {
+                        showAlert(getResources().getString(R.string.get_posts_failed));
+                    }
+                }
+            });
+        }
 
         recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        RecyclerView.Adapter adapter = new PostAdapter(posts);
+        recyclerView.setAdapter(adapter);
 
         fab = getView().findViewById(R.id.fab_add_post);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +109,19 @@ public class PostDocenteFragment extends Fragment {
             }
         });
 
-        return view;
+        return inflater.inflate(R.layout.fragment_post_docente_scrolling, container, false);
+    }
+
+    // Metodo in caso di recupero fallito dei post di un corso
+    public void showAlert(String s){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setTitle(getResources().getString(R.string.get_failed));
+        alertDialog.setMessage(s);
+        alertDialog.setNeutralButton(getResources().getString(R.string.Dialog_neutral_button_login_failed), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
     }
 }

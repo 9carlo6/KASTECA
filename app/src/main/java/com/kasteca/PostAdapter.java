@@ -1,7 +1,5 @@
 package com.kasteca;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
-    private ArrayList<Post> posts = null;
-    private Context context;
+    private ArrayList<Post> posts;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public CardView cv;
@@ -36,9 +33,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     }
 
 
-    public PostAdapter(ArrayList<Post> post_dataset, Context context) {
+    public PostAdapter(ArrayList<Post> post_dataset) {
         posts = post_dataset;
-        this.context = context;
     }
 
     // Crea nuove view (invocato dal layout manager)
@@ -58,13 +54,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         holder.tag.setText(posts.get(position).getTag());
 
         if(posts.get(position).getPdf() != null){
-            //holder.icon_post.setImageResource(R.drawable.pdf_icon);
+            holder.icon_post.setImageResource(R.drawable.pdf_icon_foreground);
         }
         else if (posts.get(position).getLink() != null){
-            //holder.icon_post.setImageResource(R.drawable.link_icon);
+            holder.icon_post.setImageResource(R.drawable.link_icon_foreground);
         }
         else{
-            //holder.icon_post.setImageResource(R.drawable.other_icon);
+            holder.icon_post.setImageResource(R.drawable.message_icon_foreground);
         }
     }
 

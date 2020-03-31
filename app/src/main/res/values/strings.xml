@@ -55,4 +55,8 @@
     <string name="upload_failed">Upload fallito</string>
     <string name="missing_data">Perfavore, inserisci i dati mancanti.</string>
 
+    <!-- stringhe per il PostDocenteFragment-->
+    <string name="get_failed">Fallimento recupero dati</string>
+    <string name="get_posts_failed">Non è stato possibile recuperare i post del corso.</string>
+
 </resources>
