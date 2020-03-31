@@ -1,13 +1,11 @@
-package com.kasteca.fragment;
+package com.kasteca.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,32 +16,30 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Source;
 import com.kasteca.PostAdapter;
 import com.kasteca.R;
-import com.kasteca.activity.NewPostActivity;
-import com.kasteca.activity.PostActivity;
 import com.kasteca.object.Post;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+public class PostDocenteActivity extends AppCompatActivity implements PostAdapter.OnPostListener{
 
-public class PostDocenteFragment extends Fragment implements PostAdapter.OnPostListener {
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
     private ArrayList<String> post_ids;
     private ArrayList<Post> posts;
     private String corso_id;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_post_docente_scrolling, container, false);
-        corso_id = "";
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_post_docente_scrolling);
+
+        corso_id = getIntent().getStringExtra("corso_id");
         post_ids = new ArrayList<>();
         posts = new ArrayList<>();
 
@@ -65,7 +61,7 @@ public class PostDocenteFragment extends Fragment implements PostAdapter.OnPostL
             }
         });
 
-        for(String id : post_ids){
+        for (String id : post_ids) {
             DocumentReference docRefPost = db.collection("Post").document(id);
             docRefPost.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -76,7 +72,7 @@ public class PostDocenteFragment extends Fragment implements PostAdapter.OnPostL
                         Post post = new Post(
                                 document.getId(),
                                 (String) document.get("tag"),
-                                (String)  document.get("testo"),
+                                (String) document.get("testo"),
                                 corso_id,
                                 (Date) document.get("data"),
                                 (String) document.get("link"),
@@ -92,29 +88,27 @@ public class PostDocenteFragment extends Fragment implements PostAdapter.OnPostL
             });
         }
 
-        recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         RecyclerView.Adapter adapter = new PostAdapter(posts, this);
         recyclerView.setAdapter(adapter);
 
-        fab = getView().findViewById(R.id.fab_add_post);
+        fab = findViewById(R.id.fab_add_post);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getBaseContext(), NewPostActivity.class);
+                Intent intent = new Intent(getApplicationContext(), NewPostActivity.class);
                 intent.putExtra("corso_id", corso_id);
-                getActivity().startActivity(intent);
+                startActivity(intent);
             }
         });
-
-        return view;
     }
 
     // Metodo in caso di recupero fallito dei post di un corso
     public void showAlert(String s){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(getResources().getString(R.string.get_failed));
         alertDialog.setMessage(s);
         alertDialog.setNeutralButton(getResources().getString(R.string.Dialog_neutral_button_login_failed), new DialogInterface.OnClickListener() {
@@ -128,8 +122,8 @@ public class PostDocenteFragment extends Fragment implements PostAdapter.OnPostL
     @Override
     public void onPostClick(int position) {
         Post post = posts.get(position);
-        Intent intent = new Intent(getActivity().getBaseContext(), PostActivity.class);
+        Intent intent = new Intent(this, PostActivity.class);
         intent.putExtra("post", post);
-        getActivity().startActivity(intent);
+        startActivity(intent);
     }
 }
