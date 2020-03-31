@@ -1,9 +1,12 @@
 package com.kasteca.object;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Post {
+public class Post implements Parcelable {
 
     private String id;
     private String tag;
@@ -40,6 +43,28 @@ public class Post {
     public Post() {
         this.lista_commenti = new ArrayList<String>();
     }
+
+    protected Post(Parcel in) {
+        id = in.readString();
+        tag = in.readString();
+        testo = in.readString();
+        corso = in.readString();
+        lista_commenti = in.createStringArrayList();
+        link = in.readString();
+        pdf = in.readString();
+    }
+
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
+
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
 
     //Metodo per l'aggiunta di un commento
     public void addComment(String commento){
@@ -112,5 +137,21 @@ public class Post {
 
     public void setPdf(String pdf) {
         this.pdf = pdf;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(tag);
+        dest.writeString(testo);
+        dest.writeString(corso);
+        dest.writeStringList(lista_commenti);
+        dest.writeString(link);
+        dest.writeString(pdf);
     }
 }

@@ -16,25 +16,36 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     private ArrayList<Post> posts;
+    private OnPostListener mOnPostListener;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public CardView cv;
         public ImageView icon_post;
         public TextView text_post;
         public TextView tag;
+        public OnPostListener onPostListener;
 
-        public ViewHolder(View v) {
+        public ViewHolder(View v, OnPostListener onPostListener) {
             super(v);
             cv = v.findViewById(R.id.card_view_post);
             icon_post = v.findViewById(R.id.icon_post);
             text_post = v.findViewById(R.id.text_post);
             tag = v.findViewById(R.id.text_tag);
+            this.onPostListener = onPostListener;
+
+            v.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onPostListener.onPostClick(getAdapterPosition());
         }
     }
 
 
-    public PostAdapter(ArrayList<Post> post_dataset) {
-        posts = post_dataset;
+    public PostAdapter(ArrayList<Post> post_dataset, OnPostListener onPostListener) {
+        this.posts = post_dataset;
+        this.mOnPostListener = onPostListener;
     }
 
     // Crea nuove view (invocato dal layout manager)
@@ -43,7 +54,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         // crea una nuova view
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.post_item, parent, false);
-        PostAdapter.ViewHolder vh = new PostAdapter.ViewHolder(v);
+        PostAdapter.ViewHolder vh = new PostAdapter.ViewHolder(v, mOnPostListener);
         return vh;
     }
 
@@ -89,5 +100,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     @Override
     public int getItemCount() {
         return posts.size();
+    }
+
+    public interface OnPostListener{
+        void onPostClick(int position);
     }
 }

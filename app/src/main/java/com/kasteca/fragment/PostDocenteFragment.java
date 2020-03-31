@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -16,16 +15,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.kasteca.PostAdapter;
 import com.kasteca.R;
 import com.kasteca.activity.NewPostActivity;
+import com.kasteca.activity.PostActivity;
 import com.kasteca.object.Post;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,9 +30,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class PostDocenteFragment extends Fragment {
+public class PostDocenteFragment extends Fragment implements PostAdapter.OnPostListener {
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
     private ArrayList<String> post_ids;
@@ -84,7 +80,7 @@ public class PostDocenteFragment extends Fragment {
                                 (String) document.get("pdf"),
                                 (ArrayList<String>) document.get("lista_commenti")
                         );
-                        
+
                         posts.add(post);
                     } else {
                         showAlert(getResources().getString(R.string.get_posts_failed));
@@ -97,7 +93,7 @@ public class PostDocenteFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        RecyclerView.Adapter adapter = new PostAdapter(posts);
+        RecyclerView.Adapter adapter = new PostAdapter(posts, this);
         recyclerView.setAdapter(adapter);
 
         fab = getView().findViewById(R.id.fab_add_post);
@@ -123,5 +119,13 @@ public class PostDocenteFragment extends Fragment {
             }
         });
         alertDialog.show();
+    }
+
+    @Override
+    public void onPostClick(int position) {
+        Post post = posts.get(position);
+        Intent intent = new Intent(getContext(), PostActivity.class);
+        intent.putExtra("post", post);
+        startActivity(intent);
     }
 }
