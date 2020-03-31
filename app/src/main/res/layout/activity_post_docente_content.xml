@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/fragment_post_docente_scrolling">
+    tools:showIn="@layout/activity_post_docente_scrolling">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -42,7 +42,7 @@ public class PostDocenteFragment extends Fragment implements PostAdapter.OnPostL
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_post_docente_scrolling, container, false);
+        View view = inflater.inflate(R.layout.activity_post_docente_scrolling, container, false);
         corso_id = "";
         post_ids = new ArrayList<>();
         posts = new ArrayList<>();
