@@ -1,8 +1,9 @@
 package com.kasteca.object;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Docente {
+public class Docente implements Serializable {
     private String id;
     private String nome;
     private String cognome;
@@ -68,12 +69,22 @@ public class Docente {
 
     @Override
     public String toString() {
-        return "Docente{" +
+        if(lista_corsi!=null)
+            return "Docente{" +
                 "id='" + id + '\'' +
                 ", nome='" + nome + '\'' +
                 ", cognome='" + cognome + '\'' +
                 ", email='" + email + '\'' +
-                ", lista_corsi=" + lista_corsi +
+                ", numero corsi=" + lista_corsi.size() +
                 '}';
+        else
+            return "Docente{" +
+                    "id='" + id + '\'' +
+                    ", nome='" + nome + '\'' +
+                    ", cognome='" + cognome + '\'' +
+                    ", email='" + email + '\'' +
+                    ", numero corsi=" + "LISTA VUOTA" +
+                    '}';
+
     }
 }

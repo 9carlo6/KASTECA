@@ -1,9 +1,10 @@
 package com.kasteca.object;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Corso {
+public class Corso implements Serializable {
 
     private String nome;
     private String descrizione;
@@ -129,10 +130,10 @@ public class Corso {
                 "nome='" + nome + '\'' +
                 ", descrizione='" + descrizione + '\'' +
                 ", anno_accademico='" + anno_accademico + '\'' +
-                ", docente=" + docente +
+                ", docente=" + docente.getNome() +
                 ", codice='" + codice + '\'' +
                 ", id='" + id + '\'' +
-                ", posts=" + posts +
+                ", posts=" + "TOSTRINGPOST DA IMPLEMENTARE" +
                 ", studenti=" + studenti +
                 '}';
     }

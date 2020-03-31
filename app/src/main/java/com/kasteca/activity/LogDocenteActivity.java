@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import android.content.Intent;
@@ -46,6 +47,8 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
     private TextView nome_cognome_TextView;
     private TextView email_TextView;
 
+    private static FragmentManager fm=null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view_docente);
@@ -64,11 +68,16 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        //inizializzo il fragmentManager che mi servirà per le operazioni sui fragment.
+        fm= getSupportFragmentManager();
+        navigationView.setCheckedItem(R.id.nav_corsi_docente);
+        /*
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
                     new CorsiDocenteFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_corsi_docente);
         }
+        */
 
         //recuper il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleDocente = getIntent().getExtras();
@@ -83,6 +92,7 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         //metodo per l'aggiunta dei corsi nella classe docente
         if(recuperoCorsi(corsi))
             Log.d(LOG,"Aggiunta corsi è terminata con successo.");
+        Log.d(LOG,docente.toString());
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
@@ -91,6 +101,25 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         nome_cognome_TextView.setText(docente.getNome() + " " + docente.getCognome());
         email_TextView.setText(docente.getEmail());
 
+        /*
+        //L'operazione di invio del bundle al fragment dovrà avvenire solo dopo che sarà terminata
+        //l'operazione di download dei contenuti
+        //Quindi sarà richiamata dal listener che di occupa di fare ciò.
+        //Avvio del fragment, invio del Bundle contente il docente.
+        Bundle data= new Bundle();
+        data.putSerializable("docente",docente);
+
+        //Crazione Fragment
+        CorsiDocenteFragment fragmentCorsiDocente= new CorsiDocenteFragment();
+        //Passo al fragment il bundle contenente il docente.
+        fragmentCorsiDocente.setArguments(data);
+        //Avvio del fragment
+        if (savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
+                   fragmentCorsiDocente).commit();
+            navigationView.setCheckedItem(R.id.nav_corsi_docente);
+        }
+        */
 
     }
 
@@ -154,28 +183,12 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
 
                                         }
                                     }
-                                /*
-                                if(document!= null){
-                                    //Creiamo corso
-                                    Corso corso = new Corso(
-                                            document.getData().get("nome_corso").toString(),
-                                            document.getData().get("anno_accademico").toString(),
-                                            document.getData().get("descrizione").toString(),
-                                            LogDocenteActivity.docente,
-                                            document.getData().get("codice").toString(),
-                                            document.get("id").toString());
-                                    Log.e(LOG, "Corso: " + corso.toString());
-                                    //aggiungo il corso al docente
-                                    if (docente.getLista_corsi() == null)
-                                        docente.setLista_corsi(new ArrayList<Corso>());
-                                    docente.addCorso(corso);
-                                }else{
-                                    Log.e(LOG,"Document nullo");
-                                }
-                                */
-                                    //}
+
                                 }
 
+                                //Dopo la creazione dei corsi dobbiamo richiamare il metodo di questa
+                                // activity per la creazione del fragment dei corsi del docente
+                                creazioneFragment(docente);
                             }
 
                         }
@@ -200,6 +213,19 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
 
 
 
+
+    //Metodo per la creazione del fragment dei corsi del docente
+    private static void creazioneFragment(Docente docente){
+        //Crazione Fragment
+        CorsiDocenteFragment fragmentCorsiDocente= new CorsiDocenteFragment(docente);
+        //Avvio del fragment
+        if(fm != null){
+            fm.beginTransaction().replace(R.id.fragment_container_docente,
+                    fragmentCorsiDocente).commit();
+        }
+
+
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
