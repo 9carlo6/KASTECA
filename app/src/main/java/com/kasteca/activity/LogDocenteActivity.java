@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,10 +45,12 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
     private Bundle bundleDocente;
     private static Docente docente;
 
+
     private TextView nome_cognome_TextView;
     private TextView email_TextView;
 
     private static FragmentManager fm=null;
+
 
 
     @Override
@@ -70,6 +73,7 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
 
         //inizializzo il fragmentManager che mi servirà per le operazioni sui fragment.
         fm= getSupportFragmentManager();
+
         navigationView.setCheckedItem(R.id.nav_corsi_docente);
         /*
         if (savedInstanceState == null){
@@ -215,17 +219,18 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
 
 
     //Metodo per la creazione del fragment dei corsi del docente
-    private static void creazioneFragment(Docente docente){
+    private void creazioneFragment(Docente docente){
         //Crazione Fragment
-        CorsiDocenteFragment fragmentCorsiDocente= new CorsiDocenteFragment(docente);
+        CorsiDocenteFragment fragmentCorsiDocente= new CorsiDocenteFragment(docente,this);
         //Avvio del fragment
         if(fm != null){
             fm.beginTransaction().replace(R.id.fragment_container_docente,
                     fragmentCorsiDocente).commit();
         }
 
-
     }
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
