@@ -87,10 +87,6 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         //docente.setLista_corsi(bundleDocente.getStringArrayList("lista_corsi"));
         docente.setId(bundleDocente.getString("id"));
 
-        //metodo per l'aggiunta dei corsi nella classe docente
-        //recuperoCorsi(corsi);
-        //Log.d(LOG,"Aggiunta corsi è terminata con successo.");
-        //Log.d(LOG,docente.toString());
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);

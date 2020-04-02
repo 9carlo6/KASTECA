@@ -1,6 +1,5 @@
 package com.kasteca.fragment;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kasteca.R;
@@ -22,7 +20,6 @@ public class RecyclerViewAdapterCorsi extends RecyclerView.Adapter<RecyclerViewA
 
     private final String LOG= "AdapterRVCorsi_DEBUG";
     private ArrayList<Corso> corsi;
-    private Context context;
     private OnNoteListener adapterOnNoteListener;
 
 
@@ -37,8 +34,7 @@ public class RecyclerViewAdapterCorsi extends RecyclerView.Adapter<RecyclerViewA
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = null;
-        view= LayoutInflater.from(parent.getContext())
+        View view= LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_item_corso_adapter_recycleview,parent,false);
 
         ViewHolder holder= new ViewHolder(view,adapterOnNoteListener);
