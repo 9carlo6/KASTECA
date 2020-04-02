@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kasteca.R;
@@ -22,12 +23,14 @@ public class RecyclerViewAdapterCorsi extends RecyclerView.Adapter<RecyclerViewA
     private final String LOG= "AdapterRVCorsi_DEBUG";
     private ArrayList<Corso> corsi;
     private Context context;
+    private OnNoteListener adapterOnNoteListener;
 
 
     //Costruttore
-    public RecyclerViewAdapterCorsi(Context context,ArrayList<Corso> corsi){
-        this.context=context;
+    public RecyclerViewAdapterCorsi(ArrayList<Corso> corsi, OnNoteListener onNoteListener){
+        this.adapterOnNoteListener= onNoteListener;
         this.corsi=corsi;
+
     }
 
     @NonNull
@@ -38,7 +41,8 @@ public class RecyclerViewAdapterCorsi extends RecyclerView.Adapter<RecyclerViewA
         view= LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_item_corso_adapter_recycleview,parent,false);
 
-        ViewHolder holder= new ViewHolder(view);
+        ViewHolder holder= new ViewHolder(view,adapterOnNoteListener);
+
         return holder;
     }
 
@@ -50,6 +54,8 @@ public class RecyclerViewAdapterCorsi extends RecyclerView.Adapter<RecyclerViewA
 
         //DA SETTARE L'ONCLICK LISTENER
 
+
+
     }
 
     @Override
@@ -58,20 +64,32 @@ public class RecyclerViewAdapterCorsi extends RecyclerView.Adapter<RecyclerViewA
     }
 
 
-
     //ViewHolder per questo Adapter
-    public class ViewHolder extends  RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView textView;
         RelativeLayout relativeLayout;
+        OnNoteListener onNoteListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnNoteListener onNoteListener) {
             super(itemView);
-            this.relativeLayout=(RelativeLayout) itemView.findViewById(R.id.relativelayout_item);
-            this.textView= (TextView) itemView.findViewById(R.id.nomeCorso);
+            this.relativeLayout = (RelativeLayout) itemView.findViewById(R.id.relativelayout_item);
+            this.textView = (TextView) itemView.findViewById(R.id.nomeCorso);
+            this.onNoteListener=onNoteListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onNoteListener.onNoteClick(getAdapterPosition());
         }
     }
 
+
+    public interface OnNoteListener{
+        void onNoteClick(int position);
+    }
 
 
 

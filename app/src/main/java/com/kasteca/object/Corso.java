@@ -9,12 +9,10 @@ public class Corso implements Serializable {
     private String nome;
     private String descrizione;
     private String anno_accademico;
-    private Docente docente;
-    //id e codice potrebbero essere la stessa cosa?
+    private String idDocente;
+
     private String codice;      //codice deciso dal docente
     private String id;          //id firebase
-    private ArrayList<Post> posts;
-    private ArrayList<Studente> studenti;
 
 
 
@@ -24,37 +22,25 @@ public class Corso implements Serializable {
 
     }
 
-    public Corso(String nome, String anno_accademico, String descrizione, Docente docente, String codice) {
+    public Corso(String nome, String anno_accademico, String descrizione) {
         this.nome = nome;
         this.anno_accademico= anno_accademico;
         this.descrizione = descrizione;
-        this.docente = docente;
+        this.idDocente = idDocente;
         this.codice = codice;
         this.id = Corso.idGenerator();
-        this.posts= new ArrayList<Post>();
-        this.studenti= new ArrayList<Studente>();
+
     }
 
-    public Corso(String nome, String anno_accademico, String descrizione, Docente docente, String codice, String id) {
+
+    public Corso(String nome, String anno_accademico, String descrizione, String idDocente, String codice, String id) {
         this.nome = nome;
         this.anno_accademico= anno_accademico;
         this.descrizione = descrizione;
-        this.docente = docente;
+        this.idDocente = idDocente;
         this.codice = codice;
         this.id = id;
-        this.posts= new ArrayList<Post>();
-        this.studenti= new ArrayList<Studente>();
-    }
 
-    public Corso(String nome, String anno_accademico, String descrizione, Docente docente, String codice, String id, ArrayList<Post> posts, ArrayList<Studente> studenti) {
-        this.nome = nome;
-        this.anno_accademico= anno_accademico;
-        this.descrizione = descrizione;
-        this.docente = docente;
-        this.codice = codice;
-        this.id = id;
-        this.posts = posts;
-        this.studenti = studenti;
     }
 
 
@@ -66,24 +52,8 @@ public class Corso implements Serializable {
     }
 
 
-    //Metodi per aggiunta studenti e posts
-    public void addStudente(Studente s){
-        try{
-            studenti.add(s);
-        }catch(NullPointerException e){
-            System.err.print(e.toString());
-            System.err.print("ArrayList degli studenti ancora non inizializzata o null.");
-        }
-    }
 
-    public void addPost(Post p){
-        try{
-            posts.add(p);
-        }catch(NullPointerException e){
-            System.err.print(e.toString());
-            System.err.print("ArrayList dei post ancora non inizializzata o null.");
-        }
-    }
+
 
 
 
@@ -99,8 +69,8 @@ public class Corso implements Serializable {
         return descrizione;
     }
 
-    public Docente getDocente() {
-        return docente;
+    public String getIdDocente() {
+        return idDocente;
     }
 
     public String getCodice() {
@@ -111,13 +81,6 @@ public class Corso implements Serializable {
         return id;
     }
 
-    public ArrayList<Post> getPosts() {
-        return posts;
-    }
-
-    public ArrayList<Studente> getStudenti() {
-        return studenti;
-    }
 
     public String getAnno_accademico() {
         return anno_accademico;
@@ -130,11 +93,9 @@ public class Corso implements Serializable {
                 "nome='" + nome + '\'' +
                 ", descrizione='" + descrizione + '\'' +
                 ", anno_accademico='" + anno_accademico + '\'' +
-                ", docente=" + docente.getNome() +
+                ", id-docente=" + idDocente +
                 ", codice='" + codice + '\'' +
                 ", id='" + id + '\'' +
-                ", posts=" + "TOSTRINGPOST DA IMPLEMENTARE" +
-                ", studenti=" + studenti +
                 '}';
     }
 }
