@@ -57,11 +57,11 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         //recuper il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleStudente = getIntent().getExtras();
         studente = new Studente();
+        studente.setId(bundleStudente.getString("id"));
         studente.setNome(bundleStudente.getString("nome"));
         studente.setCognome(bundleStudente.getString("cognome"));
         studente.setEmail(bundleStudente.getString("email"));
         studente.setMatricola(bundleStudente.getString("matricola"));
-        studente.setLista_corsi(bundleStudente.getStringArrayList("lista_corsi"));
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);

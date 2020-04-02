@@ -8,31 +8,18 @@ public class Post {
     private String id;
     private String tag;
     private String testo;
-    private Corso corso;
     private Date data;
-    private ArrayList<Commento> lista_commenti;
     private String link;
     private String pdf;
 
     //Costruttori
-    public Post(String id, String tag, String testo, Corso corso, Date data, String link, String pdf) {
+    public Post(String id, String tag, String testo, Date data, String link, String pdf) {
         this.id = id;
         this.tag = tag;
         this.testo = testo;
-        this.corso = corso;
         this.data = data;
-        this.lista_commenti = new ArrayList<Commento>();
         this.link = link;
         this.pdf = pdf;
-    }
-
-    public Post() {
-        this.lista_commenti = new ArrayList<Commento>();
-    }
-
-    //Metodo per l'aggiunta di un commento
-    public void addComment(Commento commento){
-        lista_commenti.add(commento);
     }
 
     //Metodi get
@@ -49,16 +36,8 @@ public class Post {
         return testo;
     }
 
-    public Corso getCorso() {
-        return corso;
-    }
-
     public Date getData() {
         return data;
-    }
-
-    public ArrayList<Commento> getLista_commenti() {
-        return lista_commenti;
     }
 
     public String getLink() {
@@ -83,16 +62,8 @@ public class Post {
         this.testo = testo;
     }
 
-    public void setCorso(Corso corso) {
-        this.corso = corso;
-    }
-
     public void setData(Date data) {
         this.data = data;
-    }
-
-    public void setLista_commenti(ArrayList<Commento> lista_commenti) {
-        this.lista_commenti = lista_commenti;
     }
 
     public void setLink(String link) {

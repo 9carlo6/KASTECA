@@ -7,14 +7,12 @@ public class Docente {
     private String nome;
     private String cognome;
     private String email;
-    private ArrayList<String> lista_corsi;
 
-    public Docente(String id, String nome, String cognome, String email, ArrayList<String> lista_corsi) {
+    public Docente(String id, String nome, String cognome, String email) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
-        this.lista_corsi = lista_corsi;
     }
 
     public Docente() {
@@ -50,13 +48,5 @@ public class Docente {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public ArrayList<String> getLista_corsi() {
-        return lista_corsi;
-    }
-
-    public void setLista_corsi(ArrayList<String> lista_corsi) {
-        this.lista_corsi = lista_corsi;
     }
 }

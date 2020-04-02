@@ -8,15 +8,13 @@ public class Studente {
     private String cognome;
     private String email;
     private String matricola;
-    private ArrayList<String> lista_corsi;
 
-    public Studente(String id, String nome, String cognome, String email, String matricola, ArrayList<String> lista_corsi) {
+    public Studente(String id, String nome, String cognome, String email, String matricola) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.matricola = matricola;
-        this.lista_corsi = lista_corsi;
     }
 
     public Studente() {
@@ -60,13 +58,5 @@ public class Studente {
 
     public void setMatricola(String matricola) {
         this.matricola = matricola;
-    }
-
-    public ArrayList<String> getLista_corsi() {
-        return lista_corsi;
-    }
-
-    public void setLista_corsi(ArrayList<String> lista_corsi) {
-        this.lista_corsi = lista_corsi;
     }
 }

@@ -56,10 +56,10 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         //recuper il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleDocente = getIntent().getExtras();
         docente = new Docente();
+        docente.setId(bundleDocente.getString("id"));
         docente.setNome(bundleDocente.getString("nome"));
         docente.setCognome(bundleDocente.getString("cognome"));
         docente.setEmail(bundleDocente.getString("email"));
-        docente.setLista_corsi(bundleDocente.getStringArrayList("lista_corsi"));
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);

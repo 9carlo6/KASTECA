@@ -105,10 +105,10 @@ public class MainActivity extends AppCompatActivity {
                                                 //per passare un oggetto bisogna usare la classe Bundle
                                                 docente = new Bundle();
 
+                                                docente.putString("id", document.getId());
                                                 docente.putString("nome", document.getData().get("nome").toString());
                                                 docente.putString("cognome", document.getData().get("cognome").toString());
                                                 docente.putString("email", document.getData().get("email").toString());
-                                                docente.putStringArrayList("lista_corsi", (ArrayList<String>) document.getData().get("lista_corsi"));
 
                                                 intent.putExtras(docente);
                                                 startActivity(intent);
@@ -136,11 +136,11 @@ public class MainActivity extends AppCompatActivity {
                                                 //per passare un oggetto bisogna usare la classe Bundle
                                                 studente = new Bundle();
 
+                                                studente.putString("id", document.getId());
                                                 studente.putString("nome", document.getData().get("nome").toString());
                                                 studente.putString("cognome", document.getData().get("cognome").toString());
                                                 studente.putString("email", document.getData().get("email").toString());
                                                 studente.putString("matricola", document.getData().get("matricola").toString());
-                                                studente.putStringArrayList("lista_corsi", (ArrayList<String>) document.getData().get("lista_corsi"));
 
                                                 intent.putExtras(studente);
                                                 startActivity(intent);
