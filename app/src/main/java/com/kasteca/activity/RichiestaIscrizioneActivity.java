@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.kasteca.R;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,8 +66,8 @@ public class RichiestaIscrizioneActivity extends AppCompatActivity {
                         CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
 
                         Map<String, Object> obj = new HashMap<>();
-                        obj.put("corso", document.get("codice").toString());
-                        obj.put("data", null);
+                        obj.put("codice_corso", document.get("codice").toString());
+                        obj.put("data", new Timestamp(Calendar.getInstance().getTime()));
                         obj.put("stato_richiesta", "in attesa");
                         obj.put("studente", id_studente);
 
