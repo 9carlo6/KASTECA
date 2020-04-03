@@ -15,8 +15,6 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -60,8 +58,8 @@ public class RichiestaIscrizioneActivity extends AppCompatActivity {
                     if (codice_corso_edit_text.getText().toString().equals(document.get("codice").toString())) {
                         // aggiorno controllo_esistenza_codice a 1 perchè il codice è stato trovato
                         controllo_esistenza_codice = 1;
-                        //allora inviare la richiesta e caricarla nel db
 
+                        // allora inviare la richiesta e caricarla nel db
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
 
