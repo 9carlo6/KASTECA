@@ -9,32 +9,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
 import com.kasteca.fragment.CorsiDocenteFragment;
-import com.kasteca.object.Corso;
 import com.kasteca.object.Docente;
 import com.kasteca.R;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class LogDocenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -112,8 +100,6 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         //Creazione del Bundle contenente informazioni per il fragment.
         //Sarà lo stesso contenente le informazioni contenute durante il login.
         fragmentCorsiDocente.setArguments(bundle);
-
-
 
         //Avvio del fragment
         if(fm != null){

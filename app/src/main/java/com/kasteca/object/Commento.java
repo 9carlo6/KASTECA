@@ -7,17 +7,13 @@ public class Commento {
 
     private String id;
     private String testo;
-    private Studente proprietario;
-    private Post post;
     private Date data;
     private ArrayList<Risposta> lista_risposte;
 
     //Costruttori
-    public Commento(String id, String testo, Studente proprietario, Post post, Date data) {
+    public Commento(String id, String testo, Date data) {
         this.id = id;
         this.testo = testo;
-        this.proprietario = proprietario;
-        this.post = post;
         this.data = data;
         this.lista_risposte = new ArrayList<Risposta>();
     }
@@ -41,14 +37,6 @@ public class Commento {
         return testo;
     }
 
-    public Studente getProprietario() {
-        return proprietario;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
     public Date getData() {
         return data;
     }
@@ -64,14 +52,6 @@ public class Commento {
 
     public void setTesto(String testo) {
         this.testo = testo;
-    }
-
-    public void setProprietario(Studente proprietario) {
-        this.proprietario = proprietario;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
     }
 
     public void setData(Date data) {

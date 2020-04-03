@@ -24,7 +24,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.kasteca.R;
 import com.kasteca.activity.CorsoActivity;
-import com.kasteca.activity.LogDocenteActivity;
 import com.kasteca.object.Corso;
 import com.kasteca.object.Docente;
 
@@ -82,8 +81,6 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         Log.d(LOG,"recupero corsi da firebase ...");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
-        //QuerySnapshot q =db.collection("Corsi").whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(),  idCorso);
-        //where(firebase.firestore.FieldPath.documentId(), '==', "scindv");
         Source source = Source.SERVER;
 
         Log.e(LOG, "Lista codici corsi: ");
@@ -103,17 +100,6 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
                                     if (task.getResult() == null) {
                                         Log.e(LOG, "risultato della query null");
                                     } else {
-
-                                        //Controllo dati scaticati da firebase
-                                        List<DocumentSnapshot> testDocuments = task.getResult().getDocuments();
-                                        for (DocumentSnapshot d : testDocuments) {
-                                            Log.e(LOG, d.getData().toString());
-                                            Log.e(LOG, d.getData().get("codice").toString());
-                                            Log.e(LOG, d.getData().get("descrizione").toString());
-                                            Log.e(LOG, d.getData().get("anno_accademico").toString());
-                                            Log.e(LOG, d.getData().get("nome_corso").toString());
-                                            Log.e(LOG, d.getId());
-                                        }
 
                                         //Per ogni corso controllo se è del docente
                                         for (DocumentSnapshot document : task.getResult().getDocuments()) {
