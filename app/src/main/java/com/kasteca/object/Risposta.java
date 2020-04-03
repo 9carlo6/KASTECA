@@ -5,14 +5,12 @@ import java.util.Date;
 public class Risposta {
 
     private String id;
-    private String commento;
     private Date data;
     private String testo;
 
     //Costruttori
-    public Risposta(String id, String commento, Date data , String testo) {
+    public Risposta(String id, Date data, String testo) {
         this.id = id;
-        this.commento = commento;
         this.data = data;
         this.testo = testo;
     }
@@ -26,11 +24,9 @@ public class Risposta {
         return id;
     }
 
-
     public Date getData() {
         return data;
     }
-
 
     public String getTesto() {
         return testo;

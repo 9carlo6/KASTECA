@@ -1,25 +1,22 @@
 package com.kasteca.object;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 
-public class Docente implements Serializable {
+public class Docente {
     private String id;
     private String nome;
     private String cognome;
     private String email;
 
-
-    public Docente(String id, String nome, String cognome, String email ) {
+    public Docente(String id, String nome, String cognome, String email) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
-
     }
 
     public Docente() {
     }
-
 
     public String getId() {
         return id;
@@ -51,15 +48,5 @@ public class Docente implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return "Docente{" +
-                "id='" + id + '\'' +
-                ", nome='" + nome + '\'' +
-                ", cognome='" + cognome + '\'' +
-                ", email='" + email + '\'' +
-                '}';
     }
 }

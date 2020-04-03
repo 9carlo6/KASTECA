@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,11 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.kasteca.R;
-import com.kasteca.fragment.CorsiDocenteFragment;
-import com.kasteca.object.Corso;
-import com.kasteca.object.Docente;
 
-import java.sql.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,14 +56,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        Log.e("DEBUG CORSI","Lista codici corsi:1 ");
     }
 
 
     public void login(View v) {
-
-        Log.e("DEBUG CORSI","Lista codici corsi:2 ");
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
         mAuth.signOut(); // serve per fare il logout, nel caso in cui ci fosse un utente già loggato
@@ -76,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         final String mail = email_edit_text.getText().toString();
         String pwd = password_edit_text.getText().toString();
 
-        Log.e("DEBUG CORSI","Lista codici corsi:2.5 ");
+
         // se i campi non sono vuoti o invalidi allora procede con il login
         if(ControlloCampi(mail, pwd) && email_edit_text.getText()!=null && password_edit_text.getText() != null) {
             mAuth.signInWithEmailAndPassword(mail, pwd)
@@ -86,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(MainActivity.this,
                                         getResources().getString(R.string.Login_Successful), Toast.LENGTH_LONG).show();
-                                Log.e("DEBUG CORSI","Lista codici corsi:3 ");
+
                                 // questo serve per conservare l'email dell'ultimo utente che fa l'accesso sul dispositivo
                                 SharedPreferences.Editor editor = prefs.edit();
                                 editor.putString(LAST_USER, mail);
@@ -98,12 +89,9 @@ public class MainActivity extends AppCompatActivity {
                                 Source source = Source.SERVER;
 
                                 // controlla se l'utente che ha eseguito l'accesso è un docente
-                                Log.e("DEBUG CORSI","Lista codici corsi:3.5 ");
-
                                 docenti.get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        Log.e("DEBUG CORSI","Lista codici corsi:4 ");
                                         FirebaseAuth mAuth1 = FirebaseAuth.getInstance();
                                         FirebaseUser currentUser1 = mAuth1.getCurrentUser();
 
@@ -112,18 +100,15 @@ public class MainActivity extends AppCompatActivity {
                                             // se l'id dell'utente (appena loggato) è associato a un docente
                                             if (currentUser1.getUid().equalsIgnoreCase(document.getId())) {
                                                 Intent intent = new Intent(getApplicationContext(), LogDocenteActivity.class);
-                                                Log.e("DEBUG CORSI","Lista codici corsi:5 ");
+
                                                 //scarico i dati relativi al docente e li carico in un nuovo oggetto Docente
                                                 //per passare un oggetto bisogna usare la classe Bundle
                                                 docente = new Bundle();
 
+                                                docente.putString("id", document.getId());
                                                 docente.putString("nome", document.getData().get("nome").toString());
                                                 docente.putString("cognome", document.getData().get("cognome").toString());
                                                 docente.putString("email", document.getData().get("email").toString());
-                                                docente.putStringArrayList("lista_corsi", (ArrayList<String>) document.getData().get("lista_corsi"));
-                                                docente.putString("id", currentUser1.getUid());
-
-                                                Log.e("DEBUG CORSI","Lista codici corsi: 6");
 
                                                 intent.putExtras(docente);
                                                 startActivity(intent);
@@ -151,11 +136,11 @@ public class MainActivity extends AppCompatActivity {
                                                 //per passare un oggetto bisogna usare la classe Bundle
                                                 studente = new Bundle();
 
+                                                studente.putString("id", document.getId());
                                                 studente.putString("nome", document.getData().get("nome").toString());
                                                 studente.putString("cognome", document.getData().get("cognome").toString());
                                                 studente.putString("email", document.getData().get("email").toString());
                                                 studente.putString("matricola", document.getData().get("matricola").toString());
-                                                studente.putStringArrayList("lista_corsi", (ArrayList<String>) document.getData().get("lista_corsi"));
 
                                                 intent.putExtras(studente);
                                                 startActivity(intent);

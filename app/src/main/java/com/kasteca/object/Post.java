@@ -13,7 +13,7 @@ public class Post {
     private String pdf;
 
     //Costruttori
-    public Post(String id, String tag, String testo, Corso corso, Date data, String link, String pdf) {
+    public Post(String id, String tag, String testo, Date data, String link, String pdf) {
         this.id = id;
         this.tag = tag;
         this.testo = testo;
@@ -21,9 +21,6 @@ public class Post {
         this.link = link;
         this.pdf = pdf;
     }
-
-
-
 
     //Metodi get
 
@@ -65,11 +62,9 @@ public class Post {
         this.testo = testo;
     }
 
-
     public void setData(Date data) {
         this.data = data;
     }
-
 
     public void setLink(String link) {
         this.link = link;
