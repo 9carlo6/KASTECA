@@ -47,4 +47,14 @@
     <string name="matricola_drower">matricola</string>
     <string name="logout">Logout</string>
 
+
+    <!-- stringhe per la RichiestaIscrizioneActivity -->
+    <string name="iscriviti_a_un_corso">Iscriviti a un corso</string>
+    <string name="chiedi_al_docente_il_codice">Chiedi al docente il codice del corso e inseriscilo qui</string>
+    <string name="Codice_Corso_text">Codice Corso</string>
+    <string name="bottone_richiesta_iscrizione">RICHIEDI ISCRIZIONE</string>
+    <string name="Codice_Corso_non_corretto">Il codice inserito non appartiene a nessun corso esistente</string>
+
+
+
 </resources>
