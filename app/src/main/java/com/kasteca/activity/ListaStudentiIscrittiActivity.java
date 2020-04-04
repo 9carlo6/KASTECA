@@ -8,7 +8,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,6 +17,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.kasteca.R;
+import com.kasteca.adapter.ListaStudentiIscrittiAdapter;
 import com.kasteca.object.Studente;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lista_studenti_iscritti);
 
         // la striga codice_corso serve per scaricare gli studenti iscritti al corso specifico
-        id_corso = "jyiw42K1kqPUaGWhIgZW";
+        id_corso = getIntent().getStringExtra("id_corso");
 
         // creo un arraylist che conterra gli studenti iscritti
         studenti = new ArrayList<>();

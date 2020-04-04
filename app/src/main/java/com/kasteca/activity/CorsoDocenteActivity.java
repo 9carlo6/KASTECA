@@ -84,6 +84,9 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
             case R.id.nav_post_corso:
                 break;
             case R.id.nav_visualizza_studenti_iscritti:
+                Intent intent = new Intent(getApplicationContext(), ListaStudentiIscrittiActivity.class);
+                intent.putExtra("id_corso",id_corso);
+                startActivity(intent);
                 break;
             case R.id.nav_visualizza_richieste_studente:
                 break;
@@ -94,6 +97,7 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     @Override
     public void onBackPressed() {
