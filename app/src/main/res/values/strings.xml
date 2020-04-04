@@ -47,4 +47,9 @@
     <string name="matricola_drower">matricola</string>
     <string name="logout">Logout</string>
 
+    <!-- stringhe per la CorsoDocenteActivity -->
+    <string name="menu_post">Post</string>
+    <string name="menu_visualizza_studenti_iscritti">Visualizza Studenti iscritti</string>
+    <string name="menu_visualizza_richieste_studente">Visualizza Richieste Studenti</string>
+
 </resources>

@@ -49,7 +49,6 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
         //recupero il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleDocente = getIntent().getExtras();
         docente = new Docente();
@@ -57,7 +56,6 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         docente.setNome(bundleDocente.getString("nome"));
         docente.setCognome(bundleDocente.getString("cognome"));
         docente.setEmail(bundleDocente.getString("email"));
-
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
@@ -72,30 +70,20 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         cf= new CorsiDocenteFragment();
         cf.setArguments(bundleDocente);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, cf).commit();
-
-
-
     }
-
-
-
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_corsi_docente:
-
                 cf= new CorsiDocenteFragment();
                 cf.setArguments(bundleDocente);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, cf).commit();
-
                 break;
             case R.id.nav_logout:
                 Logout();
                 break;
         }
-
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -109,23 +97,6 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         }
     }
 
-/*    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.settings_menu_docente, menu);
-        return super.onCreateOptionsMenu(menu);
-    }*/
-
-/*    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_logout:
-                Logout();
-                break;
-        }
-        return true;
-    }*/
-
     public void Logout(){
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
@@ -133,6 +104,4 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         finish();
         startActivity(intent);
     }
-
-
 }
