@@ -18,6 +18,7 @@ package com.kasteca.activity;
         import com.google.firebase.auth.FirebaseAuth;
         import com.kasteca.fragment.CorsiDocenteFragment;
         import com.kasteca.R;
+        import com.kasteca.fragment.CorsiStudenteFragment;
         import com.kasteca.object.Studente;
 
 public class LogStudenteActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,11 +51,11 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
 
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente,
-                    new CorsiDocenteFragment()).commit();
+                    new CorsiStudenteFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_corsi_studente);
         }
 
-        //recuper il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
+        //recuper lo studente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleStudente = getIntent().getExtras();
         studente = new Studente();
         studente.setId(bundleStudente.getString("id"));
@@ -80,7 +81,7 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         switch (menuItem.getItemId()){
             case R.id.nav_corsi_studente:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente,
-                        new CorsiDocenteFragment()).commit();
+                        new CorsiStudenteFragment()).commit();
                 break;
             case R.id.nav_logout:
                 Logout();
