@@ -60,6 +60,11 @@ public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStud
             @Override
             public void onClick(final View v) {
                     studente_selezionato= new HashMap<>();
+
+                    // qua bisogna aggiungere il comportamento sull'onclick
+                    // magari quando si clicca esce tipo un dialog per mostrare i dettagli dello studente
+                    //
+
                     /*
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     CollectionReference collectionReference= db.collection("Studenti");
