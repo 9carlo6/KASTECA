@@ -59,7 +59,7 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         //Avviamo metodo per il recupero dei corsi da firebase
-        recuperoCorsi();
+        recuperoCorsi(docente.getId());
 
         Log.d(LOG,"RecycleView impostata.");
 
@@ -67,7 +67,7 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
     }
 
 
-    void recuperoCorsi() {
+    void recuperoCorsi(String id) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
         Source source = Source.SERVER;
@@ -75,22 +75,21 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         corsi = new ArrayList<Corso>();
 
         //Per ogni id corso che abbiamo, facciamo una query, lo cerchiamo e lo aggiungiamo alla classe studente.
-
-        corsiReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        corsiReference.whereEqualTo("docente",id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot documenti_corsi : task.getResult()) {
-                        if (documenti_corsi.get("docente").equals(docente.getId())) {
-                            Map<String, Object> c = documenti_corsi.getData();
-                            Corso corso = new Corso(
+                        Log.d(LOG,"Documento.");
+                        Map<String, Object> c = documenti_corsi.getData();
+                        Corso corso = new Corso(
                                     c.get("nome_corso").toString(),
                                     c.get("anno_accademico").toString(),
                                     c.get("descrizione").toString(),
                                     c.get("codice").toString(),
                                     documenti_corsi.getId());
-                            corsi.add(corso);
-                        }
+                        corsi.add(corso);
+
                     }
                     creazioneRecycleView(corsi);
                 }else{
