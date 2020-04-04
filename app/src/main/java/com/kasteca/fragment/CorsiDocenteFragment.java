@@ -10,10 +10,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.content.Context;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,7 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.kasteca.R;
-import com.kasteca.activity.CorsoActivity;
+import com.kasteca.activity.CorsoDocenteActivity;
 import com.kasteca.object.Corso;
 import com.kasteca.object.Docente;
 
@@ -48,9 +46,7 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        //LOG DEBUG////////////
-        Log.d(LOG,"Cambiamento fragment, verifica docente:");
-        /////////////////////
+
 
         Bundle bundle= getArguments();
         //Recupero dati dal bundle
@@ -58,9 +54,8 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         docente.setNome(bundle.getString("nome"));
         docente.setCognome(bundle.getString("cognome"));
         docente.setEmail(bundle.getString("email"));
-        id_corsi=bundle.getStringArrayList("lista_corsi");
         docente.setId(bundle.getString("id"));
-        Log.d(LOG," Dati recuperati dal bundle.");
+        id_corsi= bundle.getStringArrayList("corsi");
 
         view = inflater.inflate(R.layout.fragment_corsi_docente, container, false);
         //Carichiamo la recycleview.
@@ -88,7 +83,6 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         if (!corsi.isEmpty()) {
             //Per ogni id corso che abbiamo, facciamo una query, lo cerchiamo e lo aggiungiamo alla classe studente.
             for (String idCorso : corsi) {
-                Log.e(LOG, "Codice corso: " + idCorso);
                 corsiReference.whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(), idCorso).get(source).addOnCompleteListener(
                         new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -121,11 +115,8 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
                                                             c.get("nome_corso").toString(),
                                                             c.get("anno_accademico").toString(),
                                                             c.get("descrizione").toString(),
-                                                            docente.getId(),
                                                             c.get("codice").toString(),
                                                             d.getId());
-                                                    Log.e(LOG, "Corso: " + corso.toString());
-
                                                     cors.add(corso);
 
                                                 }
@@ -148,6 +139,7 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
 
 
         } else {
+
             Log.e(LOG, "Nessun corso presente per questo docente.");
         }
     }
@@ -171,7 +163,7 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         Log.d(LOG,"Eseguzione onNoteClick sul corso in posizione: "+position);
 
         //intent per l'Activity del corso
-        Intent intent= new Intent(getActivity(),CorsoActivity.class);
+        Intent intent= new Intent(getActivity(), CorsoDocenteActivity.class);
         Bundle bundle= new Bundle();
 
         //Passiamo all'activity del corso il codice del documento firebase del corso

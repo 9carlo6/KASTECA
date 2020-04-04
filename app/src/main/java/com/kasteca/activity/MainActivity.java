@@ -109,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
                                                 docente.putString("nome", document.getData().get("nome").toString());
                                                 docente.putString("cognome", document.getData().get("cognome").toString());
                                                 docente.putString("email", document.getData().get("email").toString());
-
+                                                ArrayList<String> corsi = (ArrayList<String>) document.get("lista_corsi");
+                                                docente.putStringArrayList("corsi",corsi);
                                                 intent.putExtras(docente);
                                                 startActivity(intent);
                                             }

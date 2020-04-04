@@ -11,7 +11,7 @@ import androidx.cardview.widget.CardView;
 
 import com.kasteca.R;
 
-public class CorsoActivity extends AppCompatActivity {
+public class CorsoDocenteActivity extends AppCompatActivity {
 
     private final String LOG="DEBUG_CORSO_ACTIVITY";
 
@@ -26,7 +26,7 @@ public class CorsoActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_corso);
+        setContentView(R.layout.activity_corso_docente);
 
         bundle_corso=getIntent().getExtras();
         id_corso= bundle_corso.getString("codice_corso");

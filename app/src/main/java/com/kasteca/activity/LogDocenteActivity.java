@@ -30,6 +30,8 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
     private TextView nome_cognome_TextView;
     private TextView email_TextView;
 
+    private CorsiDocenteFragment cf;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,19 +49,15 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        if (savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
-                    new CorsiDocenteFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_corsi_docente);
-        }
 
-        //recuper il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
+        //recupero il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleDocente = getIntent().getExtras();
         docente = new Docente();
         docente.setId(bundleDocente.getString("id"));
         docente.setNome(bundleDocente.getString("nome"));
         docente.setCognome(bundleDocente.getString("cognome"));
         docente.setEmail(bundleDocente.getString("email"));
+
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
@@ -69,14 +67,25 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         email_TextView.setText(docente.getEmail());
 
 
+        //Avvio del fragment dei corsi del docente.
+        cf= new CorsiDocenteFragment();
+        cf.setArguments(bundleDocente);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, cf).commit();
+        navigationView.setCheckedItem(R.id.nav_corsi_docente);
+
+
     }
+
+
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_corsi_docente:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
-                        new CorsiDocenteFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
+                            new CorsiDocenteFragment()).commit();
                 break;
             case R.id.nav_logout:
                 Logout();

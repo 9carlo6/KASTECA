@@ -7,6 +7,7 @@ public class Corso {
 
     private String nome;
     private String descrizione;
+    private String anno_accademico;
     private String codice;
     private String id;
 
@@ -14,8 +15,9 @@ public class Corso {
     private Corso(){
     }
 
-    public Corso(String nome, String descrizione, String codice, String id) {
+    public Corso(String nome,String anno_accademico, String descrizione, String codice, String id) {
         this.nome = nome;
+        this.anno_accademico=anno_accademico;
         this.descrizione = descrizione;
         this.codice = codice;
         this.id = id;
@@ -51,5 +53,13 @@ public class Corso {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getAnno_accademico() {
+        return anno_accademico;
+    }
+
+    public void setAnno_accademico(String anno_accademico) {
+        this.anno_accademico = anno_accademico;
     }
 }
