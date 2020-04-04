@@ -73,12 +73,9 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
 
 
     void recuperoCorsi(ArrayList<String> corsi) {
-        Log.d(LOG,"recupero corsi da firebase ...");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
         Source source = Source.SERVER;
-
-        Log.e(LOG, "Lista codici corsi: ");
 
         if (!corsi.isEmpty()) {
             //Per ogni id corso che abbiamo, facciamo una query, lo cerchiamo e lo aggiungiamo alla classe studente.
@@ -149,7 +146,6 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
 
     //Metodo per la creazione della recycleView del fragment
     private void creazioneRecycleView(ArrayList<Corso> corsi){
-        Log.e(LOG,"CARICAMENTO ADAPTER RECYCLEVIEW.");
         this.corsiArrayList= corsi;
         recyclerView.setAdapter(new RecyclerViewAdapterCorsi(corsi,this));
 
@@ -160,7 +156,6 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
     //Metodo che verrà usato come OnClick dagli elementi gestiti dall'adapter.
     @Override
     public void onNoteClick(int position) {
-        Log.d(LOG,"Eseguzione onNoteClick sul corso in posizione: "+position);
 
         //intent per l'Activity del corso
         Intent intent= new Intent(getActivity(), CorsoDocenteActivity.class);

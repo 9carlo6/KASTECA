@@ -66,12 +66,13 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         nome_cognome_TextView.setText(docente.getNome() + " " + docente.getCognome());
         email_TextView.setText(docente.getEmail());
 
+        navigationView.setCheckedItem(R.id.nav_corsi_docente);
 
         //Avvio del fragment dei corsi del docente.
         cf= new CorsiDocenteFragment();
         cf.setArguments(bundleDocente);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, cf).commit();
-        navigationView.setCheckedItem(R.id.nav_corsi_docente);
+
 
 
     }
@@ -84,14 +85,11 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_corsi_docente:
-                if(cf!= null){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
-                            cf).commit();
-                }
-                else {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
-                            new CorsiDocenteFragment()).commit();
-                }
+
+                cf= new CorsiDocenteFragment();
+                cf.setArguments(bundleDocente);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, cf).commit();
+
                 break;
             case R.id.nav_logout:
                 Logout();
