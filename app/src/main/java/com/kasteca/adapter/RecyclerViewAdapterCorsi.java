@@ -1,4 +1,4 @@
-package com.kasteca.fragment;
+package com.kasteca.adapter;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,12 +45,8 @@ public class RecyclerViewAdapterCorsi extends RecyclerView.Adapter<RecyclerViewA
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d(LOG,"OnBindViewHolder");
-
         holder.textView.setText(corsi.get(position).getNome());
-
         //DA SETTARE L'ONCLICK LISTENER
-
-
 
     }
 
@@ -86,8 +82,6 @@ public class RecyclerViewAdapterCorsi extends RecyclerView.Adapter<RecyclerViewA
     public interface OnNoteListener{
         void onNoteClick(int position);
     }
-
-
 
 
 }

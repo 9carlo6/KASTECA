@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.kasteca.R;
 import com.kasteca.activity.CorsoDocenteActivity;
+import com.kasteca.activity.MainActivity;
+import com.kasteca.adapter.RecyclerViewAdapterCorsi;
 import com.kasteca.object.Corso;
 import com.kasteca.object.Docente;
 
@@ -32,21 +35,15 @@ import java.util.Map;
 public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapterCorsi.OnNoteListener{
 
     private RecyclerView recyclerView=null;
-
     private String LOG = "DEBUG_CORSI_DOCENTE_FRAGMENT";
-
     private Docente docente;
-
     private ArrayList<Corso> corsiArrayList;
-    private ArrayList<String> id_corsi;
+    private ArrayList<Corso> corsi; // serve per l'adapter, viene riempito quando si fa il get dei corsi su firebase
     private View view;
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
 
         Bundle bundle= getArguments();
         //Recupero dati dal bundle
@@ -55,7 +52,6 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         docente.setCognome(bundle.getString("cognome"));
         docente.setEmail(bundle.getString("email"));
         docente.setId(bundle.getString("id"));
-        id_corsi= bundle.getStringArrayList("corsi");
 
         view = inflater.inflate(R.layout.fragment_corsi_docente, container, false);
         //Carichiamo la recycleview.
@@ -63,7 +59,7 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         //Avviamo metodo per il recupero dei corsi da firebase
-        recuperoCorsi(id_corsi);
+        recuperoCorsi();
 
         Log.d(LOG,"RecycleView impostata.");
 
@@ -71,78 +67,39 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
     }
 
 
-
-    void recuperoCorsi(ArrayList<String> corsi) {
+    void recuperoCorsi() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
         Source source = Source.SERVER;
+        //Toast.makeText(getActivity(),"jrlpppppsdfsdfsd",Toast.LENGTH_SHORT).show();
+        corsi = new ArrayList<Corso>();
 
-        if (!corsi.isEmpty()) {
-            //Per ogni id corso che abbiamo, facciamo una query, lo cerchiamo e lo aggiungiamo alla classe studente.
-            for (String idCorso : corsi) {
-                corsiReference.whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(), idCorso).get(source).addOnCompleteListener(
-                        new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+        //Per ogni id corso che abbiamo, facciamo una query, lo cerchiamo e lo aggiungiamo alla classe studente.
 
-                                if (task.isSuccessful()) {
-                                    //FirebaseAuth mAuth1 = FirebaseAuth.getInstance();
-                                    //FirebaseUser user = mAuth1.getCurrentUser();
-                                    if (task.getResult() == null) {
-                                        Log.e(LOG, "risultato della query null");
-                                    } else {
-
-                                        //Per ogni corso controllo se è del docente
-                                        for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                                            //if (user.getUid().equalsIgnoreCase(document.get("id").toString())) {
-                                            //Controllo del risultato della query:
-                                            if (document == null) {
-                                                Log.e(LOG, "risultato della query null: document == null");
-
-                                            } else {
-                                                //Se la richiesta è andata a buon fine, creo un ArrayList
-                                                //di corsi, all'interno del quale inserisco i corsi scariscati
-                                                //tramite firebase e che serviranno per creare la recycleView
-                                                ArrayList<Corso> cors= new ArrayList<Corso>();
-                                                List<DocumentSnapshot> corsi = task.getResult().getDocuments();
-                                                for (DocumentSnapshot d : corsi) {
-                                                    Log.e(LOG, d.getData().toString());
-                                                    Map<String, Object> c = d.getData();
-                                                    Corso corso = new Corso(
-                                                            c.get("nome_corso").toString(),
-                                                            c.get("anno_accademico").toString(),
-                                                            c.get("descrizione").toString(),
-                                                            c.get("codice").toString(),
-                                                            d.getId());
-                                                    cors.add(corso);
-
-                                                }
-                                                //Dopo la creazione dei corsi dobbiamo richiamare il metodo
-                                                //per la creazione della recycleview.
-                                                creazioneRecycleView(cors);
-
-                                            }
-
-                                        }
-
-                                    }
-
-                                }
-                            }
-                        });
-
-
+        corsiReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot documenti_corsi : task.getResult()) {
+                        if (documenti_corsi.get("docente").equals(docente.getId())) {
+                            Map<String, Object> c = documenti_corsi.getData();
+                            Corso corso = new Corso(
+                                    c.get("nome_corso").toString(),
+                                    c.get("anno_accademico").toString(),
+                                    c.get("descrizione").toString(),
+                                    c.get("codice").toString(),
+                                    documenti_corsi.getId());
+                            corsi.add(corso);
+                        }
+                    }
+                    creazioneRecycleView(corsi);
+                }else{
+                    // c'è stato un problema nel get
+                }
             }
+        });
 
-
-        } else {
-
-            Log.e(LOG, "Nessun corso presente per questo docente.");
-        }
     }
-
-
-
 
     //Metodo per la creazione della recycleView del fragment
     private void creazioneRecycleView(ArrayList<Corso> corsi){
@@ -150,7 +107,6 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         recyclerView.setAdapter(new RecyclerViewAdapterCorsi(corsi,this));
 
     }
-
 
     //Metodo dell'interface
     //Metodo che verrà usato come OnClick dagli elementi gestiti dall'adapter.
@@ -165,9 +121,13 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         //in modo che possa recuperarlo autonomamente.
         bundle.putString("codice_corso",this.corsiArrayList.get(position).getId());
 
+        bundle.putString("id_docente", docente.getId());
+        bundle.putString("nome_docente", docente.getNome());
+        bundle.putString("cognome_docente", docente.getCognome());
+        bundle.putString("email_docente", docente.getEmail());
+
         intent.putExtras(bundle);
         startActivity(intent);
     }
-
 
 }
