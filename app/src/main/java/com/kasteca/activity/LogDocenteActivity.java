@@ -30,7 +30,7 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
     private TextView nome_cognome_TextView;
     private TextView email_TextView;
 
-    private CorsiDocenteFragment cf;
+    private CorsiDocenteFragment cf=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +84,14 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_corsi_docente:
+                if(cf!= null){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
+                            cf).commit();
+                }
+                else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
                             new CorsiDocenteFragment()).commit();
+                }
                 break;
             case R.id.nav_logout:
                 Logout();
