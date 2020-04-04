@@ -78,6 +78,11 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente,
                         new CorsiDocenteFragment()).commit();
                 break;
+            case R.id.nav_lista_studenti:
+                Intent intent = new Intent(getApplicationContext(), ListaStudentiIscrittiActivity.class);
+                //intent.putExtras();
+                startActivity(intent);
+                break;
             case R.id.nav_logout:
                 Logout();
                 break;
