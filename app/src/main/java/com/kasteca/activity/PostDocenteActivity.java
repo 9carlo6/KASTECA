@@ -5,11 +5,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -17,22 +19,20 @@ import com.google.firebase.firestore.Source;
 import com.kasteca.PostAdapter;
 import com.kasteca.R;
 import com.kasteca.object.Post;
-
 import java.util.ArrayList;
-import java.util.Date;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class PostDocenteActivity extends AppCompatActivity implements PostAdapter.OnPostListener{
 
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
     private ArrayList<String> post_ids;
-    private ArrayList<Post> posts;
     private String corso_id;
+    private ArrayList<Post> posts;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,10 +43,10 @@ public class PostDocenteActivity extends AppCompatActivity implements PostAdapte
         post_ids = new ArrayList<>();
         posts = new ArrayList<>();
 
-        Source source = Source.SERVER;
+        final Source source = Source.SERVER;
 
         //Recupero dei post del corso
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRefCorso = db.collection("Corsi").document(corso_id);
         docRefCorso.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -55,45 +55,41 @@ public class PostDocenteActivity extends AppCompatActivity implements PostAdapte
                     // Documento trovato
                     DocumentSnapshot document = task.getResult();
                     post_ids = (ArrayList<String>) document.getData().get("lista_post");
+                    for(String id : post_ids) {
+                        DocumentReference docRefPost = db.collection("Post").document(id);
+                        docRefPost.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    // Documento trovato
+                                    DocumentSnapshot document = task.getResult();
+                                    Post post = new Post(
+                                            document.getId(),
+                                            (String) document.get("tag"),
+                                            (String) document.get("testo"),
+                                            corso_id,
+                                            ((Timestamp) document.get("data")).toDate(),
+                                            (String) document.get("link"),
+                                            Uri.parse((String) document.get("pdf")),
+                                            (ArrayList<String>) document.get("lista_commenti")
+                                    );
+
+                                    posts.add(post);
+                                    setRecyclerView();
+
+                                } else {
+                                    showAlert(getResources().getString(R.string.get_posts_failed));
+                                }
+                            }
+                        });
+                    }
+
                 } else {
                     showAlert(getResources().getString(R.string.get_posts_failed));
                 }
             }
         });
 
-        for (String id : post_ids) {
-            DocumentReference docRefPost = db.collection("Post").document(id);
-            docRefPost.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        // Documento trovato
-                        DocumentSnapshot document = task.getResult();
-                        Post post = new Post(
-                                document.getId(),
-                                (String) document.get("tag"),
-                                (String) document.get("testo"),
-                                corso_id,
-                                (Date) document.get("data"),
-                                (String) document.get("link"),
-                                Uri.parse((String) document.get("pdf")),
-                                (ArrayList<String>) document.get("lista_commenti")
-                        );
-
-                        posts.add(post);
-                    } else {
-                        showAlert(getResources().getString(R.string.get_posts_failed));
-                    }
-                }
-            });
-        }
-
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        RecyclerView.Adapter adapter = new PostAdapter(posts, this);
-        recyclerView.setAdapter(adapter);
 
         fab = findViewById(R.id.fab_add_post);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -125,5 +121,14 @@ public class PostDocenteActivity extends AppCompatActivity implements PostAdapte
         Intent intent = new Intent(this, PostActivity.class);
         intent.putExtra("post", post);
         startActivity(intent);
+    }
+
+    public void setRecyclerView(){
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        RecyclerView.Adapter adapter = new PostAdapter(posts, this);
+        recyclerView.setAdapter(adapter);
     }
 }

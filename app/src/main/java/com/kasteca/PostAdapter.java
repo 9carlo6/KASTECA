@@ -1,5 +1,6 @@
 package com.kasteca;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     private ArrayList<Post> posts;
@@ -46,6 +49,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     public PostAdapter(ArrayList<Post> post_dataset, OnPostListener onPostListener) {
         this.posts = post_dataset;
         this.mOnPostListener = onPostListener;
+        Log.e(TAG, "la lista posts dentro l'adapter contiene: " + posts.toString());
     }
 
     // Crea nuove view (invocato dal layout manager)

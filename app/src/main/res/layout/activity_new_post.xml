@@ -46,7 +46,6 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="49dp"
         android:hint="@string/link"
-        android:inputType="textPassword"
         android:textColor="@color/colorGeneralText"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

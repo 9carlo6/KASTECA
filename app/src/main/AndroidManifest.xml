@@ -14,6 +14,7 @@
         <activity android:name=".activity.RegistrationActivity" />
         <activity android:name=".activity.PostActivity"/>
         <activity android:name=".activity.NewPostActivity"/>
+        <activity android:name=".activity.PostDocenteActivity"/>
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
