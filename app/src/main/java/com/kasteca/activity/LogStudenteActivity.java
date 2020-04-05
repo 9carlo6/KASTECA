@@ -32,6 +32,8 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
     private TextView email_TextView;
     private TextView matricola_TextView;
 
+    int LAUNCH_RICHIESTA_ISCRIZIONE_ACTIVITY = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +57,7 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
             navigationView.setCheckedItem(R.id.nav_corsi_studente);
         }
 
-        //recuper lo studente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
+        //recuper il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleStudente = getIntent().getExtras();
         studente = new Studente();
         studente.setId(bundleStudente.getString("id"));
@@ -82,6 +84,11 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
             case R.id.nav_corsi_studente:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente,
                         new CorsiStudenteFragment()).commit();
+                break;
+            case R.id.nav_iscrizione_corso:
+                Intent intent = new Intent(getApplicationContext(), RichiestaIscrizioneActivity.class);
+                intent.putExtra("id_studente", studente.getId());
+                startActivityForResult(intent, LAUNCH_RICHIESTA_ISCRIZIONE_ACTIVITY);
                 break;
             case R.id.nav_logout:
                 Logout();
