@@ -53,7 +53,7 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
 
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente,
-                    new CorsiDocenteFragment()).commit();
+                    new CorsiStudenteFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_corsi_studente);
         }
 
