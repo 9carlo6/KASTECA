@@ -10,6 +10,7 @@ package com.kasteca.activity;
 
         import android.content.Intent;
         import android.os.Bundle;
+        import android.util.Log;
         import android.view.MenuItem;
         import android.view.View;
         import android.widget.TextView;
@@ -21,7 +22,11 @@ package com.kasteca.activity;
         import com.kasteca.fragment.CorsiStudenteFragment;
         import com.kasteca.object.Studente;
 
+        import java.util.ArrayList;
+
 public class LogStudenteActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
+
+    private String LOG ="LogStudente activity";
 
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
@@ -32,8 +37,12 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
     private TextView email_TextView;
     private TextView matricola_TextView;
 
+    private CorsiStudenteFragment csf=null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e(LOG,"inizializzazione activity");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_studente);
 
@@ -55,6 +64,8 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
             navigationView.setCheckedItem(R.id.nav_corsi_studente);
         }
 
+        Log.e(LOG," Recupero bundle");
+
         //recuper lo studente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleStudente = getIntent().getExtras();
         studente = new Studente();
@@ -63,6 +74,8 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         studente.setCognome(bundleStudente.getString("cognome"));
         studente.setEmail(bundleStudente.getString("email"));
         studente.setMatricola(bundleStudente.getString("matricola"));
+
+        Log.e(LOG,"Dati studente: "+studente.toString());
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
@@ -73,15 +86,33 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         email_TextView.setText(studente.getEmail());
         matricola_TextView.setText(studente.getMatricola());
 
+        Log.e(LOG,"Cambiamento Fragment");
+        //Avvio il fragment con i corsi dello studente.
+        Bundle bundle= new Bundle();
+        bundle.putString("id", studente.getId());
+        bundle.putString("nome", studente.getNome());
+        bundle.putString("cognome", studente.getCognome());
+        bundle.putString("email", studente.getEmail());
+        bundle.putString("matricola", studente.getMatricola());
+        bundle.putStringArrayList("id_corsi",bundleStudente.getStringArrayList("id_corsi"));
+
+        Log.e(LOG,"Bundle: "+bundleStudente.toString());
+
+        csf= new CorsiStudenteFragment();
+        csf.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente, csf).commit();
 
     }
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_corsi_studente:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente,
-                        new CorsiStudenteFragment()).commit();
+                csf= new CorsiStudenteFragment();
+                csf.setArguments(bundleStudente);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente, csf).commit();
                 break;
             case R.id.nav_logout:
                 Logout();

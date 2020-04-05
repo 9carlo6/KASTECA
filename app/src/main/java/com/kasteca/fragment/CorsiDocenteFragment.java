@@ -67,14 +67,14 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
     }
 
 
-    void recuperoCorsi(String id) {
+    private void recuperoCorsi(String id) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
         Source source = Source.SERVER;
         //Toast.makeText(getActivity(),"jrlpppppsdfsdfsd",Toast.LENGTH_SHORT).show();
         corsi = new ArrayList<Corso>();
 
-        //Per ogni id corso che abbiamo, facciamo una query, lo cerchiamo e lo aggiungiamo alla classe studente.
+        //Facciamo una query per recuperare tutti i corsi del docente.
         corsiReference.whereEqualTo("docente",id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -119,7 +119,6 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         //Passiamo all'activity del corso il codice del documento firebase del corso
         //in modo che possa recuperarlo autonomamente.
         bundle.putString("codice_corso",this.corsiArrayList.get(position).getId());
-
         bundle.putString("id_docente", docente.getId());
         bundle.putString("nome_docente", docente.getNome());
         bundle.putString("cognome_docente", docente.getCognome());

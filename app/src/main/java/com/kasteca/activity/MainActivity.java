@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -141,6 +142,11 @@ public class MainActivity extends AppCompatActivity {
                                                 studente.putString("cognome", document.getData().get("cognome").toString());
                                                 studente.putString("email", document.getData().get("email").toString());
                                                 studente.putString("matricola", document.getData().get("matricola").toString());
+
+                                                Log.e("LOGIC","Inizializzazione array di corsi.");
+                                                //Array con tutti i corsi a cui è iscritto lo studente
+                                                studente.putStringArrayList("id_corsi",(ArrayList<String>) document.getData().get("lista_corsi"));
+                                                Log.e("LOGIC","Array dei corsi: "+studente.get("id_corsi").toString());
 
                                                 intent.putExtras(studente);
                                                 startActivity(intent);
