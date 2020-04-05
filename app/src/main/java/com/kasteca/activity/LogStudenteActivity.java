@@ -58,11 +58,6 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        if (savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente,
-                    new CorsiStudenteFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_corsi_studente);
-        }
 
         Log.e(LOG," Recupero bundle");
 

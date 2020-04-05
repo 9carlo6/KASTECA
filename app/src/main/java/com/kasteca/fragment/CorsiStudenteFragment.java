@@ -68,7 +68,7 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
         recuperoCorsi(idcorsi);
 
         //Carichiamo la recycleview.
-        recyclerView= (RecyclerView) view.findViewById(R.id.reclycleview_docente_corsi);
+        recyclerView= (RecyclerView) view.findViewById(R.id.reclycleview_studente_corsi);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return view;
