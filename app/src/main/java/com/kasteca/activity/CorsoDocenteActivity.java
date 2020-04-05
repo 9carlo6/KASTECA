@@ -21,7 +21,10 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kasteca.R;
 import com.kasteca.fragment.CorsiDocenteFragment;
+import com.kasteca.fragment.CorsiStudenteFragment;
+import com.kasteca.fragment.PostDocenteFragment;
 import com.kasteca.object.Docente;
+import com.kasteca.object.Post;
 
 public class CorsoDocenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -68,6 +71,12 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        if(savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_corso_docente,
+                    new PostDocenteFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_post_corso);
+        }
+
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
         email_TextView = header.findViewById(R.id.email_nav_header);
@@ -82,8 +91,13 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_post_corso:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_corso_docente,
+                        new PostDocenteFragment()).commit();
                 break;
             case R.id.nav_visualizza_studenti_iscritti:
+                Intent intent = new Intent(getApplicationContext(), ListaStudentiIscrittiActivity.class);
+                intent.putExtra("id_corso",id_corso);
+                startActivity(intent);
                 break;
             case R.id.nav_visualizza_richieste_studente:
                 break;
@@ -94,6 +108,7 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     @Override
     public void onBackPressed() {
