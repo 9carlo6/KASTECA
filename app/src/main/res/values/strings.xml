@@ -52,4 +52,11 @@
     <string name="menu_visualizza_studenti_iscritti">Visualizza Studenti iscritti</string>
     <string name="menu_visualizza_richieste_studente">Visualizza Richieste Studenti</string>
 
+    <!-- stringhe per la InfoDocenteActivity -->
+    <string name="nome_studente_text">Nome</string>
+    <string name="email_studente_text">Email</string>
+    <string name="matricol_studente_text">Matricola</string>
+    <string name="invia_email_button">Invia Email</string>
+    <string name="cancella_studente_button">Cancella Studente</string>
+
 </resources>

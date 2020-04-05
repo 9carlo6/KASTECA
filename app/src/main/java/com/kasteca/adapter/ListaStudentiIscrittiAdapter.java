@@ -1,5 +1,7 @@
 package com.kasteca.adapter;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,16 +10,26 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.kasteca.R;
+import com.kasteca.activity.InfoStudenteActivity;
 import com.kasteca.object.Studente;
 
 
 public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStudentiIscrittiAdapter.StudenteViewHolder>{
 
     private HashMap<String,Studente> studente_selezionato;
+    private Bundle studente;
 
     public static class StudenteViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
@@ -59,32 +71,17 @@ public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStud
         studenteViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                    studente_selezionato= new HashMap<>();
+                studente_selezionato= new HashMap<>();
 
-                    // qua bisogna aggiungere il comportamento sull'onclick
-                    // magari quando si clicca esce tipo un dialog per mostrare i dettagli dello studente
-                    //
+                Intent nuovointent= new Intent(studenteViewHolder.itemView.getContext(), InfoStudenteActivity.class);
 
-                    /*
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    CollectionReference collectionReference= db.collection("Studenti");
-                    final DocumentReference documentReference = collectionReference.document(studenti.get(i).getId());
-                    CollectionReference collectionReferencetask = documentReference.collection("tasks");
+                studente = new Bundle();
+                studente.putString("nome_cognome", studenti.get(i).getNome() + " " + studenti.get(i).getCognome());
+                studente.putString("email",studenti.get(i).getEmail());
+                studente.putString("matricola", studenti.get(i).getMatricola());
 
-                    collectionReferencetask.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                            for(DocumentSnapshot documentSnapshot : task.getResult()){
-                                currentTasks.put(documentSnapshot.getId(),documentSnapshot.toObject(CurrentTask.class));
-                            }
-                            //Intent nuovointent= new Intent(studenteViewHolder.itemView.getContext(),TasksListActivity.class);
-                            //nuovointent.putExtra("tasks",currentTasks);
-                            // nuovointent.putExtra()
-                            //studenteViewHolder.itemView.getContext().startActivity(nuovointent);
-                        }
-                    });
-                    */
+                nuovointent.putExtras(studente);
+                studenteViewHolder.itemView.getContext().startActivity(nuovointent);
             }
         });
 
