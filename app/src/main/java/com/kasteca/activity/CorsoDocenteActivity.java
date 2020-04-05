@@ -3,29 +3,37 @@ package com.kasteca.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.ui.AppBarConfiguration;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.ui.AppBarConfiguration;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.kasteca.R;
 import com.kasteca.fragment.CorsiDocenteFragment;
 import com.kasteca.object.Docente;
-import com.kasteca.R;
 
-public class LogDocenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class CorsoDocenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private final String LOG="DEBUG_CORSO_ACTIVITY";
+
+    private CardView option_Post;
 
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
-    private Bundle bundleDocente;
+    private Bundle bundleCorso;
     private Docente docente;
+    private String id_corso;
 
     private TextView nome_cognome_TextView;
     private TextView email_TextView;
@@ -35,27 +43,30 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_log_docente);
+        setContentView(R.layout.activity_corso_docente);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_corso);
         setSupportActionBar(toolbar);
 
-        drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view_docente);
+        // recupero il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
+        bundleCorso = getIntent().getExtras();
+        docente = new Docente();
+        docente.setId(bundleCorso.getString("id_docente"));
+        docente.setNome(bundleCorso.getString("nome_docente"));
+        docente.setCognome(bundleCorso.getString("cognome_docente"));
+        docente.setEmail(bundleCorso.getString("email_docente"));
+
+        // recupero anche il codice del corso
+        id_corso = bundleCorso.getString("codice_corso");
+
+        drawer = findViewById(R.id.corso_drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view_corso_docente);
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        //recupero il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
-        bundleDocente = getIntent().getExtras();
-        docente = new Docente();
-        docente.setId(bundleDocente.getString("id"));
-        docente.setNome(bundleDocente.getString("nome"));
-        docente.setCognome(bundleDocente.getString("cognome"));
-        docente.setEmail(bundleDocente.getString("email"));
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
@@ -64,21 +75,17 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         nome_cognome_TextView.setText(docente.getNome() + " " + docente.getCognome());
         email_TextView.setText(docente.getEmail());
 
-        navigationView.setCheckedItem(R.id.nav_corsi_docente);
-
-        //Avvio del fragment dei corsi del docente.
-        cf= new CorsiDocenteFragment();
-        cf.setArguments(bundleDocente);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, cf).commit();
+        navigationView.setCheckedItem(R.id.nav_post_corso);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
-            case R.id.nav_corsi_docente:
-                cf= new CorsiDocenteFragment();
-                cf.setArguments(bundleDocente);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, cf).commit();
+            case R.id.nav_post_corso:
+                break;
+            case R.id.nav_visualizza_studenti_iscritti:
+                break;
+            case R.id.nav_visualizza_richieste_studente:
                 break;
             case R.id.nav_logout:
                 Logout();
@@ -104,4 +111,6 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         finish();
         startActivity(intent);
     }
+
+
 }
