@@ -61,13 +61,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="126dp"
         android:layout_marginLeft="126dp"
-        android:layout_marginTop="102dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="127dp"
         android:layout_marginRight="127dp"
         android:onClick="press"
         android:text="@string/bottone_richiesta_iscrizione"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Codice_Corso_Edit_Text" />
 </androidx.constraintlayout.widget.ConstraintLayout>
