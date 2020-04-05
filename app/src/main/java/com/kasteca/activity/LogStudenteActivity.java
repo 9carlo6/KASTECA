@@ -18,6 +18,7 @@ package com.kasteca.activity;
         import com.google.firebase.auth.FirebaseAuth;
         import com.kasteca.fragment.CorsiDocenteFragment;
         import com.kasteca.R;
+        import com.kasteca.fragment.CorsiStudenteFragment;
         import com.kasteca.object.Studente;
 
 public class LogStudenteActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,6 +31,8 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
     private TextView nome_cognome_TextView;
     private TextView email_TextView;
     private TextView matricola_TextView;
+
+    int LAUNCH_RICHIESTA_ISCRIZIONE_ACTIVITY = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
 
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente,
-                    new CorsiDocenteFragment()).commit();
+                    new CorsiStudenteFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_corsi_studente);
         }
 
@@ -80,7 +83,12 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         switch (menuItem.getItemId()){
             case R.id.nav_corsi_studente:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente,
-                        new CorsiDocenteFragment()).commit();
+                        new CorsiStudenteFragment()).commit();
+                break;
+            case R.id.nav_iscrizione_corso:
+                Intent intent = new Intent(getApplicationContext(), RichiestaIscrizioneActivity.class);
+                intent.putExtra("id_studente", studente.getId());
+                startActivityForResult(intent, LAUNCH_RICHIESTA_ISCRIZIONE_ACTIVITY);
                 break;
             case R.id.nav_logout:
                 Logout();
