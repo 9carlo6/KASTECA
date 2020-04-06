@@ -40,6 +40,6 @@
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-    <include layout="@layout/activity_post_docente_content" />
+    <include layout="@layout/container_post_docente" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

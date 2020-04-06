@@ -1,4 +1,4 @@
-package com.kasteca;
+package com.kasteca.adapter;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.kasteca.R;
 import com.kasteca.object.Post;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -49,7 +52,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     public PostAdapter(ArrayList<Post> post_dataset, OnPostListener onPostListener) {
         this.posts = post_dataset;
         this.mOnPostListener = onPostListener;
-        Log.e(TAG, "la lista posts dentro l'adapter contiene: " + posts.toString());
+        //Collections.sort(posts);
     }
 
     // Crea nuove view (invocato dal layout manager)

@@ -7,7 +7,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Post implements Parcelable {
+public class Post implements Parcelable, Comparable {
 
     private String id;
     private String tag;
@@ -27,6 +27,8 @@ public class Post implements Parcelable {
         this.link = link;
         this.pdf = pdf;
     }
+
+    public Post(){}
 
 
     protected Post(Parcel in) {
@@ -128,5 +130,13 @@ public class Post implements Parcelable {
 
     public String toString(){
         return testo + " " + tag + " " + link + " " + pdf + " " + id;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Post postConfronto = (Post) o;
+        if(this.data.before(((Post) o).getData())) return 1;
+        else if(this.data.after(((Post) o).getData())) return -1;
+        else return 0;
     }
 }
