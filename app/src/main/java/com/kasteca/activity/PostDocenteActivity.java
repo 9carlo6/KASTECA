@@ -3,7 +3,6 @@ package com.kasteca.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,14 +11,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.kasteca.PostAdapter;
 import com.kasteca.R;
 import com.kasteca.object.Post;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,48 +47,40 @@ public class PostDocenteActivity extends AppCompatActivity implements PostAdapte
         post_ids = new ArrayList<>();
         posts = new ArrayList<>();
 
-        final Source source = Source.SERVER;
-
         //Recupero dei post del corso
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRefCorso = db.collection("Corsi").document(corso_id);
-        docRefCorso.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        CollectionReference postReference = db.collection("Post");
+        Source source = Source.SERVER;
+
+        postReference.whereEqualTo("corso", corso_id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    // Documento trovato
-                    DocumentSnapshot document = task.getResult();
-                    post_ids = (ArrayList<String>) document.getData().get("lista_post");
-                    for(String id : post_ids) {
-                        DocumentReference docRefPost = db.collection("Post").document(id);
-                        docRefPost.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    // Documento trovato
-                                    DocumentSnapshot document = task.getResult();
-                                    Post post = new Post(
-                                            document.getId(),
-                                            (String) document.get("tag"),
-                                            (String) document.get("testo"),
-                                            corso_id,
-                                            ((Timestamp) document.get("data")).toDate(),
-                                            (String) document.get("link"),
-                                            Uri.parse((String) document.get("pdf")),
-                                            (ArrayList<String>) document.get("lista_commenti")
-                                    );
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(DocumentSnapshot documento_post : task.getResult()){
+                        Map<String, Object> p = documento_post.getData();
 
-                                    posts.add(post);
-                                    setRecyclerView();
+                        String link;
+                        if(p.get("link") == null) link = null;
+                        else link = p.get("link").toString();
 
-                                } else {
-                                    showAlert(getResources().getString(R.string.get_posts_failed));
-                                }
-                            }
-                        });
+                        String pdf;
+                        if(p.get("pdf") == null) pdf = null;
+                        else pdf = p.get("pdf").toString();
+
+                        Post post = new Post(
+                                documento_post.getId(),
+                                p.get("tag").toString(),
+                                p.get("testo").toString(),
+                                corso_id,
+                                ((Timestamp) p.get("data")).toDate(),
+                                link,
+                                pdf
+                        );
+                        posts.add(post);
                     }
-
-                } else {
+                    setRecyclerView();
+                }
+                else {
                     showAlert(getResources().getString(R.string.get_posts_failed));
                 }
             }
@@ -131,4 +127,6 @@ public class PostDocenteActivity extends AppCompatActivity implements PostAdapte
         RecyclerView.Adapter adapter = new PostAdapter(posts, this);
         recyclerView.setAdapter(adapter);
     }
+
+    
 }

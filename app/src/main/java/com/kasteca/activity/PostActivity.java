@@ -47,12 +47,10 @@ public class PostActivity extends AppCompatActivity {
         tagView.setText(post.getTag());
 
         if(post.getLink() == null){
-            findViewById(R.id.linkTextView).setVisibility(View.INVISIBLE);
             findViewById(R.id.getLinkButton).setVisibility(View.INVISIBLE);
         }
 
         if(post.getPdf() == null){
-            findViewById(R.id.pdfTextView).setVisibility(View.INVISIBLE);
             findViewById(R.id.getPdfButton).setVisibility(View.INVISIBLE);
         }
 

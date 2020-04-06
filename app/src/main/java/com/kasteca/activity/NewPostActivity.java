@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -19,8 +20,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -28,24 +31,19 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.kasteca.R;
-import com.kasteca.object.Post;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class NewPostActivity extends AppCompatActivity {
+public class NewPostActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private int SELECT_FILE =100;
     private Uri uriPdf;
-    private Uri downloadUrlPdf;
+    private String downloadUrlPdf;
     private String corso_id;
 
     private EditText testo_post_text;
@@ -59,30 +57,32 @@ public class NewPostActivity extends AppCompatActivity {
     private String tag;
     private Date data;
 
+    private FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
         if(getIntent().hasExtra("corso_id")) {
-            corso_id = getIntent().getStringExtra("corso_id");
+             corso_id = getIntent().getStringExtra("corso_id");
         }
         testo_post_text = findViewById(R.id.text_post__Edit_Text);
         link_text = findViewById(R.id.link_Edit_Text);
         pdf_text = findViewById(R.id.uri_pdf);
-        tags_spinner = findViewById(R.id.tags_spinner);
         uriPdf = null;
 
         tags = new ArrayList<>();
 
         // Recupero della lista dei tag da Firebase
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         db.collection("Tag").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         tags.add(document.getId());
+                        createSpinner();
                     }
                     Log.d(TAG, tags.toString());
                 } else {
@@ -90,13 +90,6 @@ public class NewPostActivity extends AppCompatActivity {
                 }
             }
         });
-
-        // Creazione dell'adapter per lo spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tags);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // Si attacca l'adapter allo spinner
-        tags_spinner.setAdapter(dataAdapter);
     }
 
     public void uploadPdf(View v){
@@ -121,7 +114,6 @@ public class NewPostActivity extends AppCompatActivity {
         testo = testo_post_text.getText().toString();
         link = link_text.getText().toString();
         if(link.isEmpty()) link = null;
-        tag = tags_spinner.getSelectedItem().toString();
         data = new Date();
 
         if((tag == null) || (testo == null) || (testo.isEmpty())){
@@ -132,7 +124,7 @@ public class NewPostActivity extends AppCompatActivity {
         }
         else{
             downloadUrlPdf = null;
-            uploadPostToStorage();
+            uploadPostToDatabase();
         }
     }
 
@@ -169,26 +161,27 @@ public class NewPostActivity extends AppCompatActivity {
                 pdfRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        downloadUrlPdf = uri;
+                        downloadUrlPdf = uri.toString();
 
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.upload_pdf_successo), Toast.LENGTH_LONG).show();
                         // Solo se il caricamento del pdf va a buon fine viene aggiunto al Database remoto il post appena creato
-                        uploadPostToStorage();
+                        uploadPostToDatabase();
                     }
                 });
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.upload_pdf_successo), Toast.LENGTH_LONG).show();
             }
         });
     }
 
     // Metodo chiamato per aggiungere il nuovo post al Database remoto
-    public void uploadPostToStorage(){
+    public void uploadPostToDatabase(){
+        Log.i(TAG, "SONO ARRIVATO FIN QUI");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference postsRef = db.collection("Post");
 
         Map<String, Object> newPost = new HashMap<>();
 
         newPost.put("corso", corso_id);
-        newPost.put("data", data);
+        newPost.put("data", new Timestamp(data));
         newPost.put("link", link);
         newPost.put("pdf", downloadUrlPdf);
         newPost.put("tag", tag);
@@ -199,14 +192,9 @@ public class NewPostActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+                        addPostToCorso(documentReference.getId());
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.upload_successo), Toast.LENGTH_LONG).show();
-                        /*Post post = new Post(documentReference.getId(),
-                                tag,
-                                testo,
-                                corso_id,
-                                data,
-                                link,
-                                downloadUrlPdf);*/
+                        finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -217,4 +205,31 @@ public class NewPostActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        tag = parent.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        tag = null;
+    }
+
+    public void createSpinner(){
+        tags_spinner = findViewById(R.id.tags_spinner);
+
+        // Creazione dell'adapter per lo spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tags);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Si attacca l'adapter allo spinner
+        tags_spinner.setAdapter(dataAdapter);
+
+        // Si attacca allo spinner il listener per l'item cliccato
+        tags_spinner.setOnItemSelectedListener(this);
+    }
+
+    private void addPostToCorso(String post_id){
+        db.collection("Corsi").document(corso_id).update("lista_post", FieldValue.arrayUnion(post_id));
+    }
 }
