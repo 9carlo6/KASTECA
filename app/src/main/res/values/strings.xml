@@ -42,10 +42,29 @@
     <string name="nome_drower">nome</string>
     <string name="email_drower">email</string>
 
+    <!-- stringhe per la CorsoDocenteActivity -->
+    <string name="menu_post">Post</string>
+    <string name="menu_visualizza_studenti_iscritti">Visualizza Studenti iscritti</string>
+    <string name="menu_visualizza_richieste_studente">Visualizza Richieste Studenti</string>
+
+    <!-- stringhe per la InfoDocenteActivity -->
+    <string name="nome_studente_text">Nome</string>
+    <string name="email_studente_text">Email</string>
+    <string name="matricol_studente_text">Matricola</string>
+    <string name="invia_email_button">Invia Email</string>
+    <string name="cancella_studente_button">Cancella Studente</string>
+
     <!-- stringhe per la LogStudenteActivity -->
     <string name="menu_iscrizione_corso">Iscrizione ad un Corso</string>
     <string name="matricola_drower">matricola</string>
     <string name="logout">Logout</string>
+
+    <!-- stringhe per la RichiestaIscrizioneActivity -->
+    <string name="iscriviti_a_un_corso">Iscriviti a un corso</string>
+    <string name="chiedi_al_docente_il_codice">Chiedi al docente il codice del corso e inseriscilo qui</string>
+    <string name="Codice_Corso_text">Codice Corso</string>
+    <string name="bottone_richiesta_iscrizione">RICHIEDI ISCRIZIONE</string>
+    <string name="Codice_Corso_non_corretto">Il codice inserito non appartiene a nessun corso esistente</string>
 
     <!-- stringhe per la NewPostActivity -->
     <string name="testo_post">Scrivi qualcosa</string>

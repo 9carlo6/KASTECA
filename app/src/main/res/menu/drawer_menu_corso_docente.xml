@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_post_corso"
+            android:icon="@drawable/ic_post"
+            android:title="@string/menu_post"/>
+        <item
+            android:id="@+id/nav_visualizza_studenti_iscritti"
+            android:icon="@drawable/ic_studenti_iscritti"
+            android:title="@string/menu_visualizza_studenti_iscritti"/>
+        <item
+            android:id="@+id/nav_visualizza_richieste_studente"
+            android:icon="@drawable/ic_richieste_studenti"
+            android:title="@string/menu_visualizza_richieste_studente"/>
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/logout"/>
+    </group>
+
+</menu>

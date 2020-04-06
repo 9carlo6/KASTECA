@@ -99,20 +99,18 @@ public class MainActivity extends AppCompatActivity {
                                             // per ogni documento controllo presente nella collezione 'Docenti' controllo
                                             // se l'id dell'utente (appena loggato) è associato a un docente
                                             if (currentUser1.getUid().equalsIgnoreCase(document.getId())) {
-                                                Intent intent = new Intent(getApplicationContext(), PostDocenteActivity.class);
+                                                Intent intent = new Intent(getApplicationContext(), LogDocenteActivity.class);
 
                                                 //scarico i dati relativi al docente e li carico in un nuovo oggetto Docente
                                                 //per passare un oggetto bisogna usare la classe Bundle
                                                 docente = new Bundle();
 
-                                                ArrayList<String> listaCorsi = (ArrayList<String>) document.getData().get("lista_corsi");
-
+                                                docente.putString("id", document.getId());
                                                 docente.putString("nome", document.getData().get("nome").toString());
                                                 docente.putString("cognome", document.getData().get("cognome").toString());
                                                 docente.putString("email", document.getData().get("email").toString());
-                                                docente.putStringArrayList("lista_corsi", (ArrayList<String>) document.getData().get("lista_corsi"));
 
-                                                intent.putExtra("corso_id", listaCorsi.get(0));
+                                                intent.putExtras(docente);
                                                 startActivity(intent);
                                             }
                                         }
@@ -138,11 +136,11 @@ public class MainActivity extends AppCompatActivity {
                                                 //per passare un oggetto bisogna usare la classe Bundle
                                                 studente = new Bundle();
 
+                                                studente.putString("id", document.getId());
                                                 studente.putString("nome", document.getData().get("nome").toString());
                                                 studente.putString("cognome", document.getData().get("cognome").toString());
                                                 studente.putString("email", document.getData().get("email").toString());
                                                 studente.putString("matricola", document.getData().get("matricola").toString());
-                                                studente.putStringArrayList("lista_corsi", (ArrayList<String>) document.getData().get("lista_corsi"));
 
                                                 intent.putExtras(studente);
                                                 startActivity(intent);
