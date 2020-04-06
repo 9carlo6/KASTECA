@@ -90,7 +90,7 @@ public class CreazioneCorsoFragment extends Fragment {
             Date date= new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
-            documentSend.put("anno_accademico",calendar.get(Calendar.YEAR)+"/"+(Integer.parseInt(calendar.get(Calendar.YEAR)))+1);
+            documentSend.put("anno_accademico",calendar.get(Calendar.YEAR)+"/"+(calendar.get(Calendar.YEAR)+1));
 
             Log.e(LOG,"anno_accademico: "+calendar.get(Calendar.YEAR)+"/"+calendar.get(Calendar.YEAR)+1);
 
