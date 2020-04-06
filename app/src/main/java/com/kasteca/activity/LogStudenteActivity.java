@@ -7,9 +7,11 @@ package com.kasteca.activity;
         import androidx.core.view.GravityCompat;
         import androidx.drawerlayout.widget.DrawerLayout;
         import androidx.navigation.ui.AppBarConfiguration;
+        import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
         import android.content.Intent;
         import android.os.Bundle;
+        import android.os.Handler;
         import android.util.Log;
         import android.view.MenuItem;
         import android.view.View;
@@ -30,6 +32,7 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
 
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private Bundle bundleStudente;
     private Studente studente;
 
@@ -81,6 +84,7 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         email_TextView.setText(studente.getEmail());
         matricola_TextView.setText(studente.getMatricola());
 
+        //da eliminare
         Log.e(LOG,"Cambiamento Fragment");
         //Avvio il fragment con i corsi dello studente.
         Bundle bundle= new Bundle();
@@ -90,24 +94,41 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         bundle.putString("email", studente.getEmail());
         bundle.putString("matricola", studente.getMatricola());
         bundle.putStringArrayList("id_corsi",bundleStudente.getStringArrayList("id_corsi"));
-
+        /////////////////////////////////////////////////////////////////
         Log.e(LOG,"Bundle: "+bundleStudente.toString());
 
-        csf= new CorsiStudenteFragment();
-        csf.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente, csf).commit();
+        //refreshing della lista dei corsi.
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout_lista_corsi_studente);
+        //swipeRefreshLayout.setColorSchemeResources(R.color.refresh, R.color.refresh1, R.color.refresh2);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                (new Handler()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        caricamentoFragmentCorsi();
+                    }
+                },1000);
+            }
+        });
+
+        caricamentoFragmentCorsi();
 
     }
 
-
+    private void caricamentoFragmentCorsi(){
+        csf= new CorsiStudenteFragment();
+        csf.setArguments(bundleStudente);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente, csf).commit();
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_corsi_studente:
-                csf= new CorsiStudenteFragment();
-                csf.setArguments(bundleStudente);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente, csf).commit();
+                caricamentoFragmentCorsi();
                 break;
             case R.id.nav_logout:
                 Logout();

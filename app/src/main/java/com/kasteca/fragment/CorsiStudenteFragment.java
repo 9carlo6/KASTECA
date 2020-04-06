@@ -95,6 +95,7 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
                                     c.get("descrizione").toString(),
                                     c.get("codice").toString(),
                                     documenti_corsi.getId());
+                            Log.d(LOG, "Corso: "+corso.toString());
                             aggiornamentoRecycleView(corso);
                         }
 
@@ -113,6 +114,7 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
         Log.e(LOG,"aggiornamentoRecycleView");
 
         if(corsi == null){
+            Log.e(LOG,"Primo elemento");
             //Caso nel quale la recycleview viene creata per la prima volta
             corsi = new ArrayList<Corso>();
             corsi.add(corso);
@@ -120,17 +122,12 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
             recyclerView.setAdapter(adapter);
         }else{
             //Caso nel quale la recycleview già esiste
+            Log.e(LOG,"Aggiunta elementi diversi dal primo");
             corsi.add(corso);
-            adapter.addCorso(corso);
         }
 
 
     }
-
-
-
-
-
 
 
 

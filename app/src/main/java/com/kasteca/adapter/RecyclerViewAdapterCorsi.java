@@ -54,14 +54,18 @@ public class RecyclerViewAdapterCorsi extends RecyclerView.Adapter<RecyclerViewA
         return corsi.size();
     }
 
+
+    //DA ELIMINARE
+    /*
     //metodo per l'aggiunta di un corso nella recycleview
     public void addCorso(Corso corso){
         corsi.add(corso);
-
+        Log.e(LOG,"Aggiunta corso.");
+        Log.e(LOG,"lista corsi : "+corsi.toString());
         //metodo per aggiornare la grafica della recycleview e aggiungere l'elemento
-        this.notifyItemInserted(corsi.size() - 1);
+        //this.notifyItemInserted(0);
     }
-
+    */
 
     //ViewHolder per questo Adapter
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

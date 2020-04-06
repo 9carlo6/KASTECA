@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -91,9 +91,11 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
                         corsi.add(corso);
 
                     }
+                    //Chiamo il metodo per comunicare la fine del download
+                    //OnCompliteLoading();
                     creazioneRecycleView(corsi);
                 }else{
-                    // c'è stato un problema nel get
+                    // aggiungere eccezione
                 }
             }
         });
@@ -102,10 +104,13 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
 
     //Metodo per la creazione della recycleView del fragment
     private void creazioneRecycleView(ArrayList<Corso> corsi){
+
         this.corsiArrayList= corsi;
         recyclerView.setAdapter(new RecyclerViewAdapterCorsi(corsi,this));
 
     }
+
+
 
     //Metodo dell'interface
     //Metodo che verrà usato come OnClick dagli elementi gestiti dall'adapter.
