@@ -47,7 +47,7 @@
     <string name="menu_visualizza_studenti_iscritti">Visualizza Studenti iscritti</string>
     <string name="menu_visualizza_richieste_studente">Visualizza Richieste Studenti</string>
 
-    <!-- stringhe per la InfoDocenteActivity -->
+    <!-- stringhe per la InfoStudenteActivity -->
     <string name="nome_studente_text">Nome</string>
     <string name="email_studente_text">Email</string>
     <string name="matricol_studente_text">Matricola</string>
@@ -65,5 +65,10 @@
     <string name="Codice_Corso_text">Codice Corso</string>
     <string name="bottone_richiesta_iscrizione">RICHIEDI ISCRIZIONE</string>
     <string name="Codice_Corso_non_corretto">Il codice inserito non appartiene a nessun corso esistente</string>
+
+    <!-- stringhe per la InfoRichiestaStudenteActivity -->
+    <string name="data_richiesta_text">Data</string>
+    <string name="accetta_richiesta_button">Accetta Richiesta</string>
+    <string name="rifiuta_richiesta_button">Rifiuta Richiesta</string>
 
 </resources>
