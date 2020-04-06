@@ -122,7 +122,20 @@ public class CreazioneCorsoFragment extends Fragment {
         Log.d(LOG, "Aggiungo del corso nel docente");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docentiReference = db.collection("Docenti");
-        docentiReference.document(docente.getId()).update("lista_corsi", FieldValue.arrayUnion(idCorso));
+        docentiReference.document(docente.getId()).update("lista_corsi", FieldValue.arrayUnion(idCorso)).addOnSuccessListener(
+                new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getActivity().getApplicationContext(),"Corso creato con successo.",Toast.LENGTH_LONG);
+                        //riavviare l'activity
+                        //Lo facciamo in questo metodo poichè deve avvenire se e solamente se va a buon fine.
+                        getActivity().recreate();
+                    }
+                }
+        );
+
+
+
     }
 
 }

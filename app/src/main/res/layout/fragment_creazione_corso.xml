@@ -58,12 +58,13 @@
         android:id="@+id/textView2"
         android:layout_width="242dp"
         android:layout_height="40dp"
-        android:layout_marginTop="148dp"
         android:text="Inserisci le informazioni del nuovo corso:"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.479"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.17" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
