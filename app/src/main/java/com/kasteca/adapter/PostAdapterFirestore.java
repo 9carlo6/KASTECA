@@ -36,7 +36,6 @@ public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAda
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull final Post model) {
-        Log.e(TAG, model.toString());
         final Post mmodel = model;
         holder.text_post.setText(model.getTesto());
         holder.tag.setText(model.getTag());
