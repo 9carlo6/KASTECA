@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -89,11 +89,9 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
                         corsi.add(corso);
 
                     }
-                    //Chiamo il metodo per comunicare la fine del download
-                    //OnCompliteLoading();
                     creazioneRecycleView(corsi);
                 }else{
-                    // aggiungere eccezione
+                    // c'è stato un problema nel get
                 }
             }
         });
@@ -122,6 +120,7 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         //Passiamo all'activity del corso il codice del documento firebase del corso
         //in modo che possa recuperarlo autonomamente.
         bundle.putString("codice_corso",this.corsiArrayList.get(position).getId());
+        bundle.putString("id_corso",this.corsiArrayList.get(position).getId());
         bundle.putString("id_docente", docente.getId());
         bundle.putString("nome_docente", docente.getNome());
         bundle.putString("cognome_docente", docente.getCognome());

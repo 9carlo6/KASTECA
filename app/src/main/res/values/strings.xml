@@ -42,14 +42,63 @@
     <string name="nome_drower">nome</string>
     <string name="email_drower">email</string>
 
-    <!-- stringhe per la LogStudenteActivity -->
-    <string name="menu_iscrizione_corso">Iscrizione ad un Corso</string>
-    <string name="matricola_drower">matricola</string>
-    <string name="logout">Logout</string>
-
     <!-- stringhe per la CorsoDocenteActivity -->
     <string name="menu_post">Post</string>
     <string name="menu_visualizza_studenti_iscritti">Visualizza Studenti iscritti</string>
     <string name="menu_visualizza_richieste_studente">Visualizza Richieste Studenti</string>
 
+    <!-- stringhe per la InfoDocenteActivity -->
+    <string name="nome_studente_text">Nome</string>
+    <string name="email_studente_text">Email</string>
+    <string name="matricol_studente_text">Matricola</string>
+    <string name="invia_email_button">Invia Email</string>
+    <string name="cancella_studente_button">Cancella Studente</string>
+
+    <!-- stringhe per la LogStudenteActivity -->
+    <string name="menu_iscrizione_corso">Iscrizione ad un Corso</string>
+    <string name="matricola_drower">matricola</string>
+    <string name="logout">Logout</string>
+
+    <!-- stringhe per la RichiestaIscrizioneActivity -->
+    <string name="iscriviti_a_un_corso">Iscriviti a un corso</string>
+    <string name="chiedi_al_docente_il_codice">Chiedi al docente il codice del corso e inseriscilo qui</string>
+    <string name="Codice_Corso_text">Codice Corso</string>
+    <string name="bottone_richiesta_iscrizione">RICHIEDI ISCRIZIONE</string>
+    <string name="Codice_Corso_non_corretto">Il codice inserito non appartiene a nessun corso esistente</string>
+    <string name="Studente_gia_iscritto">Sei già iscritto a questo corso</string>
+    <string name="Richiesta_gia_inviata">Hai già inviato una richiesta per questo corso</string>
+
+    <!-- stringhe per la ListaStudentiIscrittiActivity -->
+    <string name="nessuno_studente_iscritto">Non ci sono studenti iscritti al corso</string>
+    <string name="Dialog_neutral_button_nessuno_studente_iscritto">OK</string>
+
+    <!-- stringhe per la ListaRichiesteStudentiActivity -->
+    <string name="nessuna_richiesta">Non ci sono nuove richieste</string>
+    <string name="Dialog_neutral_button_nessuna_richiesta">OK</string>
+
+    <!-- stringhe per la InfoRichiestaStudenteActivity -->
+    <string name="data_richiesta_text">Data</string>
+    <string name="accetta_richiesta_button">Accetta Richiesta</string>
+    <string name="rifiuta_richiesta_button">Rifiuta Richiesta</string>
+
+    <!-- stringhe per la NewPostActivity -->
+    <string name="testo_post">Scrivi qualcosa</string>
+    <string name="link">Link</string>
+    <string name="pdf">Pdf</string>
+    <string name="spinner_tag">Tag</string>
+    <string name="upload_failed">Upload fallito</string>
+    <string name="missing_data">Perfavore, inserisci i dati mancanti.</string>
+    <string name="upload_pdf_fallito">Il pdf non è stato caricato.</string>
+    <string name="upload_pdf_successo">Il pdf è stato caricato.</string>
+    <string name="upload_successo">Il post è stato caricato.</string>
+
+    <!-- stringhe per il PostDocenteFragment-->
+    <string name="get_failed">Fallimento recupero dati</string>
+    <string name="get_posts_failed">Non è stato possibile recuperare i post del corso.</string>
+
+    <!-- stringhe per il PostActivity-->
+    <string name="commenti">Commenti</string>
+    <string name="no_activity">Nessun Web Browser trovato</string>
+    <string name="download_webBrowser">Per favore, scarica un web browser.</string>
+    <string name="upload_post_error">Errore nel caricamento del nuovo post.</string>
 </resources>

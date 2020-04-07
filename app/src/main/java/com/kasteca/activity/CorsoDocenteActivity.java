@@ -21,7 +21,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kasteca.R;
 import com.kasteca.fragment.CorsiDocenteFragment;
+import com.kasteca.fragment.CorsiStudenteFragment;
+import com.kasteca.fragment.PostDocenteFragment;
 import com.kasteca.object.Docente;
+import com.kasteca.object.Post;
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class CorsoDocenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -34,6 +38,7 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
     private Bundle bundleCorso;
     private Docente docente;
     private String id_corso;
+    private String codice_corso;
 
     private TextView nome_cognome_TextView;
     private TextView email_TextView;
@@ -45,7 +50,7 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_corso_docente);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_corso);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // recupero il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
@@ -57,7 +62,8 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         docente.setEmail(bundleCorso.getString("email_docente"));
 
         // recupero anche il codice del corso
-        id_corso = bundleCorso.getString("codice_corso");
+        id_corso = bundleCorso.getString("id_corso");
+        codice_corso = bundleCorso.getString("codice_corso");
 
         drawer = findViewById(R.id.corso_drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view_corso_docente);
@@ -67,6 +73,13 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        if(savedInstanceState == null){
+            PostDocenteFragment pf = new PostDocenteFragment();
+            pf.setArguments(bundleCorso);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_corso_docente, pf).commit();
+            navigationView.setCheckedItem(R.id.nav_post_corso);
+        }
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
@@ -82,10 +95,20 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_post_corso:
+                Log.e(TAG, "bundle: " + bundleCorso);
+                PostDocenteFragment pf = new PostDocenteFragment();
+                pf.setArguments(bundleCorso);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_corso_docente,pf).commit();
                 break;
             case R.id.nav_visualizza_studenti_iscritti:
+                Intent intent = new Intent(getApplicationContext(), ListaStudentiIscrittiActivity.class);
+                intent.putExtra("id_corso",id_corso);
+                startActivity(intent);
                 break;
             case R.id.nav_visualizza_richieste_studente:
+                Intent intent_richieste = new Intent(getApplicationContext(), ListaRichiesteStudentiActivity.class);
+                intent_richieste.putExtra("codice_corso",codice_corso);
+                startActivity(intent_richieste);
                 break;
             case R.id.nav_logout:
                 Logout();
@@ -94,6 +117,7 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     @Override
     public void onBackPressed() {

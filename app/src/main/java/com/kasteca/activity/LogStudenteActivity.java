@@ -40,7 +40,9 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
     private TextView email_TextView;
     private TextView matricola_TextView;
 
+    int LAUNCH_RICHIESTA_ISCRIZIONE_ACTIVITY = 1;
     private CorsiStudenteFragment csf=null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +74,6 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         studente.setCognome(bundleStudente.getString("cognome"));
         studente.setEmail(bundleStudente.getString("email"));
         studente.setMatricola(bundleStudente.getString("matricola"));
-
-        Log.e(LOG,"Dati studente: "+studente.toString());
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
@@ -130,6 +130,11 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
             case R.id.nav_corsi_studente:
                 caricamentoFragmentCorsi();
                 break;
+            case R.id.nav_iscrizione_corso:
+                Intent intent = new Intent(getApplicationContext(), RichiestaIscrizioneActivity.class);
+                intent.putExtra("id_studente", studente.getId());
+                startActivityForResult(intent, LAUNCH_RICHIESTA_ISCRIZIONE_ACTIVITY);
+                break;
             case R.id.nav_logout:
                 Logout();
                 break;
@@ -148,22 +153,6 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         }
     }
 
-/*    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.settings_menu_studente, menu);
-        return super.onCreateOptionsMenu(menu);
-    }*/
-
-/*    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_logout:
-                Logout();
-                break;
-        }
-        return true;
-    }*/
 
     public void Logout(){
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
