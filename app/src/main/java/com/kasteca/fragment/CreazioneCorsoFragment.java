@@ -13,12 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.kasteca.R;
 import com.kasteca.object.Docente;
 
@@ -65,13 +69,46 @@ public class CreazioneCorsoFragment extends Fragment {
         this.conferma.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confermaCreazione();
+                controlloId();
             }
         });
 
 
         return view;
     }
+
+
+    private void controlloId(){
+        if( (nome.getText().length()!=0) && (codice.getText().length()!=0) && (descrizione.getText().length()!=0)){
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference corsiReference = db.collection("Corsi");
+            corsiReference.whereEqualTo("codice",codice.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+
+                        if(task.getResult().isEmpty()){
+                            confermaCreazione();
+                        }else{
+                            Toast.makeText(getActivity().getApplicationContext(),"Codice già utilizzato.",Toast.LENGTH_LONG).show();
+                            Log.e(LOG,"codice già utilizzato");
+                        }
+
+                    }else {
+                        Toast.makeText(getActivity().getApplicationContext(),"Errore di rete.",Toast.LENGTH_LONG).show();
+                        Log.e(LOG,"fire base task not successful");
+                    }
+                }
+            });
+        }else{
+            //eccezione da definire
+            Log.e(LOG,"I dati da inviare non vanno bene");
+            Toast.makeText(getActivity().getApplicationContext(),"Errore, dati mancanti.",Toast.LENGTH_LONG).show();
+        }
+
+
+    }
+
 
     private void confermaCreazione(){
 
@@ -115,7 +152,7 @@ public class CreazioneCorsoFragment extends Fragment {
         }else{
             //eccezione da definire
             Log.e(LOG,"I dati da inviare non vanno bene");
-            Toast.makeText(getActivity().getApplicationContext(),"Errore, dati mancanti.",Toast.LENGTH_LONG);
+            Toast.makeText(getActivity().getApplicationContext(),"Errore, dati mancanti.",Toast.LENGTH_LONG).show();
 
         }
     }
@@ -128,7 +165,7 @@ public class CreazioneCorsoFragment extends Fragment {
                 new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getActivity().getApplicationContext(),"Corso creato con successo.",Toast.LENGTH_LONG);
+                        Toast.makeText(getActivity().getApplicationContext(),"Corso creato con successo.",Toast.LENGTH_LONG).show();
                         CorsiDocenteFragment cf= new CorsiDocenteFragment();
                         cf.setArguments(bundle);
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, cf).commit();

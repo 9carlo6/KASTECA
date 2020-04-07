@@ -87,15 +87,6 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         //da eliminare
         Log.e(LOG,"Cambiamento Fragment");
         //Avvio il fragment con i corsi dello studente.
-        Bundle bundle= new Bundle();
-        bundle.putString("id", studente.getId());
-        bundle.putString("nome", studente.getNome());
-        bundle.putString("cognome", studente.getCognome());
-        bundle.putString("email", studente.getEmail());
-        bundle.putString("matricola", studente.getMatricola());
-        bundle.putStringArrayList("id_corsi",bundleStudente.getStringArrayList("id_corsi"));
-        /////////////////////////////////////////////////////////////////
-        Log.e(LOG,"Bundle: "+bundleStudente.toString());
 
         //refreshing della lista dei corsi.
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout_lista_corsi_studente);
@@ -153,6 +144,11 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        caricamentoFragmentCorsi();
+    }
 
     public void Logout(){
         FirebaseAuth mAuth = FirebaseAuth.getInstance();

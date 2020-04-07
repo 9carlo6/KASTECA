@@ -82,7 +82,7 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
 
         //Facciamo una query per ogni corso dello studente e lo aggiungiamo alla recycleview tramite il suo adapter
         for(String id: idcorsi) {
-            corsiReference.whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(), id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            corsiReference.whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(), id).get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
@@ -128,9 +128,6 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
 
 
     }
-
-
-
 
     @Override
     public void onNoteClick(int position) {
