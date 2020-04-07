@@ -1,5 +1,7 @@
 package com.kasteca.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -136,6 +138,9 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
+                                if(lista_studenti.isEmpty()){
+                                    showAlert();
+                                }
                                 ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(lista_richieste, lista_studenti);
                                 rv.setAdapter(adapter);
                             }
@@ -166,6 +171,25 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
 
         ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(lista_richieste, lista_studenti);
         rv.setAdapter(adapter);
+    }
+
+    // questa funzione serve per mostrare un dialog nel caso di LOGIN FALLITO
+    public void showAlert(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(getResources().getString(R.string.nessuna_richiesta));
+        alertDialog.setNeutralButton(getResources().getString(R.string.Dialog_neutral_button_nessuna_richiesta), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                //finish();
+            }
+        });
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });
+        alertDialog.show();
     }
 }
 

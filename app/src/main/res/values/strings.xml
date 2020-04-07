@@ -66,6 +66,10 @@
     <string name="bottone_richiesta_iscrizione">RICHIEDI ISCRIZIONE</string>
     <string name="Codice_Corso_non_corretto">Il codice inserito non appartiene a nessun corso esistente</string>
 
+    <!-- stringhe per la ListaRichiesteStudentiActivity -->
+    <string name="nessuna_richiesta">Non ci sono nuove richieste</string>
+    <string name="Dialog_neutral_button_nessuna_richiesta">OK</string>
+
     <!-- stringhe per la InfoRichiestaStudenteActivity -->
     <string name="data_richiesta_text">Data</string>
     <string name="accetta_richiesta_button">Accetta Richiesta</string>
