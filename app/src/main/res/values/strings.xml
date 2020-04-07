@@ -66,6 +66,15 @@
     <string name="bottone_richiesta_iscrizione">RICHIEDI ISCRIZIONE</string>
     <string name="Codice_Corso_non_corretto">Il codice inserito non appartiene a nessun corso esistente</string>
 
+    <!-- stringhe per la ListaRichiesteStudentiActivity -->
+    <string name="nessuna_richiesta">Non ci sono nuove richieste</string>
+    <string name="Dialog_neutral_button_nessuna_richiesta">OK</string>
+
+    <!-- stringhe per la InfoRichiestaStudenteActivity -->
+    <string name="data_richiesta_text">Data</string>
+    <string name="accetta_richiesta_button">Accetta Richiesta</string>
+    <string name="rifiuta_richiesta_button">Rifiuta Richiesta</string>
+
     <!-- stringhe per la NewPostActivity -->
     <string name="testo_post">Scrivi qualcosa</string>
     <string name="link">Link</string>
@@ -86,5 +95,4 @@
     <string name="no_activity">Nessun Web Browser trovato</string>
     <string name="download_webBrowser">Per favore, scarica un web browser.</string>
     <string name="upload_post_error">Errore nel caricamento del nuovo post.</string>
-
 </resources>

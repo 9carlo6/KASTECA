@@ -38,6 +38,7 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
     private Bundle bundleCorso;
     private Docente docente;
     private String id_corso;
+    private String codice_corso;
 
     private TextView nome_cognome_TextView;
     private TextView email_TextView;
@@ -61,7 +62,8 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         docente.setEmail(bundleCorso.getString("email_docente"));
 
         // recupero anche il codice del corso
-        id_corso = bundleCorso.getString("codice_corso");
+        id_corso = bundleCorso.getString("id_corso");
+        codice_corso = bundleCorso.getString("codice_corso");
 
         drawer = findViewById(R.id.corso_drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view_corso_docente);
@@ -104,6 +106,9 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
                 startActivity(intent);
                 break;
             case R.id.nav_visualizza_richieste_studente:
+                Intent intent_richieste = new Intent(getApplicationContext(), ListaRichiesteStudentiActivity.class);
+                intent_richieste.putExtra("codice_corso",codice_corso);
+                startActivity(intent_richieste);
                 break;
             case R.id.nav_logout:
                 Logout();
