@@ -38,13 +38,15 @@ public class CreazioneCorsoFragment extends Fragment {
     private EditText codice;
     private Button conferma;
 
+    private Bundle bundle;
+
     private View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        Bundle bundle= getArguments();
+        bundle= getArguments();
         //Recupero dati dal bundle
         docente = new Docente();
         docente.setNome(bundle.getString("nome"));
@@ -127,9 +129,9 @@ public class CreazioneCorsoFragment extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getActivity().getApplicationContext(),"Corso creato con successo.",Toast.LENGTH_LONG);
-                        //riavviare l'activity
-                        //Lo facciamo in questo metodo poichè deve avvenire se e solamente se va a buon fine.
-                        getActivity().recreate();
+                        CorsiDocenteFragment cf= new CorsiDocenteFragment();
+                        cf.setArguments(bundle);
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, cf).commit();
                     }
                 }
         );

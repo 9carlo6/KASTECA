@@ -23,13 +23,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.kasteca.R;
 import com.kasteca.activity.CorsoDocenteActivity;
-import com.kasteca.activity.MainActivity;
 import com.kasteca.adapter.RecyclerViewAdapterCorsi;
 import com.kasteca.object.Corso;
 import com.kasteca.object.Docente;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapterCorsi.OnNoteListener{
