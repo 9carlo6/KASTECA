@@ -7,14 +7,12 @@ public class Richiesta {
     private String codice_corso;
     private Date data;
     private String stato;
-    private Studente studente;
 
-    public Richiesta(String id, String codice_corso, Date data, String stato, Studente studente) {
+    public Richiesta(String id, String codice_corso, Date data, String stato) {
         this.id = id;
         this.codice_corso = codice_corso;
         this.data = data;
         this.stato = stato;
-        this.studente = studente;
     }
 
 
@@ -50,11 +48,4 @@ public class Richiesta {
         this.stato = stato;
     }
 
-    public Studente getStudente() {
-        return studente;
-    }
-
-    public void setStudente(Studente studente) {
-        this.studente = studente;
-    }
 }

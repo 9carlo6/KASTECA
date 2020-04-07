@@ -1,10 +1,12 @@
 package com.kasteca.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,12 +31,12 @@ import java.util.List;
 
 public class ListaRichiesteStudentiActivity extends AppCompatActivity {
 
-    private String LOG = "DEBUG_LISTA_STUDENTE_ACTIVITY";
     private RecyclerView rv;
-    private List<Richiesta> richieste;
+    private List<Richiesta> lista_richieste;
+    private List<Studente> lista_studenti;
     private String codice_corso;
     private ArrayList<String> lista_codici_studenti;
-
+    private String id_studente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,10 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
         codice_corso = getIntent().getStringExtra("codice_corso");
 
         // creo un arraylist che conterra le richieste
-        richieste = new ArrayList<>();
+        lista_richieste = new ArrayList<>();
+
+        // creo un arraylist che conterra le richieste
+        lista_studenti = new ArrayList<>();
 
         // questo è il recyclerView per la lista delle richieste
         rv = (RecyclerView) findViewById(R.id.rv_lista_richieste_studenti);
@@ -56,8 +61,8 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
 
+
         // questa parte serve in caso di refresh della pagina per questo è ripetitiva
-        // in futuro la parte di query sul db potrebbe essere fatta anche in una funzione esterna
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout_lista_richieste_studenti);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh, R.color.refresh1, R.color.refresh2);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -68,7 +73,7 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
-                        richieste = new ArrayList<>();
+                        lista_richieste = new ArrayList<>();
                         rv = (RecyclerView) findViewById(R.id.rv_lista_richieste_studenti);
 
                         // se si è certi che le dimensioni non cambieranno
@@ -77,93 +82,89 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
                         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
                         rv.setLayoutManager(llm);
 
-                        ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(richieste);
+                        ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(lista_richieste, lista_studenti);
                         rv.setAdapter(adapter);
 
-                        // scarico prima tutte le richieste relative al corso specifico e poi gli studenti relativi a queste richieste
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
-                        richieste_iscrizione.whereEqualTo("codice_corso", codice_corso).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (final DocumentSnapshot document : task.getResult()) {
-                                        // scarico i dati relativi allo studente della richiesta e poi carico la richiesta nell'array
-                                        FirebaseFirestore dbs = FirebaseFirestore.getInstance();
-                                        CollectionReference studenti_firebase= dbs.collection("Studenti");
-                                        studenti_firebase.whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(), document.get("studente")).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                if(task.isSuccessful()){
-                                                    // qui si scorre tutti i documenti
-                                                    for(DocumentSnapshot studente_document :task.getResult()){
-                                                        Studente studente = new Studente(studente_document.getId(), studente_document.get("nome").toString(), studente_document.get("cognome").toString(),studente_document.get("email").toString(), studente_document.get("matricola").toString());
-                                                        //Toast.makeText(getApplicationContext(), document.get("nome").toString(), Toast.LENGTH_LONG).show();
-                                                        Richiesta richiesta = new Richiesta(document.getId().toString(), codice_corso, (Date) document.getDate("data"), document.get("stato_richiesta").toString(), studente);
-                                                        //studenti.add(studente);
-                                                        richieste.add(richiesta);
-                                                    }
-                                                    ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(richieste);
-                                                    rv.setAdapter(adapter);
-                                                }
-                                                else{
-                                                    Toast.makeText(getApplicationContext(), "fallimento nello scaricare gli studenti", Toast.LENGTH_LONG).show();
-                                                }
-                                            }
-                                        });
-                                    }
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "fallimento nello scaricare le richieste", Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                        scaricaRichieste();
                     }
                 }, 3000);
             }
         });
 
+        scaricaRichieste();
 
-        // scarico prima tutte le richieste relative al corso specifico e poi gli studenti relativi a queste richieste
+        ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(lista_richieste, lista_studenti);
+        rv.setAdapter(adapter);
+    }
+
+    public void scaricaRichieste(){
+        lista_codici_studenti = new ArrayList<>();
+
+        // scarico prima gli id degli studenti relativi al corso specifico da firebase e poi scarico con essi i dati relativi a tutti gli studenti
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
+        CollectionReference richieste_iscrizione= db.collection("Richieste_Iscrizione");
         richieste_iscrizione.whereEqualTo("codice_corso", codice_corso).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (final DocumentSnapshot document : task.getResult()) {
-                        // scarico i dati relativi allo studente della richiesta e poi carico la richiesta nell'array
-                        FirebaseFirestore dbs = FirebaseFirestore.getInstance();
-                        CollectionReference studenti_firebase= dbs.collection("Studenti");
-                        studenti_firebase.whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(), document.get("studente")).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful()){
-                                    // qui si scorre tutti i documenti
-                                    for(DocumentSnapshot studente_document :task.getResult()){
-                                        Studente studente = new Studente(studente_document.getId(), studente_document.get("nome").toString(), studente_document.get("cognome").toString(),studente_document.get("email").toString(), studente_document.get("matricola").toString());
-                                        //Toast.makeText(getApplicationContext(), document.get("nome").toString(), Toast.LENGTH_LONG).show();
-                                        Richiesta richiesta = new Richiesta(document.getId().toString(), codice_corso, (Date) document.getDate("data"), document.get("stato_richiesta").toString(), studente);
-                                        //studenti.add(studente);
-                                        richieste.add(richiesta);
-                                    }
-                                    ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(richieste);
-                                    rv.setAdapter(adapter);
-                                }
-                                else{
-                                    Toast.makeText(getApplicationContext(), "fallimento nello scaricare gli studenti", Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                if(task.isSuccessful()){
+                    for(DocumentSnapshot documenti_richieste :task.getResult()){
+                        if(documenti_richieste.get("stato_richiesta").toString().equals("in attesa")) {
+                            // prendo il documento del corso specifico e scarico gli id degli studenti caricandoli nell'arraylist lista_codici_studenti
+                            lista_richieste.add(new Richiesta(documenti_richieste.getId().toString(),
+                                    codice_corso,
+                                    (Date) documenti_richieste.getDate("data"),
+                                    documenti_richieste.get("stato_richiesta").toString()));
+                            lista_codici_studenti.add(documenti_richieste.get("studente").toString());
+                        }
                     }
-                } else {
-                    Toast.makeText(getApplicationContext(), "fallimento nello scaricare le richieste", Toast.LENGTH_LONG).show();
+                    // scarico i dati relativi a tutti gli studenti e li carico nella lista studenti
+                    FirebaseFirestore dbs = FirebaseFirestore.getInstance();
+                    CollectionReference studenti_firebase= dbs.collection("Studenti");
+                    studenti_firebase.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()){
+                                // qui si scorre tutti i documenti
+                                for(DocumentSnapshot document :task.getResult()){
+                                    // qui si scorre tutti i codici presenti nell'arraylist lista_codici_studenti
+                                    for(String id_studente : lista_codici_studenti){
+                                        // se trova un uguaglianza allora lo studente appartiene al corso e quindi viene aggiunto alla lista studenti da passare all'adapter
+                                        if(id_studente.equals(document.getId())){
+                                            Studente studente = new Studente(document.getId(), document.get("nome").toString(), document.get("cognome").toString(),document.get("email").toString(), document.get("matricola").toString());
+                                            //Toast.makeText(getApplicationContext(), document.get("nome").toString(), Toast.LENGTH_LONG).show();
+                                            lista_studenti.add(studente);
+                                        }
+                                    }
+                                }
+                                ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(lista_richieste, lista_studenti);
+                                rv.setAdapter(adapter);
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "fallimento", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "fallimento", Toast.LENGTH_LONG).show();
                 }
             }
-
         });
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(richieste);
+        lista_richieste = null;
+        lista_studenti = null;
+        lista_richieste = new ArrayList<>();
+        lista_studenti = new ArrayList<>();
+        //ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(lista_richieste);
+        //rv.setAdapter(adapter);
+        scaricaRichieste();
+
+        ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(lista_richieste, lista_studenti);
         rv.setAdapter(adapter);
     }
 }

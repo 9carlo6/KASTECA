@@ -8,6 +8,7 @@
     tools:context=".activity.ListaRichiesteStudentiActivity">
 
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_lista_richieste_studenti"
         android:layout_width="368dp"
