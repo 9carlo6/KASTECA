@@ -65,6 +65,8 @@
     <string name="Codice_Corso_text">Codice Corso</string>
     <string name="bottone_richiesta_iscrizione">RICHIEDI ISCRIZIONE</string>
     <string name="Codice_Corso_non_corretto">Il codice inserito non appartiene a nessun corso esistente</string>
+    <string name="Studente_gia_iscritto">Sei già iscritto a questo corso</string>
+    <string name="Richiesta_gia_inviata">Hai già inviato una richiesta per questo corso</string>
 
     <!-- stringhe per la ListaStudentiIscrittiActivity -->
     <string name="nessuno_studente_iscritto">Non ci sono studenti iscritti al corso</string>
