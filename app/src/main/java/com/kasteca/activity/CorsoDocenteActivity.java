@@ -25,6 +25,7 @@ import com.kasteca.fragment.CorsiStudenteFragment;
 import com.kasteca.fragment.PostDocenteFragment;
 import com.kasteca.object.Docente;
 import com.kasteca.object.Post;
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class CorsoDocenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -48,7 +49,7 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_corso_docente);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_corso);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // recupero il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
@@ -72,8 +73,9 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         toggle.syncState();
 
         if(savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_corso_docente,
-                    new PostDocenteFragment()).commit();
+            PostDocenteFragment pf = new PostDocenteFragment();
+            pf.setArguments(bundleCorso);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_corso_docente, pf).commit();
             navigationView.setCheckedItem(R.id.nav_post_corso);
         }
 
@@ -91,8 +93,10 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_post_corso:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_corso_docente,
-                        new PostDocenteFragment()).commit();
+                Log.e(TAG, "bundle: " + bundleCorso);
+                PostDocenteFragment pf = new PostDocenteFragment();
+                pf.setArguments(bundleCorso);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_corso_docente,pf).commit();
                 break;
             case R.id.nav_visualizza_studenti_iscritti:
                 Intent intent = new Intent(getApplicationContext(), ListaStudentiIscrittiActivity.class);
