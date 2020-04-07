@@ -173,7 +173,7 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
     }
 
-    // questa funzione serve per mostrare un dialog nel caso di LOGIN FALLITO
+    // questa funzione serve per mostrare un dialog nel caso di assenza di nuove richieste
     public void showAlert(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(getResources().getString(R.string.nessuna_richiesta));

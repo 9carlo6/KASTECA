@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
@@ -163,6 +165,9 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                                                 }
                                             }
                                         }
+                                        if(studenti.isEmpty()){
+                                            showAlert();
+                                        }
                                         ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti);
                                         rv.setAdapter(adapter);
                                     }
@@ -182,5 +187,24 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
 
         ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti);
         rv.setAdapter(adapter);
+    }
+
+    // questa funzione serve per mostrare un dialog nel caso di assenza di studenti iscritti
+    public void showAlert(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(getResources().getString(R.string.nessuno_studente_iscritto));
+        alertDialog.setNeutralButton(getResources().getString(R.string.Dialog_neutral_button_nessuno_studente_iscritto), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                //finish();
+            }
+        });
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });
+        alertDialog.show();
     }
 }
