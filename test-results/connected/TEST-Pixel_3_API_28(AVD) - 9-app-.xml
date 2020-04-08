@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.kasteca.ExampleInstrumentedTest" tests="3" failures="0" errors="0" skipped="0" time="6135.0" timestamp="2020-04-08T14:38:19" hostname="localhost">
+  <properties>
+    <property name="device" value="Pixel_3_API_28(AVD) - 9" />
+    <property name="flavor" value="" />
+    <property name="project" value="app" />
+  </properties>
+  <testcase name="useAppContext" classname="com.kasteca.ExampleInstrumentedTest" time="0.0" />
+  <testcase name="mainActivityCorrectLoginStudente" classname="com.kasteca.activityTest.MainActivityTest" time="2.696" />
+  <testcase name="mainActivityCorrectLoginDocenteTest" classname="com.kasteca.activityTest.MainActivityTest" time="1.726" />
+</testsuite>

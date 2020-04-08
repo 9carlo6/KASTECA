@@ -96,6 +96,7 @@ public class MainActivityTest {
         appCompatButton.perform(click());
     }
 
+
     // Test login docente con campi corretti
     @Test
     public void mainActivityCorrectLoginDocenteTest() {
@@ -150,7 +151,9 @@ public class MainActivityTest {
         appCompatButton.perform(click());
     }
 
+
     // Test fallimento login con campi non corretti
+    /*
     @Test
     public void mainActivityLoginFailTest() {
         ViewInteraction appCompatEditText = onView(
@@ -195,6 +198,8 @@ public class MainActivityTest {
                                 0)));
         appCompatButton2.perform(scrollTo(), click());
     }
+    */
+
 
 
 
