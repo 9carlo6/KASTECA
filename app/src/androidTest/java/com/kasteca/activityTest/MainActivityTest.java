@@ -153,9 +153,8 @@ public class MainActivityTest {
 
 
     // Test fallimento login con campi non corretti
-    /*
     @Test
-    public void mainActivityLoginFailTest() {
+    public void mainActivityLoginFailTest() throws InterruptedException {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.Email_Edit_Text),
                         childAtPosition(
@@ -186,6 +185,9 @@ public class MainActivityTest {
                         isDisplayed()));
         appCompatButton.perform(click());
 
+        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
+        Thread.sleep(5000);
+
         ViewInteraction textView = onView(withText("Login fallito"));
         textView.check(matches(isDisplayed()));
 
@@ -198,7 +200,7 @@ public class MainActivityTest {
                                 0)));
         appCompatButton2.perform(scrollTo(), click());
     }
-    */
+
 
 
 
