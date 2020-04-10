@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.kasteca.R;
+import com.kasteca.util.EspressoIdlingResource;
 
 import java.util.ArrayList;
 
@@ -70,11 +72,17 @@ public class MainActivity extends AppCompatActivity {
 
         // se i campi non sono vuoti o invalidi allora procede con il login
         if(ControlloCampi(mail, pwd) && email_edit_text.getText()!=null && password_edit_text.getText() != null) {
+            //Contatore idling resource per test con espresso
+            EspressoIdlingResource.increment();
+
             mAuth.signInWithEmailAndPassword(mail, pwd)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                //Contatore idling resource per test con espresso
+                                EspressoIdlingResource.decrement();
+
                                 Toast.makeText(MainActivity.this,
                                         getResources().getString(R.string.Login_Successful), Toast.LENGTH_LONG).show();
 
@@ -87,11 +95,16 @@ public class MainActivity extends AppCompatActivity {
                                 CollectionReference docenti = db.collection("Docenti");
 
                                 Source source = Source.SERVER;
+                                //Contatore idling resource per test con espresso
+                                EspressoIdlingResource.increment();
 
                                 // controlla se l'utente che ha eseguito l'accesso è un docente
                                 docenti.get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        //Contatore idling resource per test con espresso
+                                        EspressoIdlingResource.decrement();
+
                                         FirebaseAuth mAuth1 = FirebaseAuth.getInstance();
                                         FirebaseUser currentUser1 = mAuth1.getCurrentUser();
 
@@ -118,11 +131,17 @@ public class MainActivity extends AppCompatActivity {
                                 });
 
                                 CollectionReference studenti = db.collection("Studenti");
+                                //Contatore idling resource per test con espresso
+                                EspressoIdlingResource.increment();
+
 
                                 // controlla se l'utente che ha eseguito l'accesso è uno studente
                                 studenti.get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        //Contatore idling resource per test con espresso
+                                        EspressoIdlingResource.decrement();
+
                                         FirebaseAuth mAuth1 = FirebaseAuth.getInstance();
                                         FirebaseUser currentUser1 = mAuth1.getCurrentUser();
 
@@ -141,6 +160,11 @@ public class MainActivity extends AppCompatActivity {
                                                 studente.putString("cognome", document.getData().get("cognome").toString());
                                                 studente.putString("email", document.getData().get("email").toString());
                                                 studente.putString("matricola", document.getData().get("matricola").toString());
+
+                                                Log.e("LOGIC","Inizializzazione array di corsi.");
+                                                //Array con tutti i corsi a cui è iscritto lo studente
+                                                studente.putStringArrayList("id_corsi",(ArrayList<String>) document.getData().get("lista_corsi"));
+                                                Log.e("LOGIC","Array dei corsi: "+studente.get("id_corsi").toString());
 
                                                 intent.putExtras(studente);
                                                 startActivity(intent);

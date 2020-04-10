@@ -7,24 +7,32 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.ui.AppBarConfiguration;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kasteca.fragment.CorsiDocenteFragment;
+import com.kasteca.fragment.CreazioneCorsoFragment;
 import com.kasteca.object.Docente;
 import com.kasteca.R;
 
 public class LogDocenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private String LOG="LogDocenteActivity";
+
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
     private Bundle bundleDocente;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private Docente docente;
 
     private TextView nome_cognome_TextView;
@@ -49,6 +57,8 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
+
         //recupero il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleDocente = getIntent().getExtras();
         docente = new Docente();
@@ -66,19 +76,48 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
 
         navigationView.setCheckedItem(R.id.nav_corsi_docente);
 
+        //refreshing della lista dei corsi.
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout_lista_corsi_docente);
+        //swipeRefreshLayout.setColorSchemeResources(R.color.refresh, R.color.refresh1, R.color.refresh2);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                (new Handler()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        caricamentoFragmentCorsi();
+                    }
+                },1000);
+            }
+        });
+
         //Avvio del fragment dei corsi del docente.
-        cf= new CorsiDocenteFragment();
-        cf.setArguments(bundleDocente);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, cf).commit();
+       caricamentoFragmentCorsi();
+    }
+
+    //metodo per il caricamento del fragment contenente i corsi.
+    private void caricamentoFragmentCorsi(){
+        if(bundleDocente != null){
+            cf= new CorsiDocenteFragment();
+            cf.setArguments(bundleDocente);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, cf).commit();
+        }else{
+            Log.e(LOG,"Errore nel caricamento del fragment: bundleDocente null.");
+        }
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_corsi_docente:
-                cf= new CorsiDocenteFragment();
-                cf.setArguments(bundleDocente);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, cf).commit();
+                caricamentoFragmentCorsi();
+                break;
+            case R.id.nav_aggiungi_corso:
+                CreazioneCorsoFragment ccf= new CreazioneCorsoFragment();
+                ccf.setArguments(bundleDocente);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_docente, ccf).commit();
                 break;
             case R.id.nav_logout:
                 Logout();
