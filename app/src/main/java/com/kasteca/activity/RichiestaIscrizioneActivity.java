@@ -29,6 +29,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.test.espresso.IdlingResource;
+
 public class RichiestaIscrizioneActivity extends AppCompatActivity {
 
     private EditText codice_corso_edit_text;
