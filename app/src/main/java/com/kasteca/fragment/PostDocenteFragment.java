@@ -41,7 +41,8 @@ public class PostDocenteFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle bundle= getArguments();
         Log.e(TAG, "Bunndle nel fragment: " + bundle);
-        corso_id = bundle.getString("codice_corso");
+        corso_id = bundle.getString("id_corso");
+        Log.e(TAG, corso_id);
         bundle.getString("nome_docente");
         bundle.getString("cognome_docente");
         posts = new ArrayList<>();
@@ -50,7 +51,7 @@ public class PostDocenteFragment extends Fragment{
         //Recupero dei post del corso
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference postReference = db.collection("Post");
-        Query query = postReference.whereEqualTo("corso", corso_id).orderBy("data", Query.Direction.DESCENDING);
+        Query query = postReference.whereEqualTo("corso", corso_id);
         FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>().setQuery(query, Post.class).build();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);

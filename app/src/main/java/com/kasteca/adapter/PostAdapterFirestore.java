@@ -1,6 +1,7 @@
 package com.kasteca.adapter;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.kasteca.object.Post;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAdapterFirestore.ViewHolder> {
 
@@ -34,6 +36,7 @@ public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAda
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull final Post model) {
+        Log.e(TAG, model.toString());
         final Post mmodel = model;
         holder.text_post.setText(model.getTesto());
         holder.tag.setText(model.getTag());
