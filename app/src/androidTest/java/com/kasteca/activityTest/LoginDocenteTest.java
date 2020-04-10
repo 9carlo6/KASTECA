@@ -1,17 +1,23 @@
-package com.kasteca.activity;
+package com.kasteca.activityTest;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.kasteca.R;
+import com.kasteca.activity.LogDocenteActivity;
+import com.kasteca.activity.MainActivity;
+import com.kasteca.util.EspressoIdlingResource;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -24,45 +30,48 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class LoadDocenteCorsiTest {
+public class LoginDocenteTest {
 
 
+
+    private Bundle docente;
 
     @Rule
-    public ActivityTestRule<LogDocenteActivity> mActivityTestRule = new ActivityTestRule<>(LogDocenteActivity.class);
+    //il terzo parametro è settato a false per non far partire l'activity automaticamente
+    public ActivityTestRule<MainActivity> logDocenteActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<LogDocenteActivity> logDocenteF= new ActivityTestRule<>(LogDocenteActivity.class);
 
     @Before
-    public void setUpTest(){
-        Bundle bundleTest= new Bundle();
-        bundleTest.putString("id","BbrK7iSha8RcYNdnkiOLm0H9XAk1\n" );
-        bundleTest.putString("nome", "Eugenio");
-        bundleTest.putString("cognome","Zimeo" );
-        bundleTest.putString("email","zimeo@unisannio.it" );
-        mActivityTestRule.getActivity().onCreate(bundleTest);
+    public void setUp(){
 
+        //Registro l'idling resource per il test
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
     }
 
+    //bisogna ancora aggiungere i test
     @Test
-    public void loadDocenteCorsiTest() {
+    public void logDocenteActivityActivityTest() {
+        onView(withId(R.id.Email_Edit_Text)).perform(replaceText("studenteProva@studenti.unisannio.it"), closeSoftKeyboard());
+        onView(withId(R.id.Password_Edit_Text)).perform(replaceText("passwordProva"), closeSoftKeyboard());
+        onView(withId(R.id.button)).perform(click());
 
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.reclycleview_docente_corsi),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.fragment_container_docente),
-                                        0),
-                                0),
-                        isDisplayed()));
-        recyclerView.check(matches(isDisplayed()));
+        //Cosa ci aspettiamo di vedere
+        //onView(withId(R.id.drawer_layout)).check(matches(isDisplayed()));
+        //onView(withId(R.id.swipeLayout_lista_corsi_docente)).check(matches(isDisplayed()));
+
     }
 
     private static Matcher<View> childAtPosition(
