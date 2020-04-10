@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -16,10 +17,12 @@ import androidx.test.rule.ActivityTestRule;
 import com.kasteca.R;
 import com.kasteca.activity.LogDocenteActivity;
 import com.kasteca.activity.MainActivity;
+import com.kasteca.util.EspressoIdlingResource;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,19 +49,26 @@ public class LogDocenteActivityTest {
 
     @Rule
     //il terzo parametro è settato a false per non far partire l'activity automaticamente
-    public ActivityTestRule<LogDocenteActivity> logDocenteActivityActivityTestRule = new ActivityTestRule<>(LogDocenteActivity.class, false, false);
+    public ActivityTestRule<MainActivity> logDocenteActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<LogDocenteActivity> logDocenteF= new ActivityTestRule<>(LogDocenteActivity.class);
+
+    @Before
+    public void setUp(){
+
+        //Registro l'idling resource per il test
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
+    }
 
     //bisogna ancora aggiungere i test
     @Test
     public void logDocenteActivityActivityTest() {
-        Intent intent = new Intent();
-        docente = new Bundle();
-        docente.putString("id", "BbrK7iSha8RcYNdnkiOLm0H9XAk1");
-        docente.putString("nome", "Eugenio");
-        docente.putString("cognome", "Zimeo");
-        docente.putString("email", "zimeo@unisannio.it");
-        intent.putExtras(docente);
-        logDocenteActivityActivityTestRule.launchActivity(intent);
+        onView(withId(R.id.Email_Edit_Text)).perform(replaceText("carlo@unisannio.studenti.it"), closeSoftKeyboard());
+        onView(withId(R.id.Password_Edit_Text)).perform(replaceText("password"), closeSoftKeyboard());
+        onView(withId(R.id.button)).perform(click());
+
+        //Cosa ci aspettiamo di vedere
+        //onView(withId(R.id.drawer_layout)).check(matches(isDisplayed()));
+        //onView(withId(R.id.swipeLayout_lista_corsi_docente)).check(matches(isDisplayed()));
 
     }
 

@@ -27,6 +27,7 @@ import com.kasteca.object.Corso;
 import com.kasteca.object.Studente;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdapterCorsi.OnNoteListener {
@@ -65,7 +66,8 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
 
         view = inflater.inflate(R.layout.fragment_corsi_studente, container, false);
 
-        recuperoCorsi(idcorsi);
+        //recuperoCorsi(idcorsi);
+        caricamentoCorsi(studente.getId());
 
         //Carichiamo la recycleview.
         recyclerView= (RecyclerView) view.findViewById(R.id.reclycleview_studente_corsi);
@@ -74,60 +76,6 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
         return view;
     }
 
-    private void recuperoCorsi(ArrayList<String> idcorsi){
-        Log.e(LOG,"Recupero corsi");
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference corsiReference = db.collection("Corsi");
-        Source source = Source.SERVER;
-
-        //Facciamo una query per ogni corso dello studente e lo aggiungiamo alla recycleview tramite il suo adapter
-        for(String id: idcorsi) {
-            corsiReference.whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(), id).get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (DocumentSnapshot documenti_corsi : task.getResult()) {
-                            Log.d(LOG, "Documento.");
-                            Map<String, Object> c = documenti_corsi.getData();
-                            Corso corso = new Corso(
-                                    c.get("nome_corso").toString(),
-                                    c.get("anno_accademico").toString(),
-                                    c.get("descrizione").toString(),
-                                    c.get("codice").toString(),
-                                    documenti_corsi.getId());
-                            Log.d(LOG, "Corso: "+corso.toString());
-                            aggiornamentoRecycleView(corso);
-                        }
-
-                    } else {
-                        Log.e(LOG,"QUERY FAIL.");
-                    }
-                }
-            });
-
-        }
-
-    }
-
-
-    private void aggiornamentoRecycleView(Corso corso){
-        Log.e(LOG,"aggiornamentoRecycleView");
-
-        if(corsi == null){
-            Log.e(LOG,"Primo elemento");
-            //Caso nel quale la recycleview viene creata per la prima volta
-            corsi = new ArrayList<Corso>();
-            corsi.add(corso);
-            adapter= new RecyclerViewAdapterCorsi(corsi,this);
-            recyclerView.setAdapter(adapter);
-        }else{
-            //Caso nel quale la recycleview già esiste
-            Log.e(LOG,"Aggiunta elementi diversi dal primo");
-            corsi.add(corso);
-        }
-
-
-    }
 
     @Override
     public void onNoteClick(int position) {
@@ -146,6 +94,53 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
 
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+
+
+    //Metodo per il caricamento da firebase dei documenti relativi ai corsi ai quali è iscritto lo studente.
+    private void caricamentoCorsi(String idStudente){
+        Log.e(LOG,"Caricamento corsi");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference corsiReference = db.collection("Corsi");
+        Source source = Source.SERVER;
+
+        //Query per controllare se nell'array lista_studenti,contenuto nel documento del corso, c'è uno studente con id=idStudente
+        corsiReference.whereArrayContains("lista_studenti",idStudente).get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        if(task.getResult().isEmpty()){
+                            Log.d(LOG, "Nessun documento scaricato.");
+                        }
+                        ArrayList<Corso> corsi= new ArrayList<>();
+                        for (DocumentSnapshot documenti_corsi : task.getResult()) {
+                            Log.d(LOG, "Documento.");
+                            Map<String, Object> c = documenti_corsi.getData();
+                            Corso corso = new Corso(
+                                    c.get("nome_corso").toString(),
+                                    c.get("anno_accademico").toString(),
+                                    c.get("descrizione").toString(),
+                                    c.get("codice").toString(),
+                                    documenti_corsi.getId());
+                            corsi.add(corso);
+                            Log.d(LOG, "Corso: "+corso.toString());
+                        }
+                        loadAdapter(corsi);
+                    } else {
+                        Log.e(LOG,"QUERY FAIL.");
+                    }
+                }
+            });
+    }
+
+    //Metodo per la creazione dell'adapter della recycleview del fragment
+    private void loadAdapter(ArrayList<Corso> corsi_loaded){
+        Log.e(LOG,"aggiornamentoRecycleView");
+        this.corsi= corsi_loaded;
+        adapter= new RecyclerViewAdapterCorsi(corsi,this);
+        recyclerView.setAdapter(adapter);
+
     }
 
 
