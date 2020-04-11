@@ -175,11 +175,13 @@ public class MainActivity extends AppCompatActivity {
 
                             } else {
                                 // se il LOGIN FALLISCE viene mostrato un dialog
+                                EspressoIdlingResource.decrement();
                                 showAlert(getResources().getString(R.string.Try_Again));
                             }
                         }
                     });
         }else{
+            //EspressoIdlingResource.decrement();
             showAlert(getResources().getString(R.string.Insert_correct_data));
         }
     }
