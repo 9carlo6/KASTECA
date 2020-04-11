@@ -76,10 +76,11 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-web:3.1.0'
     androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.1.0'
-    implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
 
+    implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
 }
 
 
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'checkstyle'
+

@@ -46,7 +46,6 @@ public class RecyclerViewAdapterCorsi extends RecyclerView.Adapter<RecyclerViewA
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d(LOG,"OnBindViewHolder");
         holder.textView.setText(corsi.get(position).getNome());
-        //DA SETTARE L'ONCLICK LISTENER
 
     }
 
@@ -55,6 +54,18 @@ public class RecyclerViewAdapterCorsi extends RecyclerView.Adapter<RecyclerViewA
         return corsi.size();
     }
 
+
+    //DA ELIMINARE
+    /*
+    //metodo per l'aggiunta di un corso nella recycleview
+    public void addCorso(Corso corso){
+        corsi.add(corso);
+        Log.e(LOG,"Aggiunta corso.");
+        Log.e(LOG,"lista corsi : "+corsi.toString());
+        //metodo per aggiornare la grafica della recycleview e aggiungere l'elemento
+        //this.notifyItemInserted(0);
+    }
+    */
 
     //ViewHolder per questo Adapter
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -72,6 +83,8 @@ public class RecyclerViewAdapterCorsi extends RecyclerView.Adapter<RecyclerViewA
             itemView.setOnClickListener(this);
         }
 
+        //Il metodo onClick del ViewHolder utilizzarà il metodo onClick definito dall'OnNoteListener
+        //Che nel nostro caso è li fragment stesso.
         @Override
         public void onClick(View v) {
             onNoteListener.onNoteClick(getAdapterPosition());

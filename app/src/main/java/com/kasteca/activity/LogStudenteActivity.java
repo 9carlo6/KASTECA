@@ -7,9 +7,12 @@ package com.kasteca.activity;
         import androidx.core.view.GravityCompat;
         import androidx.drawerlayout.widget.DrawerLayout;
         import androidx.navigation.ui.AppBarConfiguration;
+        import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
         import android.content.Intent;
         import android.os.Bundle;
+        import android.os.Handler;
+        import android.util.Log;
         import android.view.MenuItem;
         import android.view.View;
         import android.widget.TextView;
@@ -21,10 +24,15 @@ package com.kasteca.activity;
         import com.kasteca.fragment.CorsiStudenteFragment;
         import com.kasteca.object.Studente;
 
+        import java.util.ArrayList;
+
 public class LogStudenteActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
+
+    private String LOG ="LogStudente activity";
 
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private Bundle bundleStudente;
     private Studente studente;
 
@@ -33,9 +41,13 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
     private TextView matricola_TextView;
 
     int LAUNCH_RICHIESTA_ISCRIZIONE_ACTIVITY = 1;
+    private CorsiStudenteFragment csf=null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e(LOG,"inizializzazione activity");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_studente);
 
@@ -51,13 +63,10 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        if (savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente,
-                    new CorsiStudenteFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_corsi_studente);
-        }
 
-        //recuper il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
+        Log.e(LOG," Recupero bundle");
+
+        //recuper lo studente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleStudente = getIntent().getExtras();
         studente = new Studente();
         studente.setId(bundleStudente.getString("id"));
@@ -75,15 +84,42 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         email_TextView.setText(studente.getEmail());
         matricola_TextView.setText(studente.getMatricola());
 
+        //da eliminare
+        Log.e(LOG,"Cambiamento Fragment");
+        //Avvio il fragment con i corsi dello studente.
 
+        //refreshing della lista dei corsi.
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout_lista_corsi_studente);
+        //swipeRefreshLayout.setColorSchemeResources(R.color.refresh, R.color.refresh1, R.color.refresh2);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                (new Handler()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        caricamentoFragmentCorsi();
+                    }
+                },1000);
+            }
+        });
+
+        caricamentoFragmentCorsi();
+
+    }
+
+    private void caricamentoFragmentCorsi(){
+        csf= new CorsiStudenteFragment();
+        csf.setArguments(bundleStudente);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente, csf).commit();
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_corsi_studente:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente,
-                        new CorsiStudenteFragment()).commit();
+                caricamentoFragmentCorsi();
                 break;
             case R.id.nav_iscrizione_corso:
                 Intent intent = new Intent(getApplicationContext(), RichiestaIscrizioneActivity.class);
@@ -108,6 +144,11 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        caricamentoFragmentCorsi();
+    }
 
     public void Logout(){
         FirebaseAuth mAuth = FirebaseAuth.getInstance();

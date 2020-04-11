@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,14 +65,14 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
     }
 
 
-    void recuperoCorsi(String id) {
+    private void recuperoCorsi(String id) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
         Source source = Source.SERVER;
         //Toast.makeText(getActivity(),"jrlpppppsdfsdfsd",Toast.LENGTH_SHORT).show();
         corsi = new ArrayList<Corso>();
 
-        //Per ogni id corso che abbiamo, facciamo una query, lo cerchiamo e lo aggiungiamo alla classe studente.
+        //Facciamo una query per recuperare tutti i corsi del docente.
         corsiReference.whereEqualTo("docente",id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -99,10 +100,13 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
 
     //Metodo per la creazione della recycleView del fragment
     private void creazioneRecycleView(ArrayList<Corso> corsi){
+
         this.corsiArrayList= corsi;
         recyclerView.setAdapter(new RecyclerViewAdapterCorsi(corsi,this));
 
     }
+
+
 
     //Metodo dell'interface
     //Metodo che verrà usato come OnClick dagli elementi gestiti dall'adapter.
@@ -115,9 +119,8 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
 
         //Passiamo all'activity del corso il codice del documento firebase del corso
         //in modo che possa recuperarlo autonomamente.
+        bundle.putString("codice_corso",this.corsiArrayList.get(position).getId());
         bundle.putString("id_corso",this.corsiArrayList.get(position).getId());
-        bundle.putString("codice_corso", this.corsiArrayList.get(position).getCodice());
-
         bundle.putString("id_docente", docente.getId());
         bundle.putString("nome_docente", docente.getNome());
         bundle.putString("cognome_docente", docente.getCognome());
