@@ -28,6 +28,8 @@ android {
         // in the path_to_your_project/module_name/build/outputs/test-results/ directory.
         // '$rootDir' sets the path relative to the root directory of the current project.
         resultsDir "$rootDir/test-results"
+
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
 }
@@ -60,11 +62,28 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-firestore:6.1.0'
     androidTestImplementation 'androidx.test:rules:1.3.0-alpha04'
 
+    ///// INSTRUMENT TESTS
+    // Testing-only dependencies
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support:support-annotations:28.0.0'
+    androidTestUtil 'androidx.test:orchestrator:1.2.0'
+    // Espresso UI Testing
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    // Espresso dependencies
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.1.0'
+    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.1.0'
+
+    implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
+    androidTestUtil 'androidx.test:orchestrator:1.1.0'
 }
 
 
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'checkstyle'
+

@@ -29,6 +29,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.kasteca.util.EspressoIdlingResource;
+
 public class RichiestaIscrizioneActivity extends AppCompatActivity {
 
     private EditText codice_corso_edit_text;
@@ -57,10 +59,13 @@ public class RichiestaIscrizioneActivity extends AppCompatActivity {
 
         Source source = Source.SERVER;
 
-        corsi.get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        EspressoIdlingResource.increment();
+
+        corsi.whereEqualTo("codice", codice_corso_edit_text.getText().toString()).get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
+                    EspressoIdlingResource.decrement();
                     for (DocumentSnapshot document : task.getResult()) {
                         // per ogni documento presente nella collezione 'Corsi' controllo
                         // se il codice del corso inserito dallo studente appartiene a un corso esistente
@@ -70,67 +75,87 @@ public class RichiestaIscrizioneActivity extends AppCompatActivity {
 
                             // bisogna controllare se già è iscritto al corso
                             lista_codici_studenti = (ArrayList<String>) document.get("lista_studenti");
-                            // se è gia iscritto allora mostra un dialog attraverso il quale comunica con l'user
-                            if (lista_codici_studenti.contains(id_studente)) {
-                                showAlert(getResources().getString(R.string.Studente_gia_iscritto));
-                            }else{
-                                // se non è gia iscritto allora controlla se esiste una richiesta di questo studente per questo corso
-                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
 
-                                // deve prendere tutte le richieste che rispettano queste condizioni:
-                                //      l'id studente deve corrispondere all'utente autenticato
-                                //      il codice del corso deve corrispondere al codice inserito dallo studente
-                                //      lo stato richiesta deve essere "in attesa"
-                                richieste_iscrizione.whereEqualTo("studente", id_studente)
-                                        .whereEqualTo("codice_corso", codice_corso_edit_text.getText().toString())
-                                        .whereEqualTo("stato_richiesta", "in attesa").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            for (DocumentSnapshot document : task.getResult()) {
-                                                id_richieste_studenti.add(document.getId());
-                                            }
-                                            // se la richiesta non esiste allora mostra un dialog attraverso il quale comunica con l'user
-                                            if(!id_richieste_studenti.isEmpty()){
-                                                showAlert(getResources().getString(R.string.Richiesta_gia_inviata));
-                                            }else{
-                                                // altrimenti va avanti e carica la richiesta nel db
-                                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                                CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
+                            if (controllo_esistenza_codice == 1) {
+                                // se è gia iscritto allora mostra un dialog attraverso il quale comunica con l'user
+                                if (lista_codici_studenti.contains(id_studente)) {
+                                    showAlert(getResources().getString(R.string.Studente_gia_iscritto));
+                                } else {
+                                    //EspressoIdlingResource.decrement();
 
-                                                // allora inviare la richiesta e caricarla nel db
-                                                Map<String, Object> obj = new HashMap<>();
-                                                obj.put("codice_corso", codice_corso_edit_text.getText().toString());
-                                                obj.put("data", new Timestamp(Calendar.getInstance().getTime()));
-                                                obj.put("stato_richiesta", "in attesa");
-                                                obj.put("studente", id_studente);
+                                    // se non è gia iscritto allora controlla se esiste una richiesta di questo studente per questo corso
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                    CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
 
-                                                richieste_iscrizione.add(obj).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                        if (task.isSuccessful()) {
-                                                            Intent returnIntent = new Intent();
-                                                            setResult(Activity.RESULT_OK, returnIntent);
-                                                            finish();
-                                                        } else {
-                                                            Toast.makeText(RichiestaIscrizioneActivity.this, ("qualcosa è andato storto nel db"), Toast.LENGTH_LONG).show();
+                                    EspressoIdlingResource.increment();
+
+                                    // deve prendere tutte le richieste che rispettano queste condizioni:
+                                    //      l'id studente deve corrispondere all'utente autenticato
+                                    //      il codice del corso deve corrispondere al codice inserito dallo studente
+                                    //      lo stato richiesta deve essere "in attesa"
+                                    richieste_iscrizione.whereEqualTo("studente", id_studente)
+                                            .whereEqualTo("codice_corso", codice_corso_edit_text.getText().toString())
+                                            .whereEqualTo("stato_richiesta", "in attesa").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                EspressoIdlingResource.decrement();
+                                                for (DocumentSnapshot document : task.getResult()) {
+                                                    id_richieste_studenti.add(document.getId());
+                                                }
+                                                // se la richiesta non esiste allora mostra un dialog attraverso il quale comunica con l'user
+                                                if (!id_richieste_studenti.isEmpty()) {
+                                                    showAlert(getResources().getString(R.string.Richiesta_gia_inviata));
+                                                } else {
+
+                                                    // altrimenti va avanti e carica la richiesta nel db
+                                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                                    CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
+
+                                                    EspressoIdlingResource.increment();
+
+                                                    // allora inviare la richiesta e caricarla nel db
+                                                    Map<String, Object> obj = new HashMap<>();
+                                                    obj.put("codice_corso", codice_corso_edit_text.getText().toString());
+                                                    obj.put("data", new Timestamp(Calendar.getInstance().getTime()));
+                                                    obj.put("stato_richiesta", "in attesa");
+                                                    obj.put("studente", id_studente);
+
+                                                    richieste_iscrizione.add(obj).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                            if (task.isSuccessful()) {
+
+                                                                EspressoIdlingResource.decrement();
+
+                                                                Intent returnIntent = new Intent();
+                                                                setResult(Activity.RESULT_OK, returnIntent);
+                                                                finish();
+                                                            } else {
+                                                                Toast.makeText(RichiestaIscrizioneActivity.this, ("qualcosa è andato storto nel db"), Toast.LENGTH_LONG).show();
+
+                                                                EspressoIdlingResource.decrement();
+                                                            }
                                                         }
-                                                    }
-                                                });
+                                                    });
+                                                }
+                                            } else {
+                                                Toast.makeText(RichiestaIscrizioneActivity.this, ("qualcosa è andato storto nel db"), Toast.LENGTH_LONG).show();
+
+                                                EspressoIdlingResource.decrement();
                                             }
-                                        }else{
-                                            Toast.makeText(RichiestaIscrizioneActivity.this, ("qualcosa è andato storto nel db"), Toast.LENGTH_LONG).show();
                                         }
-                                    }
-                                });
+                                    });
+                                }
                             }
                         }
                     }
                 }else{
                     Toast.makeText(RichiestaIscrizioneActivity.this, ("qualcosa è andato storto nel db"), Toast.LENGTH_LONG).show();
+
+                    EspressoIdlingResource.decrement();
                 }
-                if(controllo_esistenza_codice==0){//se non esiste allora comunico allo studente che ha inserito un codice sbagliato
+                if(controllo_esistenza_codice == 0){
                     showAlert(getResources().getString(R.string.Codice_Corso_non_corretto));
                 }
             }
