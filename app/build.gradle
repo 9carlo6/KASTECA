@@ -28,6 +28,8 @@ android {
         // in the path_to_your_project/module_name/build/outputs/test-results/ directory.
         // '$rootDir' sets the path relative to the root directory of the current project.
         resultsDir "$rootDir/test-results"
+
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
 }
@@ -78,6 +80,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.1.0'
 
     implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
+    androidTestUtil 'androidx.test:orchestrator:1.1.0'
 }
 
 

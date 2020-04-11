@@ -13,10 +13,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,6 +26,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -35,6 +38,7 @@ import com.google.firebase.firestore.Source;
 import com.kasteca.R;
 import com.kasteca.activity.MainActivity;
 import com.kasteca.activity.RichiestaIscrizioneActivity;
+import com.kasteca.util.EspressoIdlingResource;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -47,6 +51,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runner.Runner;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -68,7 +73,6 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
 
-
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class RichiestaIscrizioneActivityTest {
@@ -85,10 +89,27 @@ public class RichiestaIscrizioneActivityTest {
 
     @BeforeClass()
     public static void singIn() throws InterruptedException {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-        String mail = "studenteProva@studenti.unisannio.it";
+        String mail = "studenteprova@studenti.unisannio.it";
         String pwd = "passwordProva";
-        mAuth.signInWithEmailAndPassword(mail, pwd);
+
+        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
+        //Thread.sleep(8000);
+
+        EspressoIdlingResource.increment();
+
+        mAuth.signInWithEmailAndPassword(mail, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                EspressoIdlingResource.decrement();
+                Log.d(TAG, "non ha funzio");
+
+
+            }
+        });
+
         //Log.d(LOG, "OK SING IN");
 
         //id_studente = "SotSWWJIZHNALPZ32EAARRed9RG2";
@@ -100,6 +121,8 @@ public class RichiestaIscrizioneActivityTest {
         // bisogna creare il corso
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsi = db.collection("Corsi");
+
+        EspressoIdlingResource.increment();
 
         Map<String, Object> obj = new HashMap<>();
         obj.put("anno_accademico", "anno_accademico_prova" );
@@ -114,15 +137,21 @@ public class RichiestaIscrizioneActivityTest {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    //
+
+                    EspressoIdlingResource.decrement();
+
+                    Log.d(TAG, "Corsi: creazione corso ok");
                 }else{
-                    //
+
+                    EspressoIdlingResource.decrement();
+
+                    Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
                 }
             }
         });
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(3000);
+        //Thread.sleep(5000);
 
 
     }
@@ -162,7 +191,7 @@ public class RichiestaIscrizioneActivityTest {
         appCompatButton2.perform(click());
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(5000);
+        //Thread.sleep(5000);
 
         ViewInteraction textView = onView(withText("Il codice inserito non appartiene a nessun corso esistente"));
         textView.check(matches(isDisplayed()));
@@ -214,7 +243,7 @@ public class RichiestaIscrizioneActivityTest {
         appCompatButton2.perform(click());
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(5000);
+        //Thread.sleep(5000);
     }
 
     // Test iscrizione corso con inserimento codice di un corso al quale ci si è gia iscritti
@@ -252,7 +281,7 @@ public class RichiestaIscrizioneActivityTest {
         appCompatButton2.perform(click());
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(5000);
+        //Thread.sleep(5000);
 
         ViewInteraction textView = onView(withText("Hai già inviato una richiesta per questo corso"));
         textView.check(matches(isDisplayed()));
@@ -271,52 +300,81 @@ public class RichiestaIscrizioneActivityTest {
 
     @AfterClass()
     public static void logOut() throws InterruptedException {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
+
         // bisogna cancellare il corso
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsi = db.collection("Corsi");
+
+        EspressoIdlingResource.increment();
+
         corsi.document("id_corso_prova")
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+
+                        EspressoIdlingResource.decrement();
+
                         Log.d(TAG, "Corsi: DocumentSnapshot successfully deleted!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+
+                        EspressoIdlingResource.decrement();
+
                         Log.w(TAG, "Corsi: Error deleting document", e);
                     }
                 });
 
         // bisogna cancellare la richiesta
         CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
+
+        EspressoIdlingResource.increment();
+
         richieste_iscrizione.whereEqualTo("codice_corso", "codice_corso_prova").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String id_documento_richiesta_iscrizone = new String();
                 if(task.isSuccessful()){
+
+                    EspressoIdlingResource.decrement();
+
                     Log.d(TAG, "Richieste_Iscrizione: get document ok");
                     for(DocumentSnapshot document :  task.getResult()){
                         id_documento_richiesta_iscrizone = document.getId();
                     }
                     FirebaseFirestore db1 = FirebaseFirestore.getInstance();
                     CollectionReference richieste = db1.collection("Richieste_Iscrizione");
+
+                    EspressoIdlingResource.increment();
+
                     richieste.document(id_documento_richiesta_iscrizone)
                             .delete()
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+
+                                    EspressoIdlingResource.decrement();
+
                                     Log.d(TAG, "Richieste Iscrizione: DocumentSnapshot successfully deleted!");
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
+
+                                    EspressoIdlingResource.decrement();
+
                                     Log.w(TAG, "Richieste Iscrizione: Error deleting document", e);
                                 }
                             });
                 }else{
+
+                    EspressoIdlingResource.decrement();
+
                     Log.w(TAG, "Richieste_Iscrizione: error get document");
                 }
             }
@@ -327,7 +385,7 @@ public class RichiestaIscrizioneActivityTest {
         mAuth.signOut();
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(3000);
+        //Thread.sleep(3000);
     }
 
 

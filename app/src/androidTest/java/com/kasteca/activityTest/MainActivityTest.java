@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -13,10 +14,12 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.kasteca.R;
 import com.kasteca.activity.MainActivity;
+import com.kasteca.util.EspressoIdlingResource;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +37,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
+import androidx.test.espresso.IdlingRegistry;
+
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -41,6 +46,12 @@ public class MainActivityTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
+    @Before()
+    public void setUp(){
+        //Registro l'idling resource per il test
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
+    }
 
     // Test login studente con campi corretti
     @Test
@@ -163,29 +174,19 @@ public class MainActivityTest {
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("emailSbagliata@studenti.unisannio.it"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText22 = onView(
-                allOf(withId(R.id.Email_Edit_Text), withText("emailSbagliata@studenti.unisannio.it"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText22.perform(pressImeActionButton());
-
-        ViewInteraction appCompatEditText11 = onView(
-                allOf(withId(R.id.Email_Edit_Text),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText11.perform(pressImeActionButton());
+        appCompatEditText.perform(replaceText("emailSbagliataProva@unisannio.it"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
+                allOf(withId(R.id.Email_Edit_Text), withText("emailSbagliataProva@unisannio.it"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        appCompatEditText2.perform(pressImeActionButton());
+
+        ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.Password_Edit_Text),
                         childAtPosition(
                                 childAtPosition(
@@ -193,7 +194,17 @@ public class MainActivityTest {
                                         0),
                                 3),
                         isDisplayed()));
-        appCompatEditText2.perform(pressImeActionButton());
+        appCompatEditText3.perform(replaceText("passwordSbagliataProva"), closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText4 = onView(
+                allOf(withId(R.id.Password_Edit_Text), withText("passwordSbagliataProva"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        appCompatEditText4.perform(pressImeActionButton());
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.button), withText("LOGIN"),
@@ -206,7 +217,7 @@ public class MainActivityTest {
         appCompatButton.perform(click());
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(5000);
+        //Thread.sleep(5000);
 
         ViewInteraction textView = onView(withText("Login fallito"));
         textView.check(matches(isDisplayed()));
