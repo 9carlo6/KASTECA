@@ -39,6 +39,8 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
     private Docente docente;
     private String id_corso;
     private String codice_corso;
+    private String nome_corso;
+    private String anno_accademico;
 
     private TextView nome_cognome_TextView;
     private TextView email_TextView;
@@ -50,8 +52,7 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_corso_docente);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
 
         // recupero il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleCorso = getIntent().getExtras();
@@ -64,6 +65,12 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         // recupero anche il codice del corso
         id_corso = bundleCorso.getString("id_corso");
         codice_corso = bundleCorso.getString("codice_corso");
+        nome_corso = bundleCorso.getString("nome_corso");
+        anno_accademico = bundleCorso.getString("anno_accademico");
+
+        Toolbar toolbar = findViewById(R.id.toolbar_docente);
+        setSupportActionBar(toolbar);
+
 
         drawer = findViewById(R.id.corso_drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view_corso_docente);
@@ -73,6 +80,9 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        toolbar.setTitle(nome_corso);
+        toolbar.setSubtitle(anno_accademico);
 
         if(savedInstanceState == null){
             PostDocenteFragment pf = new PostDocenteFragment();

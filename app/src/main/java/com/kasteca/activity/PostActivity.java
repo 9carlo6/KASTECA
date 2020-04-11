@@ -21,6 +21,7 @@ import com.kasteca.R;
 import com.kasteca.object.Post;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,8 +29,13 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class PostActivity extends AppCompatActivity {
     Post post;
+    String nomeCognome;
     TextView testoView;
     TextView tagView;
+    TextView nomeCognomeView;
+    TextView dataView;
+    TextView numeroCommentiView;
+    TextView linkView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +46,28 @@ public class PostActivity extends AppCompatActivity {
             post = getIntent().getParcelableExtra("post");
         }
 
-        testoView = findViewById(R.id.testoPostTextView);
-        tagView = findViewById(R.id.tagTextView);
+        if(getIntent().hasExtra("docente")){
+            nomeCognome = getIntent().getStringExtra("docente");
+        }
 
+        nomeCognomeView = findViewById(R.id.nome_cognome_textView);
+        dataView = findViewById(R.id.data_textView);
+        tagView = findViewById(R.id.tagTextView);
+        testoView = findViewById(R.id.testoPostTextView);
+        numeroCommentiView = findViewById(R.id.commenti_numero_textView);
+
+        nomeCognomeView.setText(nomeCognome);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        if(post.getData() != null)  dataView.setText(sdf.format(post.getData()));
         testoView.setText(post.getTesto());
         tagView.setText(post.getTag());
+        linkView = findViewById(R.id.link_textView);
 
         if(post.getLink() == null){
-            findViewById(R.id.getLinkButton).setVisibility(View.INVISIBLE);
+            linkView.setVisibility(View.INVISIBLE);
+        }
+        else{
+            linkView.setText(post.getLink());
         }
 
         if(post.getPdf() == null){
@@ -57,7 +77,29 @@ public class PostActivity extends AppCompatActivity {
     }
 
     public void downloadPdf(View v){
-        Log.d(TAG, "Download del pdf");
+        /*FirebaseStorage myStorage = FirebaseStorage.getInstance();
+        StorageReference rootStorageRef = myStorage.getReference();
+        StorageReference documentRef = rootStorageRef.child("documents/score_c.pdf");
+
+        File externalDir = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+        File f = new File(externalDir.toString()+"/score_c.pdf");
+
+        if (f.exists())
+            f.delete();
+
+        documentRef.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getApplicationContext(),"File has been created", Toast.LENGTH_LONG).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                Toast.makeText(getApplicationContext(),"Error downloading the file", Toast.LENGTH_LONG).show();
+            }
+        });*/
+
     }
 
     public void openLink(View v){
@@ -72,6 +114,10 @@ public class PostActivity extends AppCompatActivity {
 
     public void seeComments(View v){
         Log.d(TAG, "Visualizzazione commenti");
+    }
+
+    public void addComment(View v){
+
     }
 
     public void showAlert(String s){

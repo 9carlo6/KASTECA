@@ -117,6 +117,8 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         //in modo che possa recuperarlo autonomamente.
         bundle.putString("id_corso",this.corsiArrayList.get(position).getId());
         bundle.putString("codice_corso", this.corsiArrayList.get(position).getCodice());
+        bundle.putString("nome_corso", this.corsiArrayList.get(position).getNome());
+        bundle.putString("anno_accademico", this.corsiArrayList.get(position).getAnno_accademico());
 
         bundle.putString("id_docente", docente.getId());
         bundle.putString("nome_docente", docente.getNome());

@@ -10,9 +10,12 @@ import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.kasteca.R;
 import com.kasteca.activity.PostActivity;
 import com.kasteca.object.Post;
+
+import java.text.SimpleDateFormat;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -20,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAdapterFirestore.ViewHolder> {
+
+    private OnClickListener mClickListener;
 
     public PostAdapterFirestore(@NonNull FirestoreRecyclerOptions<Post> options){
         super(options);
@@ -36,9 +41,14 @@ public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAda
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull final Post model) {
-        final Post mmodel = model;
+        if(model.getTesto().length() > 30){
+            model.setTesto(model.getTesto().substring(0, 31) + "...");
+        }
         holder.text_post.setText(model.getTesto());
         holder.tag.setText(model.getTag());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        holder.data.setText(sdf.format(model.getData()));
+        Log.e(TAG, "data: " + model.getData());
 
         if(model.getPdf() != null){
             holder.icon_post.setImageResource(R.drawable.pdf_icon_foreground);
@@ -49,14 +59,6 @@ public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAda
         else{
             holder.icon_post.setImageResource(R.drawable.message_icon_foreground);
         }
-        holder.cv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), PostActivity.class);
-                intent.putExtra("post", mmodel);
-                view.getContext().startActivity(intent);
-            }
-        });
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -64,6 +66,7 @@ public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAda
         public ImageView icon_post;
         public TextView text_post;
         public TextView tag;
+        public TextView data;
 
         public ViewHolder(View v) {
             super(v);
@@ -71,7 +74,26 @@ public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAda
             icon_post = v.findViewById(R.id.icon_post);
             text_post = v.findViewById(R.id.text_post);
             tag = v.findViewById(R.id.text_tag);
+            data = v.findViewById(R.id.data_item_textView);
+
+            v.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION && mClickListener != null){
+                        mClickListener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnClickListener {
+        public void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnClickListener(OnClickListener clickListener){
+        mClickListener = clickListener;
     }
 
 }

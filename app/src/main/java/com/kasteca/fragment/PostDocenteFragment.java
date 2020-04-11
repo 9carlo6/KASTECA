@@ -18,10 +18,12 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.kasteca.R;
 import com.kasteca.activity.NewPostActivity;
+import com.kasteca.activity.PostActivity;
 import com.kasteca.adapter.PostAdapterFirestore;
 import com.kasteca.object.Post;
 
@@ -32,17 +34,15 @@ public class PostDocenteFragment extends Fragment{
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
     private String corso_id;
-    FirestoreRecyclerAdapter adapter;
+    private String nome_cognome;
+    PostAdapterFirestore adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle bundle= getArguments();
-        Log.e(TAG, "Bunndle nel fragment: " + bundle);
         corso_id = bundle.getString("id_corso");
-        Log.e(TAG, corso_id);
-        bundle.getString("nome_docente");
-        bundle.getString("cognome_docente");
+        nome_cognome = bundle.getString("nome_docente") + " " + bundle.getString("cognome_docente");
         View view = inflater.inflate(R.layout.fragment_post_docente, container, false);
 
         //Recupero dei post del corso
@@ -62,6 +62,17 @@ public class PostDocenteFragment extends Fragment{
             }
         });
         recyclerView.setAdapter(adapter);
+        adapter.setOnClickListener(new PostAdapterFirestore.OnClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Post post = documentSnapshot.toObject(Post.class);
+                Intent intent = new Intent(getContext(), PostActivity.class);
+                intent.putExtra("docente", nome_cognome);
+                intent.putExtra("post", post);
+                Log.e(TAG, "data nel fragment: " + post.getData());
+                getActivity().startActivity(intent);
+            }
+        });
 
 
         fab = getActivity().findViewById(R.id.fab_add_post);
