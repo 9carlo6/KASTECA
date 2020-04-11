@@ -44,7 +44,7 @@ public class MainActivityTest {
 
     // Test login studente con campi corretti
     @Test
-    public void mainActivityCorrectLoginStudente() {
+    public void A_mainActivityCorrectLoginStudente() {
         ViewInteraction appCompatEditText = onView(
                 allOf(ViewMatchers.withId(R.id.Email_Edit_Text),
                         childAtPosition(
@@ -53,10 +53,10 @@ public class MainActivityTest {
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("gregorio.dalia@studenti.unisannio.it"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("studenteProva@studenti.unisannio.it"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.Email_Edit_Text), withText("gregorio.dalia@studenti.unisannio.it"),
+                allOf(withId(R.id.Email_Edit_Text), withText("studenteProva@studenti.unisannio.it"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -73,10 +73,10 @@ public class MainActivityTest {
                                         0),
                                 3),
                         isDisplayed()));
-        appCompatEditText3.perform(replaceText("password"), closeSoftKeyboard());
+        appCompatEditText3.perform(replaceText("passwordProva"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.Password_Edit_Text), withText("password"),
+                allOf(withId(R.id.Password_Edit_Text), withText("passwordProva"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -99,7 +99,7 @@ public class MainActivityTest {
 
     // Test login docente con campi corretti
     @Test
-    public void mainActivityCorrectLoginDocenteTest() {
+    public void B_mainActivityCorrectLoginDocenteTest() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.Email_Edit_Text),
                         childAtPosition(
@@ -108,10 +108,10 @@ public class MainActivityTest {
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("zimeo@unisannio.it"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("docenteProva@unisannio.it"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.Email_Edit_Text), withText("zimeo@unisannio.it"),
+                allOf(withId(R.id.Email_Edit_Text), withText("docenteProva@unisannio.it"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -128,10 +128,10 @@ public class MainActivityTest {
                                         0),
                                 3),
                         isDisplayed()));
-        appCompatEditText3.perform(replaceText("password"), closeSoftKeyboard());
+        appCompatEditText3.perform(replaceText("passwordProva"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.Password_Edit_Text), withText("password"),
+                allOf(withId(R.id.Password_Edit_Text), withText("passwordProva"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -154,7 +154,7 @@ public class MainActivityTest {
 
     // Test fallimento login con campi non corretti
     @Test
-    public void mainActivityLoginFailTest() throws InterruptedException {
+    public void C_mainActivityLoginFailTest() throws InterruptedException {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.Email_Edit_Text),
                         childAtPosition(
@@ -163,7 +163,27 @@ public class MainActivityTest {
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatEditText.perform(pressImeActionButton());
+        appCompatEditText.perform(replaceText("emailSbagliata@studenti.unisannio.it"), closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText22 = onView(
+                allOf(withId(R.id.Email_Edit_Text), withText("emailSbagliata@studenti.unisannio.it"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        appCompatEditText22.perform(pressImeActionButton());
+
+        ViewInteraction appCompatEditText11 = onView(
+                allOf(withId(R.id.Email_Edit_Text),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        appCompatEditText11.perform(pressImeActionButton());
 
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.Password_Edit_Text),
