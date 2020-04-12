@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
@@ -23,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.kasteca.R;
 import com.kasteca.activity.NewPostActivity;
-import com.kasteca.activity.PostActivity;
+import com.kasteca.activity.PostActivityDocente;
 import com.kasteca.adapter.PostAdapterFirestore;
 import com.kasteca.object.Post;
 
@@ -35,7 +34,7 @@ public class PostDocenteFragment extends Fragment{
     private FloatingActionButton fab;
     private String corso_id;
     private String nome_cognome;
-    PostAdapterFirestore adapter;
+    private PostAdapterFirestore adapter;
 
     @Nullable
     @Override
@@ -66,7 +65,7 @@ public class PostDocenteFragment extends Fragment{
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 Post post = documentSnapshot.toObject(Post.class);
-                Intent intent = new Intent(getContext(), PostActivity.class);
+                Intent intent = new Intent(getContext(), PostActivityDocente.class);
                 intent.putExtra("docente", nome_cognome);
                 intent.putExtra("post", post);
                 Log.e(TAG, "data nel fragment: " + post.getData());

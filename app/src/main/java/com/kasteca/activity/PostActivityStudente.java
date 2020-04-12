@@ -2,40 +2,50 @@ package com.kasteca.activity;
 
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.kasteca.R;
+import com.kasteca.adapter.CommentiAdapterFirestore;
+import com.kasteca.adapter.PostAdapterFirestore;
+import com.kasteca.object.Commento;
 import com.kasteca.object.Post;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class PostActivity extends AppCompatActivity {
-    Post post;
-    String nomeCognome;
-    TextView testoView;
-    TextView tagView;
-    TextView nomeCognomeView;
-    TextView dataView;
-    TextView numeroCommentiView;
-    TextView linkView;
+public class PostActivityStudente extends AppCompatActivity {
+    private Post post;
+    private String nomeCognome;
+    private TextView testoView;
+    private TextView tagView;
+    private TextView nomeCognomeView;
+    private TextView dataView;
+    private TextView numeroCommentiView;
+    private TextView linkView;
+    private PopupWindow popWindow;
+    private CommentiAdapterFirestore adapter = null;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,11 +123,67 @@ public class PostActivity extends AppCompatActivity {
     }
 
     public void seeComments(View v){
-        Log.d(TAG, "Visualizzazione commenti");
+        onShowPopup(v, false);
     }
 
     public void addComment(View v){
+        onShowPopup(v, true);
+    }
 
+    public void onShowPopup(View v, boolean isAddCommentClicked){
+        if(adapter == null) adapter.startListening();
+
+        LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        // inflate the custom popup layout
+        final View inflatedView = layoutInflater.inflate(R.layout.popup_comments_layout, null,false);
+        // find the ListView in the popup layout
+        recyclerView = (RecyclerView) inflatedView.findViewById(R.id.recycler_view_commenti);
+
+        // si prendono le dimensioni del dispositivo
+        Display display = getWindowManager().getDefaultDisplay();
+        final Point size = new Point();
+        display.getSize(size);
+
+
+        // si inizializza la recyclerView
+        setRecyclerView();
+
+
+        // si setta la grandezza della pop window a seconda delle dimensioni del dispositivo
+        popWindow = new PopupWindow(inflatedView, size.x - 50,size.y - 400, true );
+        // si setta come background una forma rettangolare con gli angoli arrotondati
+        popWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_shape));
+        // si rende "focusable" per mostrare la testiera e scrivere nell'EditText
+        // lo si fa solo se il booleano passato al metodo come argomento è true
+        if(isAddCommentClicked) popWindow.setFocusable(true);
+        // si fa in modo che si possa toccare lo schermo al di fuori della finestra,
+        // cosa che porta alla chiusura della finestra stessa
+        popWindow.setOutsideTouchable(true);
+
+        // si mostra la finestra dal basso dello schermo
+        popWindow.showAtLocation(v, Gravity.BOTTOM, 0,100);
+    }
+
+
+    private void setRecyclerView(){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference postReference = db.collection("Commenti");
+        Query query = postReference.whereEqualTo("post", post.getId()).orderBy("data", Query.Direction.DESCENDING);
+        FirestoreRecyclerOptions<Commento> options = new FirestoreRecyclerOptions.Builder<Commento>().setQuery(query, Commento.class).build();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        if(adapter == null) adapter = new CommentiAdapterFirestore(options);
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                recyclerView.scrollToPosition(0);
+            }
+        });
+        recyclerView.setAdapter(adapter);
     }
 
     public void showAlert(String s){
@@ -130,5 +196,12 @@ public class PostActivity extends AppCompatActivity {
             }
         });
         alertDialog.show();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }

@@ -97,9 +97,15 @@
     <string name="get_posts_failed">Non è stato possibile recuperare i post del corso.</string>
 
     <!-- stringhe per il PostActivity-->
-    <string name="Numero_commenti">Commenti: </string>
+    <string name="Numero_commenti">Commenti</string>
     <string name="no_activity">Nessun Web Browser trovato</string>
     <string name="download_webBrowser">Per favore, scarica un web browser.</string>
     <string name="upload_post_error">Errore nel caricamento del nuovo post.</string>
     <string name="aggiungi_commento">Commenta</string>
+    <string name="formato_data">dd/MM/yyyy HH:mm</string>
+
+    !-- stringhe per il CommentiActivity-->
+    <string name="rispondi">Rispondi</string>
+    <string name="visualizza_risposte">Visualizza tutte le risposte</string>
+    <string name="scrivi_commento">Scrivi un commento...</string>
 </resources>

@@ -2,18 +2,20 @@ package com.kasteca.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.kasteca.R;
+import com.kasteca.activity.PostActivityDocente;
+import com.kasteca.activity.PostActivityStudente;
 import com.kasteca.adapter.PostAdapterFirestore;
 import com.kasteca.object.Post;
 
@@ -28,17 +30,17 @@ public class PostStudenteFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private String corso_id;
-    FirestoreRecyclerAdapter adapter;
+    private String nome_cognome_docente;
+    private PostAdapterFirestore adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle bundle= getArguments();
-        Log.e(TAG, "Bunndle nel fragment: " + bundle);
+        Log.e(TAG, "Bundle nel fragment: " + bundle);
         corso_id = bundle.getString("id_corso");
         Log.e(TAG, corso_id);
-        bundle.getString("nome_docente");
-        bundle.getString("cognome_docente");
+        nome_cognome_docente = bundle.getString("nome_docente") + " " + bundle.getString("cognome_docente");
         View view = inflater.inflate(R.layout.fragment_post_studente, container, false);
 
         //Recupero dei post del corso
@@ -58,6 +60,17 @@ public class PostStudenteFragment extends Fragment {
             }
         });
         recyclerView.setAdapter(adapter);
+        adapter.setOnClickListener(new PostAdapterFirestore.OnClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Post post = documentSnapshot.toObject(Post.class);
+                Intent intent = new Intent(getContext(), PostActivityStudente.class);
+                intent.putExtra("docente", nome_cognome_docente);
+                intent.putExtra("post", post);
+                Log.e(TAG, "data nel fragment: " + post.getData());
+                getActivity().startActivity(intent);
+            }
+        });
 
         return view;
     }

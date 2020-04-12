@@ -1,6 +1,5 @@
 package com.kasteca.adapter;
 
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.kasteca.R;
-import com.kasteca.activity.PostActivity;
 import com.kasteca.object.Post;
 
 import java.text.SimpleDateFormat;
@@ -89,7 +87,7 @@ public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAda
     }
 
     public interface OnClickListener {
-        public void onItemClick(DocumentSnapshot documentSnapshot, int position);
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     public void setOnClickListener(OnClickListener clickListener){
