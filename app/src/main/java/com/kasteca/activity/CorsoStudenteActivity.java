@@ -62,8 +62,16 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        //AGGIUNGERE L'AGGIUNTA DEL FRAGMENTE , ANCHE NEL LAYOUT.
-        //Teoricamente la prima schermata è fatta da tutti i post del corso
+        /*Completare transizione fragment
+          Modificare il nome e il tipo dell'oggetto del fragment dei post dello studente
+        if(savedInstanceState == null){
+            PostStudenteFragment pf = new PostStudenteFragment();
+            pf.setArguments(bundleStudente);
+            getSupportFragmentManager().beginTransaction().replace(R.id.  , pf).commit();
+            navigationView.setCheckedItem(R.id.nav_post_corso);
+        }
+        */
+
 
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
@@ -83,6 +91,12 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_post_corso:
+                /*Aggiunstare
+                PostStudenteFragment pf = new PostStudenteFragment();
+                pf.setArguments(bundleStudente);
+                getSupportFragmentManager().beginTransaction().replace(R.id.  , pf).commit();
+                 navigationView.setCheckedItem(R.id.nav_post_corso);
+                 */
                 break;
             case R.id.nav_logout:
                 Logout();
