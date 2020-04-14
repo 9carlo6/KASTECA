@@ -46,7 +46,6 @@ public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAda
         holder.tag.setText(model.getTag());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         holder.data.setText(sdf.format(model.getData()));
-        Log.e(TAG, "data: " + model.getData());
 
         if(model.getPdf() != null){
             holder.icon_post.setImageResource(R.drawable.pdf_icon_foreground);

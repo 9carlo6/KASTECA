@@ -64,6 +64,7 @@ public class PostStudenteFragment extends Fragment {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 Post post = documentSnapshot.toObject(Post.class);
+                post.setId(adapter.getSnapshots().getSnapshot(position).getId());
                 Intent intent = new Intent(getContext(), PostActivityStudente.class);
                 intent.putExtra("docente", nome_cognome_docente);
                 intent.putExtra("post", post);

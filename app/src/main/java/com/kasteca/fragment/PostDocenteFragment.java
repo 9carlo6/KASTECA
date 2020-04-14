@@ -65,10 +65,10 @@ public class PostDocenteFragment extends Fragment{
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 Post post = documentSnapshot.toObject(Post.class);
+                post.setId(adapter.getSnapshots().getSnapshot(position).getId());
                 Intent intent = new Intent(getContext(), PostActivityDocente.class);
                 intent.putExtra("docente", nome_cognome);
                 intent.putExtra("post", post);
-                Log.e(TAG, "data nel fragment: " + post.getData());
                 getActivity().startActivity(intent);
             }
         });

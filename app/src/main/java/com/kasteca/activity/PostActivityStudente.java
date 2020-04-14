@@ -13,20 +13,31 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.kasteca.R;
 import com.kasteca.adapter.CommentiAdapterFirestore;
-import com.kasteca.adapter.PostAdapterFirestore;
 import com.kasteca.object.Commento;
 import com.kasteca.object.Post;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,6 +57,8 @@ public class PostActivityStudente extends AppCompatActivity {
     private PopupWindow popWindow;
     private CommentiAdapterFirestore adapter = null;
     private RecyclerView recyclerView;
+    private ImageButton inviaCommento;
+    private EditText scriviCommento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +97,11 @@ public class PostActivityStudente extends AppCompatActivity {
             findViewById(R.id.getPdfButton).setVisibility(View.INVISIBLE);
         }
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference postReference = db.collection("Commenti");
+        Query query = postReference.whereEqualTo("post", post.getId()).orderBy("data", Query.Direction.DESCENDING);
+        FirestoreRecyclerOptions<Commento> options = new FirestoreRecyclerOptions.Builder<Commento>().setQuery(query, Commento.class).build();
+        adapter = new CommentiAdapterFirestore(options);
     }
 
     public void downloadPdf(View v){
@@ -131,14 +149,46 @@ public class PostActivityStudente extends AppCompatActivity {
     }
 
     public void onShowPopup(View v, boolean isAddCommentClicked){
-        if(adapter == null) adapter.startListening();
 
         LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        // inflate the custom popup layout
+        // si visualizza il layout del popup
         final View inflatedView = layoutInflater.inflate(R.layout.popup_comments_layout, null,false);
-        // find the ListView in the popup layout
+        // si cerca la recycle view nel popup layout
         recyclerView = (RecyclerView) inflatedView.findViewById(R.id.recycler_view_commenti);
+        // si cerca l'Edit Text nel popup layout
+        scriviCommento = inflatedView.findViewById(R.id.writeComment);
+        // si cerca il bottone per l'invio di un commento nel popup layout
+        inviaCommento = inflatedView.findViewById(R.id.send_commento_button);
+        // si rende il bottone disabilitato fino a che non viene scritta almeno una lettera nell'Edit Text
+        // inviaCommento.setEnabled(false);
+
+        inviaCommento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference commentiRef = db.collection("Commenti");
+
+                Map<String, Object> newCommento = new HashMap<>();
+                newCommento.put("testo", scriviCommento.getText().toString());
+                newCommento.put("data", new Date());
+                newCommento.put("lista_risposte", new ArrayList<String>());
+                newCommento.put("post", post.getId());
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                newCommento.put("proprietario_commento", currentUser.getUid());
+
+                commentiRef.add(newCommento)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                FirebaseFirestore.getInstance().collection("Post").document(post.getId()).update("lista_commenti", FieldValue.arrayUnion(documentReference.getId()));
+                                scriviCommento.getText().clear();
+                            }
+                        });
+            }
+        });
+
 
         // si prendono le dimensioni del dispositivo
         Display display = getWindowManager().getDefaultDisplay();
@@ -161,6 +211,8 @@ public class PostActivityStudente extends AppCompatActivity {
         // cosa che porta alla chiusura della finestra stessa
         popWindow.setOutsideTouchable(true);
 
+        popWindow.setAnimationStyle(R.style.PopupAnimation);
+
         // si mostra la finestra dal basso dello schermo
         popWindow.showAtLocation(v, Gravity.BOTTOM, 0,100);
     }
@@ -168,15 +220,9 @@ public class PostActivityStudente extends AppCompatActivity {
 
     private void setRecyclerView(){
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference postReference = db.collection("Commenti");
-        Query query = postReference.whereEqualTo("post", post.getId()).orderBy("data", Query.Direction.DESCENDING);
-        FirestoreRecyclerOptions<Commento> options = new FirestoreRecyclerOptions.Builder<Commento>().setQuery(query, Commento.class).build();
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        if(adapter == null) adapter = new CommentiAdapterFirestore(options);
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -184,6 +230,21 @@ public class PostActivityStudente extends AppCompatActivity {
             }
         });
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnRispondiClickListener(new CommentiAdapterFirestore.OnRispondiClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Log.e(TAG, "Rispondo al commento " + adapter.getSnapshots().getSnapshot(position).getId());
+            }
+        });
+
+        adapter.setOnVisualizzaRisposteClickListener(new CommentiAdapterFirestore.OnVisualizzaRisposteClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Log.e(TAG, "Visualizzo le risposte al commento " + adapter.getSnapshots().getSnapshot(position).getId());
+            }
+        });
+
     }
 
     public void showAlert(String s){
@@ -200,7 +261,13 @@ public class PostActivityStudente extends AppCompatActivity {
 
 
     @Override
-    protected void onStop() {
+    protected void onStart(){
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop(){
         super.onStop();
         adapter.stopListening();
     }

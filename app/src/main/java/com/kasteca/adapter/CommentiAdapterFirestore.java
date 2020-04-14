@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.ui.common.BaseObservableSnapshotArray;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,8 +35,8 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento, CommentiAdapterFirestore.ViewHolder> {
 
-    private OnClickListener mClickListener;
-    private String nome_cognome_proprietario;
+    private OnRispondiClickListener mRispondiClickListener;
+    private OnVisualizzaRisposteClickListener mVisualizzaRisposteClickListener;
 
     public CommentiAdapterFirestore(@NonNull FirestoreRecyclerOptions<Commento> options){
         super(options);
@@ -53,29 +54,11 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Commento model) {
-        /*FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference studRef = db.collection("Studenti").document(model.getProprietario_commento());
 
-        Source source = Source.SERVER;
-
-        studRef.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    nome_cognome_proprietario = (String) document.getData().get("nome")
-                                                + " "
-                                                + (String) document.getData().get("cognome");
-                } else {
-                    Log.d(TAG, "Failed: " + task.getException());
-                }
-            }
-        });*/
-        holder.nome_proprietario.setText(model.getProprietario_commento());
+        holder.nome_proprietario.setText(model.getProprietario_commento().substring(0,6));
         holder.text_commento.setText(model.getTesto());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         holder.data.setText(sdf.format(model.getData()));
-        Log.e(TAG, "data: " + model.getData());
 
     }
 
@@ -101,19 +84,37 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    if(position != RecyclerView.NO_POSITION && mClickListener != null){
-                        mClickListener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    if(position != RecyclerView.NO_POSITION && mRispondiClickListener != null){
+                        mRispondiClickListener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+            });
+
+            tutte_risposte.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION && mVisualizzaRisposteClickListener != null){
+                        mVisualizzaRisposteClickListener.onItemClick(getSnapshots().getSnapshot(position), position);
                     }
                 }
             });
         }
     }
 
-    public interface OnClickListener {
-        public void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    public interface OnRispondiClickListener {
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
-    public void setOnClickListener(CommentiAdapterFirestore.OnClickListener clickListener){
-        mClickListener = clickListener;
+    public interface OnVisualizzaRisposteClickListener {
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnRispondiClickListener(CommentiAdapterFirestore.OnRispondiClickListener clickListener){
+        mRispondiClickListener = clickListener;
+    }
+
+    public void setOnVisualizzaRisposteClickListener(CommentiAdapterFirestore.OnVisualizzaRisposteClickListener clickListener){
+        mVisualizzaRisposteClickListener = clickListener;
     }
 }

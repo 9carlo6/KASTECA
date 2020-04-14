@@ -8,7 +8,7 @@ public class Commento {
     private String id;
     private String testo;
     private Date data;
-    private String Post;
+    private String post;
     private String proprietario_commento;
 
     //Costruttori
@@ -16,9 +16,11 @@ public class Commento {
         this.id = id;
         this.testo = testo;
         this.data = data;
-        this.Post = post;
+        this.post = post;
         this.proprietario_commento = proprietario_commento;
     }
+
+    public Commento(){ }
 
     //Metodi get
 
@@ -34,7 +36,7 @@ public class Commento {
         return data;
     }
 
-    public String getPost() { return Post; }
+    public String getPost() { return post; }
 
     public String getProprietario_commento() { return proprietario_commento; }
     //Metodi set
@@ -51,7 +53,7 @@ public class Commento {
         this.data = data;
     }
 
-    public void setPost(String post) { Post = post; }
+    public void setPost(String post) { this.post = post; }
 
     public void setProprietario_commento(String proprietario_commento) { this.proprietario_commento = proprietario_commento; }
 }
