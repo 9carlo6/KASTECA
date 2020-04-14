@@ -63,11 +63,11 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
         toggle.syncState();
 
         /*Completare transizione fragment
-          Modificare il nome e il tipo dell'oggetto del fragment dei post dello studente
+          Modificare il tipo dell'oggetto del fragment dei post dello studente
         if(savedInstanceState == null){
             PostStudenteFragment pf = new PostStudenteFragment();
             pf.setArguments(bundleStudente);
-            getSupportFragmentManager().beginTransaction().replace(R.id.  , pf).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_corso_studente  , pf).commit();
             navigationView.setCheckedItem(R.id.nav_post_corso);
         }
         */
@@ -91,11 +91,10 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_post_corso:
-                /*Aggiunstare
+                /*Aggiunstare il tipo del fragment
                 PostStudenteFragment pf = new PostStudenteFragment();
                 pf.setArguments(bundleStudente);
-                getSupportFragmentManager().beginTransaction().replace(R.id.  , pf).commit();
-                 navigationView.setCheckedItem(R.id.nav_post_corso);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_corso_studente , pf).commit();
                  */
                 break;
             case R.id.nav_logout:

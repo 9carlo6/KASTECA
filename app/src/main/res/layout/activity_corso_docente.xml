@@ -19,6 +19,11 @@
             layout="@layout/tab_layout_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+        <FrameLayout
+            android:id="@+id/fragment_container_corso_docente"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
 
     </LinearLayout>
 
