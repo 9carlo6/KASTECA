@@ -55,7 +55,7 @@ public class MainActivityTest {
 
     // Test login studente con campi corretti
     @Test
-    public void A_mainActivityCorrectLoginStudente() {
+    public void A_mainActivityCorrectLoginStudente() throws InterruptedException {
         ViewInteraction appCompatEditText = onView(
                 allOf(ViewMatchers.withId(R.id.Email_Edit_Text),
                         childAtPosition(
@@ -96,15 +96,11 @@ public class MainActivityTest {
                         isDisplayed()));
         appCompatEditText4.perform(pressImeActionButton());
 
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.button), withText("LOGIN"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                4),
-                        isDisplayed()));
-        appCompatButton.perform(click());
+        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
+        //Thread.sleep(1000);
+
+        onView(withId(R.id.button)).perform(click());
+
     }
 
 

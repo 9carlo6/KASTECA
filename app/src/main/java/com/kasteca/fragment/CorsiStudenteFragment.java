@@ -62,7 +62,7 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
         studente.setMatricola(bundleStudente.getString("matricola"));
         idcorsi= bundleStudente.getStringArrayList("id_corsi");
 
-        Log.e(LOG,"id corsi studente: "+idcorsi.toString());
+        //Log.e(LOG,"id corsi studente: "+idcorsi.toString());
 
         view = inflater.inflate(R.layout.fragment_corsi_studente, container, false);
 
