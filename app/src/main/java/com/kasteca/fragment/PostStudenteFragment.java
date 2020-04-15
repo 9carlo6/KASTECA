@@ -9,16 +9,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.kasteca.R;
-import com.kasteca.activity.PostActivityDocente;
-import com.kasteca.activity.PostActivityStudente;
+import com.kasteca.activity.PostActivity;
 import com.kasteca.adapter.PostAdapterFirestore;
 import com.kasteca.object.Post;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +33,7 @@ public class PostStudenteFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private String corso_id;
+    private String codice_docente;
     private String nome_cognome_docente;
     private PostAdapterFirestore adapter;
 
@@ -37,14 +41,31 @@ public class PostStudenteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Bundle bundle= getArguments();
-        Log.e(TAG, "Bundle nel fragment: " + bundle);
         corso_id = bundle.getString("id_corso");
-        Log.e(TAG, corso_id);
-        nome_cognome_docente = bundle.getString("nome_docente") + " " + bundle.getString("cognome_docente");
+        codice_docente = bundle.getString("docente");
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docenteReference = db.collection("Docenti").document(codice_docente);
+        docenteReference.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                nome_cognome_docente = documentSnapshot.getData().get("nome").toString()
+                        + " "
+                        + documentSnapshot.getData().get("cognome").toString();
+            }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showAlert(getResources().getString(R.string.get_docente_failed));
+                    }
+                });
+
+
         View view = inflater.inflate(R.layout.fragment_post_studente, container, false);
 
         //Recupero dei post del corso
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference postReference = db.collection("Post");
         Query query = postReference.whereEqualTo("corso", corso_id).orderBy("data", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>().setQuery(query, Post.class).build();
@@ -65,7 +86,7 @@ public class PostStudenteFragment extends Fragment {
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 Post post = documentSnapshot.toObject(Post.class);
                 post.setId(adapter.getSnapshots().getSnapshot(position).getId());
-                Intent intent = new Intent(getContext(), PostActivityStudente.class);
+                Intent intent = new Intent(getContext(), PostActivity.class);
                 intent.putExtra("docente", nome_cognome_docente);
                 intent.putExtra("post", post);
                 Log.e(TAG, "data nel fragment: " + post.getData());

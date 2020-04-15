@@ -18,6 +18,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kasteca.R;
 import com.kasteca.fragment.PostDocenteFragment;
+import com.kasteca.fragment.PostStudenteFragment;
 import com.kasteca.object.Studente;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -25,7 +26,10 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class CorsoStudenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Studente studente;
+    private String corso_id;
     private String codice_corso;
+    private String nome_corso;
+    private String anno_accademico;
     private Bundle bundleStudente;
 
 
@@ -39,7 +43,7 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_corso_studente);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_studente);
         setSupportActionBar(toolbar);
 
         bundleStudente= getIntent().getExtras();
@@ -51,7 +55,12 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
         studente.setCognome(bundleStudente.getString("cognome"));
         studente.setEmail(bundleStudente.getString("email"));
         studente.setMatricola(bundleStudente.getString("matricola"));
-        codice_corso= bundleStudente.getString("codice_corso");
+
+        // recupero anche il codice del corso
+        corso_id = bundleStudente.getString("id_corso");
+        codice_corso = bundleStudente.getString("codice_corso");
+        nome_corso = bundleStudente.getString("nome_corso");
+        anno_accademico = bundleStudente.getString("anno_accademico");
 
         drawer = findViewById(R.id.corso_studente_drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view_corso_studente);
@@ -62,15 +71,12 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        /*Completare transizione fragment
-          Modificare il tipo dell'oggetto del fragment dei post dello studente
         if(savedInstanceState == null){
             PostStudenteFragment pf = new PostStudenteFragment();
             pf.setArguments(bundleStudente);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_corso_studente  , pf).commit();
             navigationView.setCheckedItem(R.id.nav_post_corso);
         }
-        */
 
 
         View header=navigationView.getHeaderView(0);
@@ -91,11 +97,9 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_post_corso:
-                /*Aggiunstare il tipo del fragment
                 PostStudenteFragment pf = new PostStudenteFragment();
                 pf.setArguments(bundleStudente);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_corso_studente , pf).commit();
-                 */
                 break;
             case R.id.nav_logout:
                 Logout();

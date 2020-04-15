@@ -64,7 +64,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class PostActivityDocente extends AppCompatActivity {
+public class PostActivity extends AppCompatActivity {
     private Post post;
     private String nomeCognome;
     private TextView testoView;
@@ -87,8 +87,6 @@ public class PostActivityDocente extends AppCompatActivity {
         if(getIntent().hasExtra("post")){
             post = getIntent().getParcelableExtra("post");
         }
-
-        Log.e(TAG, post.getPdf());
 
         if(getIntent().hasExtra("docente")){
             nomeCognome = getIntent().getStringExtra("docente");
@@ -139,7 +137,9 @@ public class PostActivityDocente extends AppCompatActivity {
                     .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                     .setDestinationUri(Uri.fromFile(file));
 
-            downloadManager.enqueue(request);
+            if (downloadManager != null) {
+                downloadManager.enqueue(request);
+            }
         }
     }
 
@@ -309,7 +309,7 @@ public class PostActivityDocente extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
         String nomeFile = post.getPdf().substring(post.getPdf().indexOf("/pdf"));
         nomeFile = nomeFile.substring(7, nomeFile.indexOf("?"));
         if(!nomeFile.contains(".pdf")) nomeFile = nomeFile + ".pdf";
@@ -321,7 +321,7 @@ public class PostActivityDocente extends AppCompatActivity {
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 .setDestinationUri(Uri.fromFile(file));
 
-        downloadManager.enqueue(request);
+        if(downloadManager != null) downloadManager.enqueue(request);
     }
 
 }

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +21,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.kasteca.R;
 import com.kasteca.activity.NewPostActivity;
-import com.kasteca.activity.PostActivityDocente;
+import com.kasteca.activity.PostActivity;
 import com.kasteca.adapter.PostAdapterFirestore;
 import com.kasteca.object.Post;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class PostDocenteFragment extends Fragment{
 
@@ -66,7 +63,7 @@ public class PostDocenteFragment extends Fragment{
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 Post post = documentSnapshot.toObject(Post.class);
                 post.setId(adapter.getSnapshots().getSnapshot(position).getId());
-                Intent intent = new Intent(getContext(), PostActivityDocente.class);
+                Intent intent = new Intent(getContext(), PostActivity.class);
                 intent.putExtra("docente", nome_cognome);
                 intent.putExtra("post", post);
                 getActivity().startActivity(intent);
