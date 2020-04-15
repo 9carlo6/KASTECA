@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                                                 Log.e("LOGIC","Inizializzazione array di corsi.");
                                                 //Array con tutti i corsi a cui è iscritto lo studente
                                                 studente.putStringArrayList("id_corsi",(ArrayList<String>) document.getData().get("lista_corsi"));
-                                                Log.e("LOGIC","Array dei corsi: "+studente.get("id_corsi").toString());
+                                                //Log.e("LOGIC","Array dei corsi: "+studente.get("id_corsi").toString());
 
                                                 intent.putExtras(studente);
                                                 startActivity(intent);
