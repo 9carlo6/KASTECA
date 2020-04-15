@@ -137,7 +137,7 @@ public class ListaStudentiIscrittiActivityTestConStudenti {
                 });
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(4000);
+        Thread.sleep(5000);
     }
 
     @After()
@@ -189,7 +189,7 @@ public class ListaStudentiIscrittiActivityTestConStudenti {
         listaStudentiIscrittiActivityActivityTestRule.launchActivity(i);
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         ViewInteraction textView = onView(withText("NomeProva CognomeProva"));
         textView.check(matches(isDisplayed()));

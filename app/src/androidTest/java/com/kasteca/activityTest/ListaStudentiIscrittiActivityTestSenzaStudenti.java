@@ -91,7 +91,7 @@ public class ListaStudentiIscrittiActivityTestSenzaStudenti {
         });
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(2000);
+        Thread.sleep(3000);
     }
 
     @After()
@@ -120,7 +120,7 @@ public class ListaStudentiIscrittiActivityTestSenzaStudenti {
     }
 
     @Test()
-    public void ListaStudentiIscrittiActivityTestConStudenti() throws InterruptedException {
+    public void ListaStudentiIscrittiActivityTestSenzaStudenti() throws InterruptedException {
 
         Intent i = new Intent();
         i.putExtra("id_corso", "id_corso_prova");
