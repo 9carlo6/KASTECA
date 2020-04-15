@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import com.kasteca.activity.CorsoDocenteActivity;
 import com.kasteca.adapter.RecyclerViewAdapterCorsi;
 import com.kasteca.object.Corso;
 import com.kasteca.object.Docente;
+import com.kasteca.util.EspressoIdlingResource;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -64,17 +66,22 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
     }
 
 
-    void recuperoCorsi(String id) {
+    private void recuperoCorsi(String id) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
         Source source = Source.SERVER;
         //Toast.makeText(getActivity(),"jrlpppppsdfsdfsd",Toast.LENGTH_SHORT).show();
         corsi = new ArrayList<Corso>();
 
-        //Per ogni id corso che abbiamo, facciamo una query, lo cerchiamo e lo aggiungiamo alla classe studente.
+        //Contatore idling resource per test con espresso
+        //EspressoIdlingResource.increment();
+
+        //Facciamo una query per recuperare tutti i corsi del docente.
         corsiReference.whereEqualTo("docente",id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                //Contatore idling resource per test con espresso
+                EspressoIdlingResource.decrement();
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot documenti_corsi : task.getResult()) {
                         Log.d(LOG,"Documento.");
@@ -100,10 +107,13 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
 
     //Metodo per la creazione della recycleView del fragment
     private void creazioneRecycleView(ArrayList<Corso> corsi){
+
         this.corsiArrayList= corsi;
         recyclerView.setAdapter(new RecyclerViewAdapterCorsi(corsi,this));
 
     }
+
+
 
     //Metodo dell'interface
     //Metodo che verrà usato come OnClick dagli elementi gestiti dall'adapter.

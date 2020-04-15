@@ -24,6 +24,7 @@ import com.kasteca.fragment.CorsiDocenteFragment;
 import com.kasteca.fragment.CreazioneCorsoFragment;
 import com.kasteca.object.Docente;
 import com.kasteca.R;
+import com.kasteca.util.EspressoIdlingResource;
 
 public class LogDocenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -92,6 +93,9 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
                 },1000);
             }
         });
+
+        //Contatore idling resource per test con espresso
+        //EspressoIdlingResource.decrement();
 
         //Avvio del fragment dei corsi del docente.
        caricamentoFragmentCorsi();
