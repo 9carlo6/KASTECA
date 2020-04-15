@@ -74,7 +74,7 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         corsi = new ArrayList<Corso>();
 
         //Contatore idling resource per test con espresso
-        //EspressoIdlingResource.increment();
+        EspressoIdlingResource.increment();
 
         //Facciamo una query per recuperare tutti i corsi del docente.
         corsiReference.whereEqualTo("docente",id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -99,6 +99,7 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
                     creazioneRecycleView(corsi);
                 }else{
                     // c'è stato un problema nel get
+
                 }
             }
         });
