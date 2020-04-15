@@ -89,7 +89,7 @@ public class PostStudenteFragment extends Fragment {
                 Intent intent = new Intent(getContext(), PostActivity.class);
                 intent.putExtra("docente", nome_cognome_docente);
                 intent.putExtra("post", post);
-                Log.e(TAG, "data nel fragment: " + post.getData());
+                intent.putExtra("id_docente", codice_docente);
                 getActivity().startActivity(intent);
             }
         });

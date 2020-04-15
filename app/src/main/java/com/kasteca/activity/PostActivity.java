@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -67,6 +68,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class PostActivity extends AppCompatActivity {
     private Post post;
     private String nomeCognome;
+    private String id_docente;
     private TextView testoView;
     private TextView tagView;
     private TextView nomeCognomeView;
@@ -90,6 +92,10 @@ public class PostActivity extends AppCompatActivity {
 
         if(getIntent().hasExtra("docente")){
             nomeCognome = getIntent().getStringExtra("docente");
+        }
+
+        if(getIntent().hasExtra("id_docente")){
+            id_docente = getIntent().getStringExtra("id_docente");
         }
 
         nomeCognomeView = findViewById(R.id.nome_cognome_textView);
@@ -120,7 +126,7 @@ public class PostActivity extends AppCompatActivity {
         CollectionReference postReference = db.collection("Commenti");
         Query query = postReference.whereEqualTo("post", post.getId()).orderBy("data", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Commento> options = new FirestoreRecyclerOptions.Builder<Commento>().setQuery(query, Commento.class).build();
-        adapter = new CommentiAdapterFirestore(options);
+        adapter = new CommentiAdapterFirestore(options, id_docente, nomeCognome);
 
     }
 
@@ -195,26 +201,31 @@ public class PostActivity extends AppCompatActivity {
         inviaCommento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                CollectionReference commentiRef = db.collection("Commenti");
+                if (!scriviCommento.getText().toString().trim().isEmpty()) {
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    CollectionReference commentiRef = db.collection("Commenti");
 
-                Map<String, Object> newCommento = new HashMap<>();
-                newCommento.put("testo", scriviCommento.getText().toString());
-                newCommento.put("data", new Date());
-                newCommento.put("lista_risposte", new ArrayList<String>());
-                newCommento.put("post", post.getId());
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                FirebaseUser currentUser = mAuth.getCurrentUser();
-                newCommento.put("proprietario_commento", currentUser.getUid());
+                    Map<String, Object> newCommento = new HashMap<>();
+                    newCommento.put("testo", scriviCommento.getText().toString());
+                    newCommento.put("data", new Date());
+                    newCommento.put("lista_risposte", new ArrayList<String>());
+                    newCommento.put("post", post.getId());
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    newCommento.put("proprietario_commento", currentUser.getUid());
 
-                commentiRef.add(newCommento)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                FirebaseFirestore.getInstance().collection("Post").document(post.getId()).update("lista_commenti", FieldValue.arrayUnion(documentReference.getId()));
-                                scriviCommento.getText().clear();
-                            }
-                        });
+                    commentiRef.add(newCommento)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    FirebaseFirestore.getInstance().collection("Post").document(post.getId()).update("lista_commenti", FieldValue.arrayUnion(documentReference.getId()));
+                                    scriviCommento.getText().clear();
+                                }
+                            });
+                }
+                else{
+                    scriviCommento.getText().clear();
+                }
             }
         });
 

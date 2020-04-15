@@ -31,6 +31,7 @@ public class PostDocenteFragment extends Fragment{
     private FloatingActionButton fab;
     private String corso_id;
     private String nome_cognome;
+    private String id_docente;
     private PostAdapterFirestore adapter;
 
     @Nullable
@@ -39,6 +40,7 @@ public class PostDocenteFragment extends Fragment{
         Bundle bundle= getArguments();
         corso_id = bundle.getString("id_corso");
         nome_cognome = bundle.getString("nome_docente") + " " + bundle.getString("cognome_docente");
+        id_docente = bundle.getString("id_docente");
         View view = inflater.inflate(R.layout.fragment_post_docente, container, false);
 
         //Recupero dei post del corso
@@ -65,6 +67,7 @@ public class PostDocenteFragment extends Fragment{
                 post.setId(adapter.getSnapshots().getSnapshot(position).getId());
                 Intent intent = new Intent(getContext(), PostActivity.class);
                 intent.putExtra("docente", nome_cognome);
+                intent.putExtra("id_docente", id_docente);
                 intent.putExtra("post", post);
                 getActivity().startActivity(intent);
             }
