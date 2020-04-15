@@ -103,6 +103,8 @@
     <string name="upload_post_error">Errore nel caricamento del nuovo post.</string>
     <string name="aggiungi_commento">Commenta</string>
     <string name="formato_data">dd/MM/yyyy HH:mm</string>
+    <string name="titolo">File Download</string>
+
 
     !-- stringhe per il CommentiActivity-->
     <string name="rispondi">Rispondi</string>

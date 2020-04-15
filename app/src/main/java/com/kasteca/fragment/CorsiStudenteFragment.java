@@ -122,7 +122,8 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
                                     c.get("anno_accademico").toString(),
                                     c.get("descrizione").toString(),
                                     c.get("codice").toString(),
-                                    documenti_corsi.getId());
+                                    documenti_corsi.getId(),
+                                    c.get("docente").toString());
                             corsi.add(corso);
                             Log.d(LOG, "Corso: "+corso.toString());
                         }

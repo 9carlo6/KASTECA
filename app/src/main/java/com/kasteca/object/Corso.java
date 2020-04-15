@@ -10,17 +10,19 @@ public class Corso {
     private String anno_accademico;
     private String codice;
     private String id;
+    private String docente;
 
     //COSTRUTTORI
     private Corso(){
     }
 
-    public Corso(String nome,String anno_accademico, String descrizione, String codice, String id) {
+    public Corso(String nome,String anno_accademico, String descrizione, String codice, String id, String docente) {
         this.nome = nome;
         this.anno_accademico=anno_accademico;
         this.descrizione = descrizione;
         this.codice = codice;
         this.id = id;
+        this.docente = docente;
     }
 
     public String getNome() {
@@ -61,5 +63,13 @@ public class Corso {
 
     public void setAnno_accademico(String anno_accademico) {
         this.anno_accademico = anno_accademico;
+    }
+
+    public String getDocente() {
+        return docente;
+    }
+
+    public void setDocente(String docente) {
+        this.docente = docente;
     }
 }

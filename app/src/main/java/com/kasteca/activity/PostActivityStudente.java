@@ -1,13 +1,18 @@
 package com.kasteca.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -33,6 +38,7 @@ import com.kasteca.adapter.CommentiAdapterFirestore;
 import com.kasteca.object.Commento;
 import com.kasteca.object.Post;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +46,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -105,29 +112,36 @@ public class PostActivityStudente extends AppCompatActivity {
     }
 
     public void downloadPdf(View v){
-        /*FirebaseStorage myStorage = FirebaseStorage.getInstance();
-        StorageReference rootStorageRef = myStorage.getReference();
-        StorageReference documentRef = rootStorageRef.child("documents/score_c.pdf");
+        if( haveStoragePermission()){
+            String nomeFile = post.getPdf().substring(post.getPdf().indexOf("/pdf"));
+            nomeFile = nomeFile.substring(7, nomeFile.indexOf("?"));
+            if(!nomeFile.contains(".pdf")) nomeFile = nomeFile + ".pdf";
+            File file = new File(Environment.getExternalStorageDirectory(), nomeFile);
 
-        File externalDir = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-        File f = new File(externalDir.toString()+"/score_c.pdf");
+            DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(post.getPdf()))
+                    .setTitle(getResources().getString(R.string.titolo))
+                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                    .setDestinationUri(Uri.fromFile(file));
 
-        if (f.exists())
-            f.delete();
+            downloadManager.enqueue(request);
+        }
+    }
 
-        documentRef.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"File has been created", Toast.LENGTH_LONG).show();
+    public  boolean haveStoragePermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-                Toast.makeText(getApplicationContext(),"Error downloading the file", Toast.LENGTH_LONG).show();
-            }
-        });*/
-
+        }
+        else {
+            // se dispositivo ha un API level minore di 23, non c'è bisogno di chiedere dinamicamente il permesso
+            return true;
+        }
     }
 
     public void openLink(View v){
@@ -270,5 +284,21 @@ public class PostActivityStudente extends AppCompatActivity {
     protected void onStop(){
         super.onStop();
         adapter.stopListening();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        String nomeFile = post.getPdf().substring(post.getPdf().indexOf("/pdf"));
+        nomeFile = nomeFile.substring(7, nomeFile.indexOf("?"));
+        if(!nomeFile.contains(".pdf")) nomeFile = nomeFile + ".pdf";
+        File file = new File(Environment.getExternalStorageDirectory(), nomeFile);
+
+        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(post.getPdf()))
+                .setTitle(getResources().getString(R.string.titolo))
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setDestinationUri(Uri.fromFile(file));
+
+        downloadManager.enqueue(request);
     }
 }

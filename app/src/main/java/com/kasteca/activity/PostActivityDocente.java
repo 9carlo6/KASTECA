@@ -1,19 +1,26 @@
 package com.kasteca.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,17 +40,25 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.kasteca.R;
 import com.kasteca.adapter.CommentiAdapterFirestore;
 import com.kasteca.object.Commento;
 import com.kasteca.object.Post;
+
+
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,6 +87,8 @@ public class PostActivityDocente extends AppCompatActivity {
         if(getIntent().hasExtra("post")){
             post = getIntent().getParcelableExtra("post");
         }
+
+        Log.e(TAG, post.getPdf());
 
         if(getIntent().hasExtra("docente")){
             nomeCognome = getIntent().getStringExtra("docente");
@@ -109,29 +127,36 @@ public class PostActivityDocente extends AppCompatActivity {
     }
 
     public void downloadPdf(View v){
-        /*FirebaseStorage myStorage = FirebaseStorage.getInstance();
-        StorageReference rootStorageRef = myStorage.getReference();
-        StorageReference documentRef = rootStorageRef.child("documents/score_c.pdf");
+        if( haveStoragePermission()){
+            String nomeFile = post.getPdf().substring(post.getPdf().indexOf("/pdf"));
+            nomeFile = nomeFile.substring(7, nomeFile.indexOf("?"));
+            if(!nomeFile.contains(".pdf")) nomeFile = nomeFile + ".pdf";
+            File file = new File(Environment.getExternalStorageDirectory(), nomeFile);
 
-        File externalDir = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-        File f = new File(externalDir.toString()+"/score_c.pdf");
+            DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(post.getPdf()))
+                    .setTitle(getResources().getString(R.string.titolo))
+                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                    .setDestinationUri(Uri.fromFile(file));
 
-        if (f.exists())
-            f.delete();
+            downloadManager.enqueue(request);
+        }
+    }
 
-        documentRef.getFile(f).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"File has been created", Toast.LENGTH_LONG).show();
+    public  boolean haveStoragePermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-                Toast.makeText(getApplicationContext(),"Error downloading the file", Toast.LENGTH_LONG).show();
-            }
-        });*/
-
+        }
+        else {
+            // se dispositivo ha un API level minore di 23, non c'è bisogno di chiedere dinamicamente il permesso
+            return true;
+        }
     }
 
     public void openLink(View v){
@@ -154,7 +179,7 @@ public class PostActivityDocente extends AppCompatActivity {
 
     public void onShowPopup(View v, boolean isAddCommentClicked){
 
-        LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // si visualizza il layout del popup
         final View inflatedView = layoutInflater.inflate(R.layout.popup_comments_layout, null,false);
@@ -210,7 +235,6 @@ public class PostActivityDocente extends AppCompatActivity {
         // si vuole vedere la testiera e scrivere nell'EditText
         // lo si fa solo se il booleano passato al metodo come argomento è true
         if(isAddCommentClicked){
-            scriviCommento = inflatedView.findViewById(R.id.writeComment);
             scriviCommento.requestFocus();
             scriviCommento.postDelayed(new Runnable() {
                 @Override
@@ -282,6 +306,22 @@ public class PostActivityDocente extends AppCompatActivity {
     protected void onStop(){
         super.onStop();
         adapter.stopListening();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        String nomeFile = post.getPdf().substring(post.getPdf().indexOf("/pdf"));
+        nomeFile = nomeFile.substring(7, nomeFile.indexOf("?"));
+        if(!nomeFile.contains(".pdf")) nomeFile = nomeFile + ".pdf";
+        File file = new File(Environment.getExternalStorageDirectory(), nomeFile);
+
+        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(post.getPdf()))
+                .setTitle(getResources().getString(R.string.titolo))
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setDestinationUri(Uri.fromFile(file));
+
+        downloadManager.enqueue(request);
     }
 
 }
