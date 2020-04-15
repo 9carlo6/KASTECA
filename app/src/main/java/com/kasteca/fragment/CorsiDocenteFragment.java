@@ -26,6 +26,7 @@ import com.kasteca.activity.CorsoDocenteActivity;
 import com.kasteca.adapter.RecyclerViewAdapterCorsi;
 import com.kasteca.object.Corso;
 import com.kasteca.object.Docente;
+import com.kasteca.util.EspressoIdlingResource;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -72,10 +73,15 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
         //Toast.makeText(getActivity(),"jrlpppppsdfsdfsd",Toast.LENGTH_SHORT).show();
         corsi = new ArrayList<Corso>();
 
+        //Contatore idling resource per test con espresso
+        //EspressoIdlingResource.increment();
+
         //Facciamo una query per recuperare tutti i corsi del docente.
         corsiReference.whereEqualTo("docente",id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                //Contatore idling resource per test con espresso
+                EspressoIdlingResource.decrement();
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot documenti_corsi : task.getResult()) {
                         Log.d(LOG,"Documento.");
@@ -92,6 +98,7 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
                     creazioneRecycleView(corsi);
                 }else{
                     // c'è stato un problema nel get
+
                 }
             }
         });
