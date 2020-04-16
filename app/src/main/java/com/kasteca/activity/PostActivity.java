@@ -135,7 +135,7 @@ public class PostActivity extends AppCompatActivity {
             String nomeFile = post.getPdf().substring(post.getPdf().indexOf("/pdf"));
             nomeFile = nomeFile.substring(7, nomeFile.indexOf("?"));
             if(!nomeFile.contains(".pdf")) nomeFile = nomeFile + ".pdf";
-            File file = new File(Environment.getExternalStorageDirectory(), nomeFile);
+            File file = new File(String.valueOf(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)));
 
             DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(post.getPdf()))
@@ -324,7 +324,7 @@ public class PostActivity extends AppCompatActivity {
         String nomeFile = post.getPdf().substring(post.getPdf().indexOf("/pdf"));
         nomeFile = nomeFile.substring(7, nomeFile.indexOf("?"));
         if(!nomeFile.contains(".pdf")) nomeFile = nomeFile + ".pdf";
-        File file = new File(Environment.getExternalStorageDirectory(), nomeFile);
+        File file = new File(String.valueOf(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)));
 
         DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(post.getPdf()))
