@@ -85,7 +85,11 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
 
         //Passiamo all'activity del corso il codice del documento firebase del corso
         //in modo che possa recuperarlo autonomamente.
-        bundle.putString("codice_corso",this.corsi.get(position).getId());
+        bundle.putString("id_corso",this.corsi.get(position).getId());
+        bundle.putString("codice_corso", this.corsi.get(position).getCodice());
+        bundle.putString("nome_corso", this.corsi.get(position).getNome());
+        bundle.putString("anno_accademico", this.corsi.get(position).getAnno_accademico());
+        bundle.putString("docente", this.corsi.get(position).getDocente());
         bundle.putString("id", studente.getId());
         bundle.putString("nome", studente.getNome());
         bundle.putString("cognome", studente.getCognome());
@@ -105,6 +109,8 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
         CollectionReference corsiReference = db.collection("Corsi");
         Source source = Source.SERVER;
 
+        corsi= new ArrayList<>();
+
         //Query per controllare se nell'array lista_studenti,contenuto nel documento del corso, c'è uno studente con id=idStudente
         corsiReference.whereArrayContains("lista_studenti",idStudente).get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -113,7 +119,6 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
                         if(task.getResult().isEmpty()){
                             Log.d(LOG, "Nessun documento scaricato.");
                         }
-                        ArrayList<Corso> corsi= new ArrayList<>();
                         for (DocumentSnapshot documenti_corsi : task.getResult()) {
                             Log.d(LOG, "Documento.");
                             Map<String, Object> c = documenti_corsi.getData();
@@ -122,7 +127,8 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
                                     c.get("anno_accademico").toString(),
                                     c.get("descrizione").toString(),
                                     c.get("codice").toString(),
-                                    documenti_corsi.getId());
+                                    documenti_corsi.getId(),
+                                    c.get("docente").toString());
                             corsi.add(corso);
                             Log.d(LOG, "Corso: "+corso.toString());
                         }

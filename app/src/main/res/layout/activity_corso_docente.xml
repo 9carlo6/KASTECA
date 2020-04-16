@@ -16,7 +16,7 @@
         android:orientation="vertical">
 
         <include
-            layout="@layout/tab_layout_toolbar"
+            layout="@layout/tab_layout_toolbar_docente"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <FrameLayout

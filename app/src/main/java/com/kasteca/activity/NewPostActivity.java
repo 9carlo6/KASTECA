@@ -174,7 +174,6 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
 
     // Metodo chiamato per aggiungere il nuovo post al Database remoto
     public void uploadPostToDatabase(){
-        Log.i(TAG, "SONO ARRIVATO FIN QUI");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference postsRef = db.collection("Post");
 

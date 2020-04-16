@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -16,6 +18,7 @@ public class Post implements Parcelable, Comparable {
     private Date data;
     private String link;
     private String pdf;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     //Costruttori
     public Post(String id, String tag, String testo, String corso, Date data, String link, String pdf) {
@@ -36,6 +39,11 @@ public class Post implements Parcelable, Comparable {
         tag = in.readString();
         testo = in.readString();
         corso = in.readString();
+        try {
+            data = sdf.parse(in.readString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         link = in.readString();
         pdf = in.readString();
     }
@@ -124,6 +132,7 @@ public class Post implements Parcelable, Comparable {
         dest.writeString(tag);
         dest.writeString(testo);
         dest.writeString(corso);
+        if(data != null) dest.writeString(sdf.format(data));
         dest.writeString(link);
         dest.writeString(pdf);
     }

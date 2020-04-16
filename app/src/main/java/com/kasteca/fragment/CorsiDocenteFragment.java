@@ -91,7 +91,8 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
                                     c.get("anno_accademico").toString(),
                                     c.get("descrizione").toString(),
                                     c.get("codice").toString(),
-                                    documenti_corsi.getId());
+                                    documenti_corsi.getId(),
+                                    c.get("docente").toString());
                         corsi.add(corso);
 
                     }
@@ -126,8 +127,11 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
 
         //Passiamo all'activity del corso il codice del documento firebase del corso
         //in modo che possa recuperarlo autonomamente.
-        bundle.putString("codice_corso",this.corsiArrayList.get(position).getCodice());
         bundle.putString("id_corso",this.corsiArrayList.get(position).getId());
+        bundle.putString("codice_corso", this.corsiArrayList.get(position).getCodice());
+        bundle.putString("nome_corso", this.corsiArrayList.get(position).getNome());
+        bundle.putString("anno_accademico", this.corsiArrayList.get(position).getAnno_accademico());
+
         bundle.putString("id_docente", docente.getId());
         bundle.putString("nome_docente", docente.getNome());
         bundle.putString("cognome_docente", docente.getCognome());

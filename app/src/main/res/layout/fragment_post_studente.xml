@@ -4,14 +4,13 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.PostDocenteFragment"
+    tools:context=".fragment.PostStudenteFragment"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_post_docente"
+        android:id="@+id/recycler_view_post_studente"
         android:layout_width="414dp"
         android:layout_height="648dp"
-        android:background="@color/colorBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
