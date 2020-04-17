@@ -74,7 +74,7 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
                         rv.setLayoutManager(llm);
 
-                        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti);
+                        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti, id_corso);
                         rv.setAdapter(adapter);
 
                         lista_codici_studenti = new ArrayList<>();
@@ -111,7 +111,10 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                                                                 }
                                                             }
                                                         }
-                                                        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti);
+                                                        if(studenti.isEmpty()){
+                                                            showAlert();
+                                                        }
+                                                        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti, id_corso);
                                                         rv.setAdapter(adapter);
                                                     }
                                                     else{
@@ -168,7 +171,7 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                                         if(studenti.isEmpty()){
                                             showAlert();
                                         }
-                                        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti);
+                                        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti, id_corso);
                                         rv.setAdapter(adapter);
                                     }
                                     else{
@@ -185,7 +188,7 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
             }
         });
 
-        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti);
+        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti, id_corso);
         rv.setAdapter(adapter);
     }
 
