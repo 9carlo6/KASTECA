@@ -71,6 +71,9 @@
     <!-- stringhe per la ListaStudentiIscrittiActivity -->
     <string name="nessuno_studente_iscritto">Non ci sono studenti iscritti al corso</string>
     <string name="Dialog_neutral_button_nessuno_studente_iscritto">OK</string>
+    <string name="Dialog_cancellazione_stuednte_question">Sei sicuro di volere cancellare lo Studente?</string>
+    <string name="Dialog_neutral_button_cancella_studente">Si</string>
+    <string name="Dialog_neutral_button_non_cancellare_lo_studente">No</string>
 
     <!-- stringhe per la ListaRichiesteStudentiActivity -->
     <string name="nessuna_richiesta">Non ci sono nuove richieste</string>
