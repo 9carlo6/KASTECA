@@ -131,7 +131,7 @@ public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStud
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsi = db.collection("Corsi");
 
-        // cancellazione del delllo studente dal corso
+        // cancellazione del dello studente dal corso
         corsi.document(id_corso)
                 .update("lista_studenti", FieldValue.arrayRemove(id_studente))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -152,29 +152,6 @@ public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStud
                     }
                 });
     }
-
-    /*public void deleteItem(int position) {
-        mRecentlyDeletedItem = mListItems.get(position);
-        mRecentlyDeletedItemPosition = position;
-        mListItems.remove(position);
-        notifyItemRemoved(position);
-        showUndoSnackbar();
-    }
-
-    private void showUndoSnackbar() {
-        View view = mActivity.findViewById(R.id.coordinator_layout);
-        Snackbar snackbar = Snackbar.make(view, R.string.snack_bar_text,
-                Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.snack_bar_undo, v -> undoDelete());
-        snackbar.show();
-    }
-
-    private void undoDelete() {
-        mListItems.add(mRecentlyDeletedItemPosition,
-                mRecentlyDeletedItem);
-        notifyItemInserted(mRecentlyDeletedItemPosition);
-    }*/
-
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {

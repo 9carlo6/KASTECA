@@ -47,6 +47,19 @@
     <string name="menu_visualizza_studenti_iscritti">Visualizza Studenti iscritti</string>
     <string name="menu_visualizza_richieste_studente">Visualizza Richieste Studenti</string>
 
+    <!-- stringhe per la CorsoStudenteActivity -->
+    <string name="menu_cancellazione_dal_corso">Abbandona il Corso</string>
+    <string name="Dialog_titolo_conferma_cancellazione">Sei sicuro di voler abbandonare il corso?</string>
+    <string name="Dialog_descrizione_conferma_cancellazione">Cosi facendo perderai tutti i dati relativi al corso</string>
+    <string name="Dialog_button_si_conferma_cancellazione">Si</string>
+    <string name="Dialog_button_no_conferma_cancellazione">No</string>
+    <string name="Dialog_titolo_corretta_cancellazione">La cancellazione è avvenuta con successo</string>
+    <string name="Dialog_titolo_incorretta_cancellazione">La cancellazione non è avvenuta con successo, riprova</string>
+    <string name="Dialog_button_ok_cancellazione">Ok</string>
+
+
+
+
     <!-- stringhe per la InfoDocenteActivity -->
     <string name="nome_studente_text">Nome</string>
     <string name="email_studente_text">Email</string>
@@ -58,6 +71,7 @@
     <string name="menu_iscrizione_corso">Iscrizione ad un Corso</string>
     <string name="matricola_drower">matricola</string>
     <string name="logout">Logout</string>
+
 
     <!-- stringhe per la RichiestaIscrizioneActivity -->
     <string name="iscriviti_a_un_corso">Iscriviti a un corso</string>
