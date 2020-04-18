@@ -11,6 +11,8 @@ public class Commento {
     private String post;
     private String proprietarioCommento;
 
+
+
     //Costruttori
     public Commento(String id, String testo, Date data, String post, String proprietarioCommento) {
         this.id = id;
@@ -39,6 +41,7 @@ public class Commento {
     public String getPost() { return post; }
 
     public String getProprietarioCommento() { return proprietarioCommento; }
+
     //Metodi set
 
     public void setId(String id) {
@@ -55,5 +58,4 @@ public class Commento {
 
     public void setPost(String post) { this.post = post; }
 
-    public void setProprietarioCommento(String proprietarioCommento) { this.proprietarioCommento = proprietarioCommento; }
 }

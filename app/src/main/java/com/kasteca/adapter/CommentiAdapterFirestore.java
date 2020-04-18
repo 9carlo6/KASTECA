@@ -37,12 +37,12 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
 
     private OnRispondiClickListener mRispondiClickListener;
     private OnVisualizzaRisposteClickListener mVisualizzaRisposteClickListener;
-    private String id_docente;
+    private String idDocente;
     private String nomeCognomeDocente;
 
     public CommentiAdapterFirestore(@NonNull FirestoreRecyclerOptions<Commento> options, String idDocente, String nomeCognomeDocente){
         super(options);
-        this.id_docente = idDocente;
+        this.idDocente = idDocente;
         this.nomeCognomeDocente = nomeCognomeDocente;
     }
 
@@ -58,7 +58,7 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Commento model) {
-        if(!id_docente.equals(model.getProprietarioCommento())) {
+        if(!idDocente.equals(model.getProprietarioCommento())) {
             holder.nome_proprietario.setText(model.getProprietarioCommento().substring(0, 6));
         }
         else{

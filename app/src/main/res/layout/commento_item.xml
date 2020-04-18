@@ -43,7 +43,6 @@
         android:layout_toEndOf="@+id/data_commento_view"
         android:layout_toRightOf="@+id/data_commento_view"
         android:clickable="false"
-        android:onClick="deleteComment"
         android:text="@string/elimina"
         android:textColor="@color/colorRedBackground"
         android:textSize="12sp"
