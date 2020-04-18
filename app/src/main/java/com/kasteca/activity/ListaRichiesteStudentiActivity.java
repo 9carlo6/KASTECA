@@ -108,19 +108,19 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
 
         // scarico prima gli id degli studenti relativi al corso specifico da firebase e poi scarico con essi i dati relativi a tutti gli studenti
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference richieste_iscrizione= db.collection("Richieste_Iscrizione");
+        CollectionReference richiesteIscrizione= db.collection("Richieste_Iscrizione");
 
-        richieste_iscrizione.whereEqualTo("codice_corso", codice_corso).whereEqualTo("stato_richiesta", "in attesa").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        richiesteIscrizione.whereEqualTo("codice_corso", codice_corso).whereEqualTo("stato_richiesta", "in attesa").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
                     Log.d(TAG, "Download delle richieste ok");
-                    for(DocumentSnapshot documenti_richieste :task.getResult()){
-                        lista_richieste.add(new Richiesta(documenti_richieste.getId().toString(),
+                    for(DocumentSnapshot documentiRichieste :task.getResult()){
+                        lista_richieste.add(new Richiesta(documentiRichieste.getId().toString(),
                                 codice_corso,
-                                (Date) documenti_richieste.getDate("data"),
-                                documenti_richieste.get("stato_richiesta").toString()));
-                        lista_codici_studenti.add(documenti_richieste.get("studente").toString());
+                                (Date) documentiRichieste.getDate("data"),
+                                documentiRichieste.get("stato_richiesta").toString()));
+                        lista_codici_studenti.add(documentiRichieste.get("studente").toString());
                     }
                     if(lista_richieste.isEmpty()){
                         Log.d(TAG, "Non ci sono richieste in attesa per questo corso");
@@ -128,12 +128,12 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
                     }else{
                         Log.d(TAG, "Ci sono richieste in attesa per questo corso");
                         FirebaseFirestore dbs = FirebaseFirestore.getInstance();
-                        CollectionReference studenti_firebase= dbs.collection("Studenti");
+                        CollectionReference studentiFirebase= dbs.collection("Studenti");
                         contatore_studenti_caricati_nella_lista = 0;
 
                         // per ogni id studente relativo alle richieste del corso specifico scarico lo studente corrispondente
-                        for(String id_studente : lista_codici_studenti){
-                            studenti_firebase.document(id_studente).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        for(String idStudente : lista_codici_studenti){
+                            studentiFirebase.document(idStudente).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                     if(task.isSuccessful()){

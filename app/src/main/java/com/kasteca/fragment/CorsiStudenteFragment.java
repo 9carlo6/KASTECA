@@ -119,15 +119,15 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
                         if(task.getResult().isEmpty()){
                             Log.d(LOG, "Nessun documento scaricato.");
                         }
-                        for (DocumentSnapshot documenti_corsi : task.getResult()) {
+                        for (DocumentSnapshot documentiCorsi : task.getResult()) {
                             Log.d(LOG, "Documento.");
-                            Map<String, Object> c = documenti_corsi.getData();
+                            Map<String, Object> c = documentiCorsi.getData();
                             Corso corso = new Corso(
                                     c.get("nome_corso").toString(),
                                     c.get("anno_accademico").toString(),
                                     c.get("descrizione").toString(),
                                     c.get("codice").toString(),
-                                    documenti_corsi.getId(),
+                                    documentiCorsi.getId(),
                                     c.get("docente").toString());
                             corsi.add(corso);
                             Log.d(LOG, "Corso: "+corso.toString());
@@ -141,9 +141,9 @@ public class CorsiStudenteFragment extends Fragment implements  RecyclerViewAdap
     }
 
     //Metodo per la creazione dell'adapter della recycleview del fragment
-    private void loadAdapter(ArrayList<Corso> corsi_loaded){
+    private void loadAdapter(ArrayList<Corso> corsiLoaded){
         Log.e(LOG,"aggiornamentoRecycleView");
-        this.corsi= corsi_loaded;
+        this.corsi= corsiLoaded;
         adapter= new RecyclerViewAdapterCorsi(corsi,this);
         recyclerView.setAdapter(adapter);
 

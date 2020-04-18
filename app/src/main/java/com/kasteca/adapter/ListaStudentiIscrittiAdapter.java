@@ -34,7 +34,7 @@ public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStud
 
     private HashMap<String,Studente> studente_selezionato;
     private Bundle studente;
-    private String id_corso;
+    private String idCorso;
 
     public static class StudenteViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
@@ -51,9 +51,9 @@ public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStud
 
     List<Studente> studenti;
 
-    public ListaStudentiIscrittiAdapter(List<Studente> studenti, String id_corso){
+    public ListaStudentiIscrittiAdapter(List<Studente> studenti, String idCorso){
         this.studenti = studenti;
-        this.id_corso = id_corso;
+        this.idCorso = idCorso;
     }
 
     @Override
@@ -127,13 +127,13 @@ public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStud
     }
 
 
-    public void cancellazioneStudente(final String id_studente){
+    public void cancellazioneStudente(final String idStudente){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsi = db.collection("Corsi");
 
         // cancellazione del dello studente dal corso
-        corsi.document(id_corso)
-                .update("lista_studenti", FieldValue.arrayRemove(id_studente))
+        corsi.document(idCorso)
+                .update("lista_studenti", FieldValue.arrayRemove(idStudente))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -141,8 +141,8 @@ public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStud
                         CollectionReference studenti = db.collection("Studenti");
 
                         // cancellazione del corso dalla lista corsi accessibili dallo studente
-                        studenti.document(id_studente)
-                                .update("lista_corsi", FieldValue.arrayRemove(id_corso))
+                        studenti.document(idStudente)
+                                .update("lista_corsi", FieldValue.arrayRemove(idCorso))
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {

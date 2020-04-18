@@ -151,8 +151,8 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
     }
 
     public void Logout(){
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
+        FirebaseAuth mauth = FirebaseAuth.getInstance();
+        mauth.signOut();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         finish();
         startActivity(intent);

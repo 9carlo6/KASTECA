@@ -9,15 +9,15 @@ public class Commento {
     private String testo;
     private Date data;
     private String post;
-    private String proprietario_commento;
+    private String proprietarioCommento;
 
     //Costruttori
-    public Commento(String id, String testo, Date data, String post, String proprietario_commento) {
+    public Commento(String id, String testo, Date data, String post, String proprietarioCommento) {
         this.id = id;
         this.testo = testo;
         this.data = data;
         this.post = post;
-        this.proprietario_commento = proprietario_commento;
+        this.proprietarioCommento = proprietarioCommento;
     }
 
     public Commento(){ }
@@ -38,7 +38,7 @@ public class Commento {
 
     public String getPost() { return post; }
 
-    public String getProprietario_commento() { return proprietario_commento; }
+    public String getProprietarioCommento() { return proprietarioCommento; }
     //Metodi set
 
     public void setId(String id) {
@@ -55,5 +55,5 @@ public class Commento {
 
     public void setPost(String post) { this.post = post; }
 
-    public void setProprietario_commento(String proprietario_commento) { this.proprietario_commento = proprietario_commento; }
+    public void setProprietarioCommento(String proprietarioCommento) { this.proprietarioCommento = proprietarioCommento; }
 }

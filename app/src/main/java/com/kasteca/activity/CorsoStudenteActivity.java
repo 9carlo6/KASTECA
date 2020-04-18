@@ -117,7 +117,7 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
                                 .update("lista_corsi", FieldValue.arrayRemove(corso_id))
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
-                                    public void onSuccess(Void aVoid) {
+                                    public void onSuccess(Void avoid) {
                                         showAlertInfoCancellazione(getResources().getString(R.string.Dialog_titolo_corretta_cancellazione));
                                     }
                                 })
@@ -208,8 +208,8 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
     }
 
     public void Logout(){
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
+        FirebaseAuth mauth = FirebaseAuth.getInstance();
+        mauth.signOut();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         finish();
         startActivity(intent);

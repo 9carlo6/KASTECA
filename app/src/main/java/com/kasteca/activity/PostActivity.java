@@ -210,8 +210,8 @@ public class PostActivity extends AppCompatActivity {
                     newCommento.put("data", new Date());
                     newCommento.put("lista_risposte", new ArrayList<String>());
                     newCommento.put("post", post.getId());
-                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    FirebaseAuth mauth = FirebaseAuth.getInstance();
+                    FirebaseUser currentUser = mauth.getCurrentUser();
                     newCommento.put("proprietario_commento", currentUser.getUid());
 
                     commentiRef.add(newCommento)

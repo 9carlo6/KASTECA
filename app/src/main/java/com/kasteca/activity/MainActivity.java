@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void login(View v) {
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-        mAuth.signOut(); // serve per fare il logout, nel caso in cui ci fosse un utente già loggato
+        FirebaseAuth mauth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
+        mauth.signOut(); // serve per fare il logout, nel caso in cui ci fosse un utente già loggato
 
         final String mail = email_edit_text.getText().toString();
         String pwd = password_edit_text.getText().toString();
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             //Contatore idling resource per test con espresso
             EspressoIdlingResource.increment();
 
-            mAuth.signInWithEmailAndPassword(mail, pwd)
+            mauth.signInWithEmailAndPassword(mail, pwd)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -105,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
                                         //Contatore idling resource per test con espresso
                                         EspressoIdlingResource.decrement();
 
-                                        FirebaseAuth mAuth1 = FirebaseAuth.getInstance();
-                                        FirebaseUser currentUser1 = mAuth1.getCurrentUser();
+                                        FirebaseAuth mauth1 = FirebaseAuth.getInstance();
+                                        FirebaseUser currentUser1 = mauth1.getCurrentUser();
 
                                         for (DocumentSnapshot document : task.getResult()) {
                                             // per ogni documento controllo presente nella collezione 'Docenti' controllo
@@ -142,8 +142,8 @@ public class MainActivity extends AppCompatActivity {
                                         //Contatore idling resource per test con espresso
                                         EspressoIdlingResource.decrement();
 
-                                        FirebaseAuth mAuth1 = FirebaseAuth.getInstance();
-                                        FirebaseUser currentUser1 = mAuth1.getCurrentUser();
+                                        FirebaseAuth mauth = FirebaseAuth.getInstance();
+                                        FirebaseUser currentUser1 = mauth.getCurrentUser();
 
                                         for (DocumentSnapshot document : task.getResult()) {
                                             // per ogni documento controllo presente nella collezione 'Docenti' controllo

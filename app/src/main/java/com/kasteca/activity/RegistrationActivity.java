@@ -89,8 +89,8 @@ public class RegistrationActivity extends AppCompatActivity {
     public void CreateNewAccount(View v){
         isCorrect = false; // inizializzazione della variabile per verificare la correttezza dei campi inseriti
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-        mAuth.signOut(); // serve per fare il logout, nel caso in cui ci fosse un utente già loggato
+        FirebaseAuth mauth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
+        mauth.signOut(); // serve per fare il logout, nel caso in cui ci fosse un utente già loggato
 
         // in questa maniera vengono presi i valori dei campi inseriti
         final String nome = nome_edit_text.getText().toString();
@@ -132,7 +132,7 @@ public class RegistrationActivity extends AppCompatActivity {
         // se l'inserimento dei campi è corretto si può procedere con la registrazione
         // questo è il ramo della registrazione di un docente
         if(isCorrect && isDocente){
-            mAuth.createUserWithEmailAndPassword(mail, password)
+            mauth.createUserWithEmailAndPassword(mail, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -165,7 +165,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     });
 
         }else if(isCorrect && !isDocente){
-            mAuth.createUserWithEmailAndPassword(mail, password)
+            mauth.createUserWithEmailAndPassword(mail, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
