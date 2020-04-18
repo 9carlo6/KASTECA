@@ -59,7 +59,7 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Commento model) {
         if(!idDocente.equals(model.getProprietarioCommento())) {
-            holder.nome_proprietario.setText(model.getProprietarioCommento().substring(0, 6));
+            //holder.nome_proprietario.setText(model.getProprietarioCommento().substring(0, 6));
         }
         else{
             holder.nome_proprietario.setText(nomeCognomeDocente);
