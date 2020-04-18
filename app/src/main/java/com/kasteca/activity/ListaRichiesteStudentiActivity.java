@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,12 +34,14 @@ import java.util.List;
 
 public class ListaRichiesteStudentiActivity extends AppCompatActivity {
 
+    private static final String TAG = "DEBUG_LISTA_RICHIESTE";
     private RecyclerView rv;
     private List<Richiesta> lista_richieste;
     private List<Studente> lista_studenti;
     private String codice_corso;
     private ArrayList<String> lista_codici_studenti;
-    private String id_studente;
+    //private String id_studente;
+    private int contatore_studenti_caricati_nella_lista = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,60 +104,72 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
 
     public void scaricaRichieste(){
         lista_codici_studenti = new ArrayList<>();
+        lista_studenti = new ArrayList<>();
 
         // scarico prima gli id degli studenti relativi al corso specifico da firebase e poi scarico con essi i dati relativi a tutti gli studenti
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference richieste_iscrizione= db.collection("Richieste_Iscrizione");
-        richieste_iscrizione.whereEqualTo("codice_corso", codice_corso).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+        richieste_iscrizione.whereEqualTo("codice_corso", codice_corso).whereEqualTo("stato_richiesta", "in attesa").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
+                    Log.d(TAG, "Download delle richieste ok");
                     for(DocumentSnapshot documenti_richieste :task.getResult()){
-                        if(documenti_richieste.get("stato_richiesta").toString().equals("in attesa")) {
-                            // prendo il documento del corso specifico e scarico gli id degli studenti caricandoli nell'arraylist lista_codici_studenti
-                            lista_richieste.add(new Richiesta(documenti_richieste.getId().toString(),
-                                    codice_corso,
-                                    (Date) documenti_richieste.getDate("data"),
-                                    documenti_richieste.get("stato_richiesta").toString()));
-                            lista_codici_studenti.add(documenti_richieste.get("studente").toString());
-                        }
+                        lista_richieste.add(new Richiesta(documenti_richieste.getId().toString(),
+                                codice_corso,
+                                (Date) documenti_richieste.getDate("data"),
+                                documenti_richieste.get("stato_richiesta").toString()));
+                        lista_codici_studenti.add(documenti_richieste.get("studente").toString());
                     }
-                    // scarico i dati relativi a tutti gli studenti e li carico nella lista studenti
-                    FirebaseFirestore dbs = FirebaseFirestore.getInstance();
-                    CollectionReference studenti_firebase= dbs.collection("Studenti");
-                    studenti_firebase.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                // qui si scorre tutti i documenti
-                                for(DocumentSnapshot document :task.getResult()){
-                                    // qui si scorre tutti i codici presenti nell'arraylist lista_codici_studenti
-                                    for(String id_studente : lista_codici_studenti){
-                                        // se trova un uguaglianza allora lo studente appartiene al corso e quindi viene aggiunto alla lista studenti da passare all'adapter
-                                        if(id_studente.equals(document.getId())){
+                    if(lista_richieste.isEmpty()){
+                        Log.d(TAG, "Non ci sono richieste in attesa per questo corso");
+                        showAlert();
+                    }else{
+                        Log.d(TAG, "Ci sono richieste in attesa per questo corso");
+                        FirebaseFirestore dbs = FirebaseFirestore.getInstance();
+                        CollectionReference studenti_firebase= dbs.collection("Studenti");
+                        contatore_studenti_caricati_nella_lista = 0;
+
+                        // per ogni id studente relativo alle richieste del corso specifico scarico lo studente corrispondente
+                        for(String id_studente : lista_codici_studenti){
+                            studenti_firebase.document(id_studente).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            Log.d(TAG, "Download del documento relativo allo studente " + document.get("nome").toString() + " " + document.get("cognome").toString() + " andato a buon fine");
                                             Studente studente = new Studente(document.getId(), document.get("nome").toString(), document.get("cognome").toString(),document.get("email").toString(), document.get("matricola").toString());
-                                            //Toast.makeText(getApplicationContext(), document.get("nome").toString(), Toast.LENGTH_LONG).show();
+                                            contatore_studenti_caricati_nella_lista++;
                                             lista_studenti.add(studente);
+
+                                            // quando siamo arrivati alla fine della lista vado a settare l'adapter
+                                            // c'è bisogno di mettere la condizione qui perche mettendo il set dell'adapter al di fuori del for che cicla i codici degli studenti
+                                            // non riesce a scaricare in tempo gli studenti per passarli all'adapter
+                                            if(contatore_studenti_caricati_nella_lista==lista_codici_studenti.size()){
+                                                Log.d(TAG, "Sono stati scaricati tutti gli studenti");
+                                                ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(lista_richieste, lista_studenti);
+                                                rv.setAdapter(adapter);
+                                            }
+                                        } else {
+                                            Log.d(TAG, "ERRORE: Non esiste un documento relativo a questo studente");
                                         }
+                                    }else{
+                                        Log.d(TAG, "ERRORE: Problema nella richiesta del documento ", task.getException());
                                     }
                                 }
-                                if(lista_studenti.isEmpty()){
-                                    showAlert();
-                                }
-                                ListaRichiesteStudentiAdapter adapter = new ListaRichiesteStudentiAdapter(lista_richieste, lista_studenti);
-                                rv.setAdapter(adapter);
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(), "fallimento", Toast.LENGTH_LONG).show();
-                            }
+                            });
                         }
-                    });
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "fallimento", Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Log.d(TAG, "Qualcosa è andato storto nel download delle richieste");
                 }
             }
+
+
         });
+
     }
 
     @Override
