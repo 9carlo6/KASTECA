@@ -7,12 +7,14 @@ public class Risposta {
     private String id;
     private Date data;
     private String testo;
+    private String proprietario;
 
     //Costruttori
-    public Risposta(String id, Date data, String testo) {
+    public Risposta(String id, Date data, String testo, String proprietarioRisposta) {
         this.id = id;
         this.data = data;
         this.testo = testo;
+        this.proprietario= proprietarioRisposta;
     }
 
     public Risposta(){
@@ -32,6 +34,10 @@ public class Risposta {
         return testo;
     }
 
+    public String getProprietario_risposta() {
+        return proprietario;
+    }
+
     //Metodi set
 
     public void setId(String id) {
@@ -44,5 +50,9 @@ public class Risposta {
 
     public void setTesto(String testo) {
         this.testo = testo;
+    }
+
+    public void setProprietario(String proprietarioRisposta) {
+        this.proprietario = proprietarioRisposta;
     }
 }

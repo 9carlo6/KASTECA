@@ -7,42 +7,64 @@
     android:orientation="vertical">
 
 
-    <LinearLayout
-        android:id="@+id/headerLayout"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_comm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_alignParentTop="true"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="3dp"
+        android:layout_below="@+id/textTool"
+        android:divider="@android:color/transparent"
+        android:elevation="10dp"
+        app:cardBackgroundColor="#CFF4F4"
+        app:cardCornerRadius="9dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:text="@string/Numero_commenti"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            android:id="@+id/visuale"/>
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/nome_cognome_comm_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5sp"
+                android:textColor="@color/colorGeneralText"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/testo_comm_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                android:textColor="@color/colorGeneralText" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <View
         android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/headerLayout"
-        android:layout_alignBottom="@+id/headerLayout"
+        android:layout_below="@+id/card_view_comm"
+        android:layout_alignBottom="@+id/card_view_comm"
         android:layout_marginTop="1dp"
-        android:layout_marginBottom="-2dp"
+        android:layout_marginBottom="2dp"
         android:background="@color/colorAccent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_commenti"
+        android:id="@+id/recycler_view_risposte"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/headerLayout"
+        android:layout_below="@id/card_view_comm"
         android:layout_above="@+id/comment_section"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
@@ -66,7 +88,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/writeComment"
+            android:id="@+id/writeRisposta"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="40dp"
@@ -83,17 +105,42 @@
             android:isScrollContainer="true" />
 
         <ImageButton
-            android:id="@+id/send_commento_button"
+            android:id="@+id/send_risposta_button"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginRight="38dp"
             android:background="@color/cardview_light_background"
-            android:onClick="sendCommento"
             android:rotation="180"
             android:tint="@color/colorTitle"
             app:srcCompat="@android:drawable/ic_menu_send" />
 
     </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/textTool"
+            android:text="Risposte"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5sp"
+            android:textColor="@color/colorGeneralText"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+
+    <ImageView
+        android:id="@+id/back_to_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="?attr/homeAsUpIndicator"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="15dp"
+        />
+
+
 
 </RelativeLayout>
