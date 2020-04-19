@@ -58,11 +58,13 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Commento model) {
-        if(!idDocente.equals(model.getProprietarioCommento())) {
-            //holder.nome_proprietario.setText(model.getProprietarioCommento().substring(0, 6));
-        }
-        else{
-            holder.nome_proprietario.setText(nomeCognomeDocente);
+        if(model.getProprietarioCommento()!=null){
+            if(!idDocente.equals(model.getProprietarioCommento())) {
+                holder.nome_proprietario.setText(model.getProprietarioCommento().substring(0, 6));
+            }
+            else{
+                holder.nome_proprietario.setText(nomeCognomeDocente);
+            }
         }
         holder.text_commento.setText(model.getTesto());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");

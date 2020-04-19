@@ -212,7 +212,7 @@ public class PostActivity extends AppCompatActivity {
                     newCommento.put("post", post.getId());
                     FirebaseAuth mauth = FirebaseAuth.getInstance();
                     FirebaseUser currentUser = mauth.getCurrentUser();
-                    newCommento.put("proprietario_commento", currentUser.getUid());
+                    newCommento.put("proprietarioCommento", currentUser.getUid());
 
                     commentiRef.add(newCommento)
                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
