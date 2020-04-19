@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.kasteca.R;
 import com.kasteca.object.Studente;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class InfoStudenteActivity extends AppCompatActivity {
@@ -28,5 +31,13 @@ public class InfoStudenteActivity extends AppCompatActivity {
         email_studente_text.setText(bundleStudente.getString("email"));
         matricola_studente_text.setText(bundleStudente.getString("matricola"));
 
+    }
+
+    public void inviaEmail(View v){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri data = Uri.parse("mailto:" + bundleStudente.getString("email"));
+        //Uri data = Uri.parse("mailto:" + bundleStudente.getString("email") + "&subject=" + "subject" + "&body=" + "body");
+        intent.setData(data);
+        startActivity(intent);
     }
 }
