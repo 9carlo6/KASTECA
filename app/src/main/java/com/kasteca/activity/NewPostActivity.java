@@ -228,7 +228,7 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
         tags_spinner.setOnItemSelectedListener(this);
     }
 
-    private void addPostToCorso(String post_id){
-        db.collection("Corsi").document(corso_id).update("lista_post", FieldValue.arrayUnion(post_id));
+    private void addPostToCorso(String postiId){
+        db.collection("Corsi").document(corso_id).update("lista_post", FieldValue.arrayUnion(postiId));
     }
 }

@@ -164,7 +164,7 @@ public class CreazioneCorsoFragment extends Fragment {
         docentiReference.document(docente.getId()).update("lista_corsi", FieldValue.arrayUnion(idCorso)).addOnSuccessListener(
                 new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onSuccess(Void avoid) {
                         Toast.makeText(getActivity().getApplicationContext(),"Corso creato con successo.",Toast.LENGTH_LONG).show();
                         CorsiDocenteFragment cf= new CorsiDocenteFragment();
                         cf.setArguments(bundle);

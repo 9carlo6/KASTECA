@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'checkstyle'
+apply plugin: 'jacoco'
 
 android {
     compileSdkVersion 29
@@ -17,6 +19,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            testCoverageEnabled false
+        }
+        debug{
+            testCoverageEnabled true
         }
     }
     testOptions {
@@ -30,9 +36,30 @@ android {
         resultsDir "$rootDir/test-results"
 
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
+
+        unitTests.all {
+            jacoco{
+                includeNoLocationClasses = true
+                jacoco.excludes = ['jdk.internal.*']
+            }
+
+        }
     }
 
 }
+
+task checkstyle(type: Checkstyle) {
+    configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+
+    source 'src/main/java'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    // empty classpath
+    classpath = files()
+}
+
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -92,5 +119,4 @@ dependencies {
 
 
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'checkstyle'
 

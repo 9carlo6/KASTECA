@@ -13,20 +13,26 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +42,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.kasteca.R;
 import com.kasteca.adapter.CommentiAdapterFirestore;
 import com.kasteca.adapter.RisposteAdapterFirestore;
@@ -125,7 +134,6 @@ public class PostActivity extends AppCompatActivity {
             findViewById(R.id.getPdfButton).setVisibility(View.INVISIBLE);
         }
 
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference postReference = db.collection("Commenti");
         Query query = postReference.whereEqualTo("post", post.getId()).orderBy("data", Query.Direction.ASCENDING);
@@ -186,7 +194,7 @@ public class PostActivity extends AppCompatActivity {
     public void addComment(View v){
         onShowPopup(v, true);
     }
-    ///*
+
     public void onShowPopup(View v, boolean isAddCommentClicked){
 
         final LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -269,7 +277,6 @@ public class PostActivity extends AppCompatActivity {
         // si mostra la finestra dal basso dello schermo
         popWindow.showAtLocation(this.testoView, Gravity.BOTTOM, 0,100);
     }
-
 
     private void setRecyclerView(){
 

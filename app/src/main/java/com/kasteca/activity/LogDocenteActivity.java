@@ -141,8 +141,8 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
     }
 
     public void Logout(){
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
+        FirebaseAuth mauth = FirebaseAuth.getInstance();
+        mauth.signOut();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         finish();
         startActivity(intent);

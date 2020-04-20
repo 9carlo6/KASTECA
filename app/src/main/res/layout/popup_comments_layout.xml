@@ -89,7 +89,6 @@
             android:layout_gravity="center"
             android:layout_marginRight="38dp"
             android:background="@color/cardview_light_background"
-            android:onClick="sendCommento"
             android:rotation="180"
             android:tint="@color/colorTitle"
             app:srcCompat="@android:drawable/ic_menu_send" />

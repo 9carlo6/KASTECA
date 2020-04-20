@@ -4,13 +4,13 @@ import java.util.Date;
 
 public class Richiesta {
     private String id;
-    private String codice_corso;
+    private String codiceCorso;
     private Date data;
     private String stato;
 
-    public Richiesta(String id, String codice_corso, Date data, String stato) {
+    public Richiesta(String id, String codiceCorso, Date data, String stato) {
         this.id = id;
-        this.codice_corso = codice_corso;
+        this.codiceCorso = codiceCorso;
         this.data = data;
         this.stato = stato;
     }
@@ -25,11 +25,11 @@ public class Richiesta {
     }
 
     public String getCodice_corso() {
-        return codice_corso;
+        return codiceCorso;
     }
 
-    public void setCodice_corso(String codice_corso) {
-        this.codice_corso = codice_corso;
+    public void setCodice_corso(String codiceCorso) {
+        this.codiceCorso = codiceCorso;
     }
 
     public Date getData() {

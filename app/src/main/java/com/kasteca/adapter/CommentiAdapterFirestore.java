@@ -37,13 +37,13 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
 
     private OnRispondiClickListener mRispondiClickListener;
     private OnVisualizzaRisposteClickListener mVisualizzaRisposteClickListener;
-    private String id_docente;
-    private String nome_cognome_docente;
+    private String idDocente;
+    private String nomeCognomeDocente;
 
-    public CommentiAdapterFirestore(@NonNull FirestoreRecyclerOptions<Commento> options, String id_docente, String nome_cognome_docente){
+    public CommentiAdapterFirestore(@NonNull FirestoreRecyclerOptions<Commento> options, String idDocente, String nomeCognomeDocente){
         super(options);
-        this.id_docente = id_docente;
-        this.nome_cognome_docente = nome_cognome_docente;
+        this.idDocente = idDocente;
+        this.nomeCognomeDocente = nomeCognomeDocente;
     }
 
     @NonNull
@@ -58,11 +58,13 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Commento model) {
-        if(!id_docente.equals(model.getProprietario_commento())) {
-            //holder.nome_proprietario.setText(model.getProprietario_commento().substring(0, 6));
-        }
-        else{
-            //holder.nome_proprietario.setText(nome_cognome_docente);
+        if(model.getProprietarioCommento()!=null){
+            if(!idDocente.equals(model.getProprietarioCommento())) {
+                holder.nome_proprietario.setText(model.getProprietarioCommento().substring(0, 6));
+            }
+            else{
+                holder.nome_proprietario.setText(nomeCognomeDocente);
+            }
         }
         holder.text_commento.setText(model.getTesto());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");

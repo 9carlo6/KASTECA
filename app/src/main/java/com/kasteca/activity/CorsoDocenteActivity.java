@@ -116,9 +116,9 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
                 startActivity(intent);
                 break;
             case R.id.nav_visualizza_richieste_studente:
-                Intent intent_richieste = new Intent(getApplicationContext(), ListaRichiesteStudentiActivity.class);
-                intent_richieste.putExtra("codice_corso",codice_corso);
-                startActivity(intent_richieste);
+                Intent intentRrichieste = new Intent(getApplicationContext(), ListaRichiesteStudentiActivity.class);
+                intentRrichieste.putExtra("codice_corso",codice_corso);
+                startActivity(intentRrichieste);
                 break;
             case R.id.nav_logout:
                 Logout();
@@ -139,8 +139,8 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
     }
 
     public void Logout(){
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
+        FirebaseAuth mauth = FirebaseAuth.getInstance();
+        mauth.signOut();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         finish();
         startActivity(intent);

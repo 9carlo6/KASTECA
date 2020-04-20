@@ -83,15 +83,15 @@ public class CorsiDocenteFragment extends Fragment implements  RecyclerViewAdapt
                 //Contatore idling resource per test con espresso
                 EspressoIdlingResource.decrement();
                 if (task.isSuccessful()) {
-                    for (DocumentSnapshot documenti_corsi : task.getResult()) {
+                    for (DocumentSnapshot documentiCorsi : task.getResult()) {
                         Log.d(LOG,"Documento.");
-                        Map<String, Object> c = documenti_corsi.getData();
+                        Map<String, Object> c = documentiCorsi.getData();
                         Corso corso = new Corso(
                                     c.get("nome_corso").toString(),
                                     c.get("anno_accademico").toString(),
                                     c.get("descrizione").toString(),
                                     c.get("codice").toString(),
-                                    documenti_corsi.getId(),
+                                documentiCorsi.getId(),
                                     c.get("docente").toString());
                         corsi.add(corso);
 

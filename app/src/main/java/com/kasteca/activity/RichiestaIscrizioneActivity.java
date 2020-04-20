@@ -85,7 +85,7 @@ public class RichiestaIscrizioneActivity extends AppCompatActivity {
 
                                     // se non è gia iscritto allora controlla se esiste una richiesta di questo studente per questo corso
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                    CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
+                                    CollectionReference richiesteIscrizione = db.collection("Richieste_Iscrizione");
 
                                     EspressoIdlingResource.increment();
 
@@ -93,7 +93,7 @@ public class RichiestaIscrizioneActivity extends AppCompatActivity {
                                     //      l'id studente deve corrispondere all'utente autenticato
                                     //      il codice del corso deve corrispondere al codice inserito dallo studente
                                     //      lo stato richiesta deve essere "in attesa"
-                                    richieste_iscrizione.whereEqualTo("studente", id_studente)
+                                    richiesteIscrizione.whereEqualTo("studente", id_studente)
                                             .whereEqualTo("codice_corso", codice_corso_edit_text.getText().toString())
                                             .whereEqualTo("stato_richiesta", "in attesa").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
@@ -110,7 +110,7 @@ public class RichiestaIscrizioneActivity extends AppCompatActivity {
 
                                                     // altrimenti va avanti e carica la richiesta nel db
                                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                                    CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
+                                                    CollectionReference richiesteIscrizione = db.collection("Richieste_Iscrizione");
 
                                                     EspressoIdlingResource.increment();
 
@@ -121,7 +121,7 @@ public class RichiestaIscrizioneActivity extends AppCompatActivity {
                                                     obj.put("stato_richiesta", "in attesa");
                                                     obj.put("studente", id_studente);
 
-                                                    richieste_iscrizione.add(obj).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                    richiesteIscrizione.add(obj).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<DocumentReference> task) {
                                                             if (task.isSuccessful()) {

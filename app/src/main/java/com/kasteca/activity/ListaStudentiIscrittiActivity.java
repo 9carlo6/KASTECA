@@ -74,7 +74,7 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                         LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
                         rv.setLayoutManager(llm);
 
-                        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti);
+                        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti, id_corso);
                         rv.setAdapter(adapter);
 
                         lista_codici_studenti = new ArrayList<>();
@@ -87,31 +87,34 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if(task.isSuccessful()){
-                                    for(DocumentSnapshot documenti_corsi :task.getResult()){
+                                    for(DocumentSnapshot documentiCorsi :task.getResult()){
                                         // prendo il documento del corso specifico e scarico gli id degli studenti caricandoli nell'arraylist lista_codici_studenti
-                                        if(documenti_corsi.getId().equals(id_corso)){
-                                            lista_codici_studenti = (ArrayList<String>) documenti_corsi.get("lista_studenti");
+                                        if(documentiCorsi.getId().equals(id_corso)){
+                                            lista_codici_studenti = (ArrayList<String>) documentiCorsi.get("lista_studenti");
 
                                             // scarico i dati relativi a tutti gli studenti e li carico nella lista studenti
                                             FirebaseFirestore dbs = FirebaseFirestore.getInstance();
-                                            CollectionReference studenti_firebase= dbs.collection("Studenti");
-                                            studenti_firebase.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            CollectionReference studentiFirebase= dbs.collection("Studenti");
+                                            studentiFirebase.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                     if(task.isSuccessful()){
                                                         // qui si scorre tutti i documenti
                                                         for(DocumentSnapshot document :task.getResult()){
                                                             // qui si scorre tutti i codici presenti nell'arraylist lista_codici_studenti
-                                                            for(String id_studente : lista_codici_studenti){
+                                                            for(String idStudente : lista_codici_studenti){
                                                                 // se trova un uguaglianza allora lo studente appartiene al corso e quindi viene aggiunto alla lista studenti da passare all'adapter
-                                                                if(id_studente.equals(document.getId())){
+                                                                if(idStudente.equals(document.getId())){
                                                                     Studente studente = new Studente(document.getId(), document.get("nome").toString(), document.get("cognome").toString(),document.get("email").toString(), document.get("matricola").toString());
                                                                     //Toast.makeText(getApplicationContext(), document.get("nome").toString(), Toast.LENGTH_LONG).show();
                                                                     studenti.add(studente);
                                                                 }
                                                             }
                                                         }
-                                                        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti);
+                                                        if(studenti.isEmpty()){
+                                                            showAlert();
+                                                        }
+                                                        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti, id_corso);
                                                         rv.setAdapter(adapter);
                                                     }
                                                     else{
@@ -141,24 +144,24 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    for(DocumentSnapshot documenti_corsi :task.getResult()){
+                    for(DocumentSnapshot documentiCorsi :task.getResult()){
                         // prendo il documento del corso specifico e scarico gli id degli studenti caricandoli nell'arraylist lista_codici_studenti
-                        if(documenti_corsi.getId().equals(id_corso)){
-                            lista_codici_studenti = (ArrayList<String>) documenti_corsi.get("lista_studenti");
+                        if(documentiCorsi.getId().equals(id_corso)){
+                            lista_codici_studenti = (ArrayList<String>) documentiCorsi.get("lista_studenti");
 
                             // scarico i dati relativi a tutti gli studenti e li carico nella lista studenti
                             FirebaseFirestore dbs = FirebaseFirestore.getInstance();
-                            CollectionReference studenti_firebase= dbs.collection("Studenti");
-                            studenti_firebase.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            CollectionReference studentiFirebase= dbs.collection("Studenti");
+                            studentiFirebase.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if(task.isSuccessful()){
                                         // qui si scorre tutti i documenti
                                         for(DocumentSnapshot document :task.getResult()){
                                             // qui si scorre tutti i codici presenti nell'arraylist lista_codici_studenti
-                                            for(String id_studente : lista_codici_studenti){
+                                            for(String idStudente : lista_codici_studenti){
                                                 // se trova un uguaglianza allora lo studente appartiene al corso e quindi viene aggiunto alla lista studenti da passare all'adapter
-                                                if(id_studente.equals(document.getId())){
+                                                if(idStudente.equals(document.getId())){
                                                     Studente studente = new Studente(document.getId(), document.get("nome").toString(), document.get("cognome").toString(),document.get("email").toString(), document.get("matricola").toString());
                                                     //Toast.makeText(getApplicationContext(), document.get("nome").toString(), Toast.LENGTH_LONG).show();
                                                     studenti.add(studente);
@@ -168,7 +171,7 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                                         if(studenti.isEmpty()){
                                             showAlert();
                                         }
-                                        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti);
+                                        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti, id_corso);
                                         rv.setAdapter(adapter);
                                     }
                                     else{
@@ -185,7 +188,7 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
             }
         });
 
-        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti);
+        ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti, id_corso);
         rv.setAdapter(adapter);
     }
 
