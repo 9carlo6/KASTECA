@@ -13,30 +13,21 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
+
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -45,10 +36,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.kasteca.R;
 import com.kasteca.adapter.CommentiAdapterFirestore;
 import com.kasteca.adapter.RisposteAdapterFirestore;
@@ -68,8 +55,6 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -140,7 +125,6 @@ public class PostActivity extends AppCompatActivity {
             findViewById(R.id.getPdfButton).setVisibility(View.INVISIBLE);
         }
 
-        //CARICAMENTO DEI COMMENTI DEL POST: SPOSTATO NEL FRAGMENT
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference postReference = db.collection("Commenti");
@@ -233,7 +217,7 @@ public class PostActivity extends AppCompatActivity {
                     newCommento.put("post", post.getId());
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     FirebaseUser currentUser = mAuth.getCurrentUser();
-                    newCommento.put("proprietario_commento", currentUser.getUid());
+                    newCommento.put("proprietarioCommento", currentUser.getUid());
 
                     commentiRef.add(newCommento)
                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -317,10 +301,8 @@ public class PostActivity extends AppCompatActivity {
         });
 
     }
-//////////////////////////////////////////////////////
 
     private void setRecyclerViewRisposte(DocumentSnapshot commentoSnapshot ,Boolean isAddingRespond){
-        //visuale.setText("Risposte");
         //Richiesta di FireBase per le risposte
         popWindow.dismiss();
         Log.e(TAG,"Cerchiamo le risposte del commento: "+commentoSnapshot.getId());
@@ -329,30 +311,12 @@ public class PostActivity extends AppCompatActivity {
                 commentoSnapshot.get("testo").toString(),
                 commentoSnapshot.getDate("data"),
                 commentoSnapshot.get("post").toString(),
-                commentoSnapshot.get("proprietario_commento").toString()
+                commentoSnapshot.get("proprietarioCommento").toString()
         );
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference risposteReference = db.collection("Risposte_Commenti");
-        //Query query = risposteReference.whereEqualTo("commento", idCommento).orderBy("data", Query.Direction.ASCENDING);
-        /*
-        risposteReference.whereEqualTo("commento", idCommento).get().
-                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    Log.e(LOG,"Numero risposte: "+task.getResult().size());
-                    for (DocumentSnapshot documenti_risposte : task.getResult()) {
-                        Map<String, Object> c = documenti_risposte.getData();
-                        Log.e(LOG,"Risposta: "+c.toString());
-                    }
-                }else{
-                    // c'è stato un problema nel get
-                    Log.e(LOG,"Errore task di controllo");
-                }
-            }
-        });
-        */
+        //Query query = risposteReference.whereEqualTo("commento", commento.getId()).orderBy("data", Query.Direction.ASCENDING);
         Query query = risposteReference.whereEqualTo("commento", commento.getId());
         FirestoreRecyclerOptions<Risposta> options = new FirestoreRecyclerOptions.Builder<Risposta>().setQuery(query, Risposta.class).build();
         risposteAdapterFirestore = new RisposteAdapterFirestore(options, id_docente, nomeCognome);
@@ -367,7 +331,6 @@ public class PostActivity extends AppCompatActivity {
         risposteAdapterFirestore.setOnRispondiClickListener( new CommentiAdapterFirestore.OnRispondiClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                //setRecyclerViewRisposte(adapter.getSnapshots().getSnapshot(position).getId(),true);
                 //DEVE APRIRE LA TASTIERA
                 Log.e(TAG, "Rispondo al commento " + adapter.getSnapshots().getSnapshot(position).getId());
             }

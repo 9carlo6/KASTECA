@@ -59,10 +59,10 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Commento model) {
         if(!id_docente.equals(model.getProprietario_commento())) {
-            holder.nome_proprietario.setText(model.getProprietario_commento().substring(0, 6));
+            //holder.nome_proprietario.setText(model.getProprietario_commento().substring(0, 6));
         }
         else{
-            holder.nome_proprietario.setText(nome_cognome_docente);
+            //holder.nome_proprietario.setText(nome_cognome_docente);
         }
         holder.text_commento.setText(model.getTesto());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
