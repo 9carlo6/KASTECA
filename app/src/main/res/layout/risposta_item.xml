@@ -17,8 +17,9 @@
         android:text="@string/formato_data"
         android:textSize="12sp" />
 
+
     <TextView
-        android:id="@+id/rispondi_view"
+        android:id="@+id/elimina_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/card_view_risposta"
@@ -26,12 +27,13 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/data_risposta_view"
-        android:layout_toRightOf="@+id/data_risposta_view"
+        android:layout_toRightOf="@+id/rispondi_view"
         android:clickable="false"
         android:onClick="addRisposta"
-        android:text="@string/rispondi"
+        android:text="@string/eliminaRisposta"
         android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="invisible"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view_risposta"

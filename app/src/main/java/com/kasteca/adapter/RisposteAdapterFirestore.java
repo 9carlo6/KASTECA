@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.kasteca.R;
 import com.kasteca.object.Risposta;
 
@@ -20,8 +21,11 @@ import java.text.SimpleDateFormat;
 public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta, RisposteAdapterFirestore.ViewHolder> {
     private final String LOG= "RISPOSTE_ADAPTER";
     private CommentiAdapterFirestore.OnRispondiClickListener mRispondiClickListener;
-    private String id_docente;
-    private String nome_cognome_docente;
+    private RisposteAdapterFirestore.Delete delete;
+    private String idDocente;
+    private String nomeCognomeDocente;
+    private String nomeCognomeStudente;
+    private String idStudente;
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -29,10 +33,12 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
      *
      * @param options
      */
-    public RisposteAdapterFirestore(@NonNull FirestoreRecyclerOptions<Risposta> options, String id_docente, String nome_cognome_docente) {
+    public RisposteAdapterFirestore(@NonNull FirestoreRecyclerOptions<Risposta> options, String id_docente, String nomeCognome,  String nomeCognomeStudente, String idStudente) {
         super(options);
-        this.id_docente = id_docente;
-        this.nome_cognome_docente = nome_cognome_docente;
+        this.idDocente = id_docente;
+        this.idStudente= idStudente;
+        this.nomeCognomeDocente = nomeCognome;
+        this.nomeCognomeStudente= nomeCognomeStudente;
     }
 
     public RisposteAdapterFirestore.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,36 +52,65 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Risposta model) {
         // AGGIUNGERE QUESTA PARTE MANCA IL PROPRIETARIO DELLA RISPOSTA
-        holder.nome_proprietario.setText(model.getProprietario_risposta());
-        holder.text_commento.setText(model.getTesto());
+        holder.nomeProprietario.setText(model.getProprietario());
+        if(model.getProprietario()!=null){
+            if(!idDocente.equals(model.getProprietario())) {
+                if( idStudente!=null && nomeCognomeStudente!=null && idStudente.equals(model.getProprietario())){
+                    holder.nomeProprietario.setText(nomeCognomeStudente);
+                    holder.elimina.setVisibility(View.VISIBLE);
+                }else{
+                    holder.nomeProprietario.setText(model.getProprietario().substring(0, 6));
+                }
+            }
+            else{
+                holder.nomeProprietario.setText(nomeCognomeDocente);
+                holder.elimina.setVisibility(View.VISIBLE);
+            }
+            /*
+            if(!idDocente.equals(model.getProprietario())) {
+                holder.nomeProprietario.setText(model.getProprietario().substring(0, 6));
+            }
+            else{
+                holder.nomeProprietario.setText(nomeCognome);
+                holder.elimina.setVisibility(View.VISIBLE);
+            }*/
+        }
+        holder.textCommento.setText(model.getTesto());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         holder.data.setText(sdf.format(model.getData()));
+
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public CardView cv;
-        public TextView nome_proprietario;
-        public TextView text_commento;
+        public TextView nomeProprietario;
+        public TextView textCommento;
         public TextView data;
-        public TextView risposta;
-        public TextView tutte_risposte;
+        public TextView elimina;
+
 
         public ViewHolder(View v) {
             super(v);
             cv = v.findViewById(R.id.card_view_risposta);
-            nome_proprietario = v.findViewById(R.id.nome_cognome_risposta_view);
-            text_commento = v.findViewById(R.id.testo_risposta_view);
+            nomeProprietario = v.findViewById(R.id.nome_cognome_risposta_view);
+            textCommento = v.findViewById(R.id.testo_risposta_view);
             data = v.findViewById(R.id.data_risposta_view);
-            risposta = v.findViewById(R.id.rispondi_view);
+            elimina = v.findViewById(R.id.elimina_view);
 
 
-            risposta.setOnClickListener(new View.OnClickListener(){
+            //Abilito l'eliminazione solo se il proprietario è lo stesso
+            elimina.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    Log.d(LOG,"rispondi alla risposta");
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION && delete != null){
+                        delete.deleteOnClick(getSnapshots().getSnapshot(position));
+                    }
                 }
             });
+
+
 
         }
     }
@@ -84,6 +119,12 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
         mRispondiClickListener = clickListener;
     }
 
+    public interface Delete{
+        void deleteOnClick(DocumentSnapshot documentSnapshot);
+    }
 
+    public void setDelete(RisposteAdapterFirestore.Delete clickDelete){
+        delete=clickDelete;
+    }
 
 }

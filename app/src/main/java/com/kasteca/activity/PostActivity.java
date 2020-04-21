@@ -32,8 +32,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -42,6 +44,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -93,6 +97,10 @@ public class PostActivity extends AppCompatActivity {
     private RisposteAdapterFirestore risposteAdapterFirestore= null;
     private View viewPop;
 
+
+    private String nomeCognomeStudente= null;
+    private String idStudente= null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +117,14 @@ public class PostActivity extends AppCompatActivity {
         if(getIntent().hasExtra("id_docente")){
             id_docente = getIntent().getStringExtra("id_docente");
         }
+        if(getIntent().hasExtra("nome") && getIntent().hasExtra("cognome") && getIntent().hasExtra("id")){
+            nomeCognomeStudente = getIntent().getStringExtra("nome")+" "+getIntent().getStringExtra("cognome");
+            idStudente= getIntent().getStringExtra("id");
+        }
+
+        //Verifichiamo il current user per vedere se èp uno studente
+        //Nel caso è uno studente salviamo il suo nome ed il suo cognome
+        //verificaStudente();
 
         nomeCognomeView = findViewById(R.id.nome_cognome_textView);
         dataView = findViewById(R.id.data_textView);
@@ -138,8 +154,7 @@ public class PostActivity extends AppCompatActivity {
         CollectionReference postReference = db.collection("Commenti");
         Query query = postReference.whereEqualTo("post", post.getId()).orderBy("data", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Commento> options = new FirestoreRecyclerOptions.Builder<Commento>().setQuery(query, Commento.class).build();
-        adapter = new CommentiAdapterFirestore(options, id_docente, nomeCognome);
-
+        adapter = new CommentiAdapterFirestore(options, id_docente, nomeCognome, nomeCognomeStudente, idStudente);
     }
 
     public void downloadPdf(View v){
@@ -307,6 +322,35 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
+        adapter.setDelete(new RisposteAdapterFirestore.Delete() {
+            @Override
+            public void deleteOnClick(DocumentSnapshot documentSnapshot) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference commentiReference = db.collection("Commenti");
+                commentiReference.document(documentSnapshot.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(LOG,"Commento eliminato");
+                    }
+                });
+
+                CollectionReference risposteReference = db.collection("Risposte_Commenti");
+                risposteReference.whereEqualTo("commento",documentSnapshot.getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            CollectionReference risposteR = db.collection("Risposte_Commenti");
+                            for(DocumentSnapshot ds: task.getResult()){
+                                risposteR.document(ds.getId()).delete();
+                            }
+                        }
+                    }
+                });
+
+            }
+        });
+
     }
 
     private void setRecyclerViewRisposte(DocumentSnapshot commentoSnapshot ,Boolean isAddingRespond){
@@ -324,9 +368,9 @@ public class PostActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference risposteReference = db.collection("Risposte_Commenti");
         //Query query = risposteReference.whereEqualTo("commento", commento.getId()).orderBy("data", Query.Direction.ASCENDING);
-        Query query = risposteReference.whereEqualTo("commento", commento.getId());
+        Query query = risposteReference.whereEqualTo("commento", commento.getId()).orderBy("data", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Risposta> options = new FirestoreRecyclerOptions.Builder<Risposta>().setQuery(query, Risposta.class).build();
-        risposteAdapterFirestore = new RisposteAdapterFirestore(options, id_docente, nomeCognome);
+        risposteAdapterFirestore = new RisposteAdapterFirestore(options, id_docente, nomeCognome, nomeCognomeStudente, idStudente);
 
         risposteAdapterFirestore.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -335,21 +379,28 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        risposteAdapterFirestore.setOnRispondiClickListener( new CommentiAdapterFirestore.OnRispondiClickListener() {
+        //Aggiungo interfaccia per l'eliminazione del commento
+        risposteAdapterFirestore.setDelete(new RisposteAdapterFirestore.Delete() {
             @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                //DEVE APRIRE LA TASTIERA
-                Log.e(TAG, "Rispondo al commento " + adapter.getSnapshots().getSnapshot(position).getId());
+            public void deleteOnClick(DocumentSnapshot documentSnapshot) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference risposteReference = db.collection("Risposte_Commenti");
+                risposteReference.document(documentSnapshot.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(LOG,"Risposta correttamente eliminata.");
+                    }
+                });
             }
         });
+
         risposteAdapterFirestore.startListening();
-
-
 
         final LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // si visualizza il layout del popup
         final View inflatedView = layoutInflater.inflate(R.layout.popup_risposte_layout, null,false);
+        //settiamo il bottone per tornare ai commenti
         ImageView backButton= inflatedView.findViewById(R.id.back_to_comment);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -360,8 +411,15 @@ public class PostActivity extends AppCompatActivity {
         });
 
         //settiamo il layout del commento di riferimento
+        //Settiamo il nome del proprietario del commento nel modo giusto
         TextView nome_comm= inflatedView.findViewById(R.id.nome_cognome_comm_view);
-        nome_comm.setText(commento.getProprietario_commento());
+        if(!commento.getProprietarioCommento().equals(nomeCognome)) {
+            nome_comm.setText(commento.getProprietarioCommento().substring(0, 6));
+        }
+        else{
+            nome_comm.setText(nomeCognome);
+        }
+
         TextView testo_comm= inflatedView.findViewById(R.id.testo_comm_view);
         testo_comm.setText(commento.getTesto());
         // si cerca la recycle view nel popup layout
@@ -385,7 +443,7 @@ public class PostActivity extends AppCompatActivity {
                     newRisposta.put("commento", commento.getId());
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     FirebaseUser currentUser = mAuth.getCurrentUser();
-                    newRisposta.put("proprietario_commento", currentUser.getUid());
+                    newRisposta.put("proprietario", currentUser.getUid());
 
                     risposteReference.add(newRisposta)
                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -442,7 +500,6 @@ public class PostActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(risposteAdapterFirestore);
 
-        //*/
     }
 
     public void showAlert(String s){

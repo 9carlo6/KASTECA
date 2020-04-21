@@ -37,13 +37,18 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
 
     private OnRispondiClickListener mRispondiClickListener;
     private OnVisualizzaRisposteClickListener mVisualizzaRisposteClickListener;
+    private RisposteAdapterFirestore.Delete delete;
     private String idDocente;
     private String nomeCognomeDocente;
+    private String nomeCognomeStudente;
+    private String idStudente;
 
-    public CommentiAdapterFirestore(@NonNull FirestoreRecyclerOptions<Commento> options, String idDocente, String nomeCognomeDocente){
+    public CommentiAdapterFirestore(@NonNull FirestoreRecyclerOptions<Commento> options, String idDocente, String nomeCognomeDocente, String nomeCognomeStudente, String idStudente){
         super(options);
         this.idDocente = idDocente;
+        this.idStudente= idStudente;
         this.nomeCognomeDocente = nomeCognomeDocente;
+        this.nomeCognomeStudente= nomeCognomeStudente;
     }
 
     @NonNull
@@ -60,10 +65,16 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Commento model) {
         if(model.getProprietarioCommento()!=null){
             if(!idDocente.equals(model.getProprietarioCommento())) {
-                holder.nome_proprietario.setText(model.getProprietarioCommento().substring(0, 6));
+                if( idStudente!=null && nomeCognomeStudente!=null && idStudente.equals(model.getProprietarioCommento())){
+                    holder.nome_proprietario.setText(nomeCognomeStudente);
+                    holder.elimina.setVisibility(View.VISIBLE);
+                }else{
+                    holder.nome_proprietario.setText(model.getProprietarioCommento().substring(0, 6));
+                }
             }
             else{
                 holder.nome_proprietario.setText(nomeCognomeDocente);
+                holder.elimina.setVisibility(View.VISIBLE);
             }
         }
         holder.text_commento.setText(model.getTesto());
@@ -80,6 +91,7 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
         public TextView data;
         public TextView risposta;
         public TextView tutte_risposte;
+        public TextView elimina;
 
         public ViewHolder(View v) {
             super(v);
@@ -89,6 +101,7 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
             data = v.findViewById(R.id.data_commento_view);
             risposta = v.findViewById(R.id.rispondi_view);
             tutte_risposte = v.findViewById(R.id.visualizza_risposte_view);
+            elimina= v.findViewById(R.id.elimina_commento_view);
 
             risposta.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -109,6 +122,15 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
                     }
                 }
             });
+            elimina.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION && delete != null){
+                        delete.deleteOnClick(getSnapshots().getSnapshot(position));
+                    }
+                }
+            });
         }
     }
 
@@ -126,5 +148,9 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
 
     public void setOnVisualizzaRisposteClickListener(CommentiAdapterFirestore.OnVisualizzaRisposteClickListener clickListener){
         mVisualizzaRisposteClickListener = clickListener;
+    }
+
+    public void setDelete(RisposteAdapterFirestore.Delete clickDelete){
+        delete=clickDelete;
     }
 }

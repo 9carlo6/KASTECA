@@ -125,8 +125,12 @@
     <string name="formato_data">dd/MM/yyyy HH:mm</string>
     <string name="titolo">File Download</string>
 
+    <!-- stringhe per l'item Risposta-->
+    <string name="eliminaRisposta">Elimina</string>
 
-    !-- stringhe per il CommentiActivity-->
+
+
+    <!-- stringhe per il CommentiActivity-->
     <string name="rispondi">Rispondi</string>
     <string name="elimina">Elimina</string>
     <string name="visualizza_risposte">Visualizza tutte le risposte</string>

@@ -10,11 +10,11 @@ public class Risposta {
     private String proprietario;
 
     //Costruttori
-    public Risposta(String id, Date data, String testo, String proprietarioRisposta) {
+    public Risposta(String id, Date data, String testo, String proprietario) {
         this.id = id;
         this.data = data;
         this.testo = testo;
-        this.proprietario= proprietarioRisposta;
+        this.proprietario= proprietario;
     }
 
     public Risposta(){
@@ -34,7 +34,7 @@ public class Risposta {
         return testo;
     }
 
-    public String getProprietario_risposta() {
+    public String getProprietario() {
         return proprietario;
     }
 
@@ -52,7 +52,7 @@ public class Risposta {
         this.testo = testo;
     }
 
-    public void setProprietario(String proprietarioRisposta) {
-        this.proprietario = proprietarioRisposta;
+    public void setProprietario(String proprietario) {
+        this.proprietario = proprietario;
     }
 }
