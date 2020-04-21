@@ -64,18 +64,18 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Commento model) {
         if(model.getProprietarioCommento()!=null){
-            if(!idDocente.equals(model.getProprietarioCommento())) {
-                if( idStudente!=null && nomeCognomeStudente!=null && idStudente.equals(model.getProprietarioCommento())){
+
+            if(idDocente.equals(model.getProprietarioCommento())){
+                holder.nome_proprietario.setText(nomeCognomeDocente);
+                if(idStudente==null)
+                    holder.elimina.setVisibility(View.VISIBLE);
+            }else
+             if(idStudente!=null && nomeCognomeStudente!=null && idStudente.equals(model.getProprietarioCommento())){
                     holder.nome_proprietario.setText(nomeCognomeStudente);
                     holder.elimina.setVisibility(View.VISIBLE);
-                }else{
-                    holder.nome_proprietario.setText(model.getProprietarioCommento().substring(0, 6));
-                }
-            }
-            else{
-                holder.nome_proprietario.setText(nomeCognomeDocente);
-                holder.elimina.setVisibility(View.VISIBLE);
-            }
+             }else
+                 holder.nome_proprietario.setText(model.getProprietarioCommento().substring(0, 6));
+
         }
         holder.text_commento.setText(model.getTesto());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");

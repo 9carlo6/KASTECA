@@ -79,7 +79,7 @@ public class PostActivity extends AppCompatActivity {
     private Commento commento;
     private Post post;
     private String nomeCognome;
-    private String id_docente;
+    private String idDocente;
     private TextView testoView;
     private TextView tagView;
     private TextView nomeCognomeView;
@@ -115,7 +115,7 @@ public class PostActivity extends AppCompatActivity {
         }
 
         if(getIntent().hasExtra("id_docente")){
-            id_docente = getIntent().getStringExtra("id_docente");
+            idDocente = getIntent().getStringExtra("id_docente");
         }
         if(getIntent().hasExtra("nome") && getIntent().hasExtra("cognome") && getIntent().hasExtra("id")){
             nomeCognomeStudente = getIntent().getStringExtra("nome")+" "+getIntent().getStringExtra("cognome");
@@ -154,7 +154,7 @@ public class PostActivity extends AppCompatActivity {
         CollectionReference postReference = db.collection("Commenti");
         Query query = postReference.whereEqualTo("post", post.getId()).orderBy("data", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Commento> options = new FirestoreRecyclerOptions.Builder<Commento>().setQuery(query, Commento.class).build();
-        adapter = new CommentiAdapterFirestore(options, id_docente, nomeCognome, nomeCognomeStudente, idStudente);
+        adapter = new CommentiAdapterFirestore(options, idDocente, nomeCognome, nomeCognomeStudente, idStudente);
     }
 
     public void downloadPdf(View v){
@@ -370,7 +370,7 @@ public class PostActivity extends AppCompatActivity {
         //Query query = risposteReference.whereEqualTo("commento", commento.getId()).orderBy("data", Query.Direction.ASCENDING);
         Query query = risposteReference.whereEqualTo("commento", commento.getId()).orderBy("data", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Risposta> options = new FirestoreRecyclerOptions.Builder<Risposta>().setQuery(query, Risposta.class).build();
-        risposteAdapterFirestore = new RisposteAdapterFirestore(options, id_docente, nomeCognome, nomeCognomeStudente, idStudente);
+        risposteAdapterFirestore = new RisposteAdapterFirestore(options, idDocente, nomeCognome, nomeCognomeStudente, idStudente);
 
         risposteAdapterFirestore.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -413,7 +413,14 @@ public class PostActivity extends AppCompatActivity {
         //settiamo il layout del commento di riferimento
         //Settiamo il nome del proprietario del commento nel modo giusto
         TextView nome_comm= inflatedView.findViewById(R.id.nome_cognome_comm_view);
-        if(!commento.getProprietarioCommento().equals(nomeCognome)) {
+        if(!commento.getProprietarioCommento().equals(idDocente)) {
+            //Controlliamo se è loggato lo studente
+            if(nomeCognomeStudente!=null && idStudente!= null && commento.getProprietarioCommento().equals(idStudente)){
+                nome_comm.setText(nomeCognomeStudente);
+            }else{
+                nome_comm.setText(commento.getProprietarioCommento().substring(0, 6));
+
+            }
             nome_comm.setText(commento.getProprietarioCommento().substring(0, 6));
         }
         else{

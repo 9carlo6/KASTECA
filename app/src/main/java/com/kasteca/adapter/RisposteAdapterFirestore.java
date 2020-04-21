@@ -54,26 +54,18 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
         // AGGIUNGERE QUESTA PARTE MANCA IL PROPRIETARIO DELLA RISPOSTA
         holder.nomeProprietario.setText(model.getProprietario());
         if(model.getProprietario()!=null){
-            if(!idDocente.equals(model.getProprietario())) {
-                if( idStudente!=null && nomeCognomeStudente!=null && idStudente.equals(model.getProprietario())){
-                    holder.nomeProprietario.setText(nomeCognomeStudente);
-                    holder.elimina.setVisibility(View.VISIBLE);
-                }else{
-                    holder.nomeProprietario.setText(model.getProprietario().substring(0, 6));
-                }
-            }
-            else{
+
+            if(idDocente.equals(model.getProprietario())){
                 holder.nomeProprietario.setText(nomeCognomeDocente);
+                if(idStudente==null)
+                    holder.elimina.setVisibility(View.VISIBLE);
+            }else
+            if(idStudente!=null && nomeCognomeStudente!=null && idStudente.equals(model.getProprietario())){
+                holder.nomeProprietario.setText(nomeCognomeStudente);
                 holder.elimina.setVisibility(View.VISIBLE);
-            }
-            /*
-            if(!idDocente.equals(model.getProprietario())) {
+            }else
                 holder.nomeProprietario.setText(model.getProprietario().substring(0, 6));
-            }
-            else{
-                holder.nomeProprietario.setText(nomeCognome);
-                holder.elimina.setVisibility(View.VISIBLE);
-            }*/
+
         }
         holder.textCommento.setText(model.getTesto());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
