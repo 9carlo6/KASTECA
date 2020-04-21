@@ -137,7 +137,7 @@ public class ListaStudentiIscrittiActivityTestConStudenti {
                 });
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(6000);
+        Thread.sleep(10000);
     }
 
     @After()
