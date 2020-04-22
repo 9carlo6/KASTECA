@@ -22,6 +22,7 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
     private final String LOG= "RISPOSTE_ADAPTER";
     private CommentiAdapterFirestore.OnRispondiClickListener mRispondiClickListener;
     private RisposteAdapterFirestore.Delete delete;
+    private CommentiAdapterFirestore.OnModificaClickListener modificaClickListener;
     private String idDocente;
     private String nomeCognomeDocente;
     private String nomeCognomeStudente;
@@ -57,12 +58,15 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
 
             if(idDocente.equals(model.getProprietario())){
                 holder.nomeProprietario.setText(nomeCognomeDocente);
-                if(idStudente==null)
+                if(idStudente==null) {
                     holder.elimina.setVisibility(View.VISIBLE);
+                    holder.modifica.setVisibility(View.VISIBLE);
+                }
             }else
             if(idStudente!=null && nomeCognomeStudente!=null && idStudente.equals(model.getProprietario())){
                 holder.nomeProprietario.setText(nomeCognomeStudente);
                 holder.elimina.setVisibility(View.VISIBLE);
+                holder.modifica.setVisibility(View.VISIBLE);
             }else
                 holder.nomeProprietario.setText(model.getProprietario().substring(0, 6));
 
@@ -80,6 +84,7 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
         public TextView textCommento;
         public TextView data;
         public TextView elimina;
+        public TextView modifica;
 
 
         public ViewHolder(View v) {
@@ -89,6 +94,7 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
             textCommento = v.findViewById(R.id.testo_risposta_view);
             data = v.findViewById(R.id.data_risposta_view);
             elimina = v.findViewById(R.id.elimina_view);
+            modifica = v.findViewById(R.id.modifica_risposta_view);
 
 
             //Abilito l'eliminazione solo se il proprietario è lo stesso
@@ -101,8 +107,15 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
                     }
                 }
             });
-
-
+            modifica.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION && modificaClickListener != null){
+                        modificaClickListener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+            });
 
         }
     }
@@ -119,4 +132,7 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
         delete=clickDelete;
     }
 
+    public void setModificaClickListener(CommentiAdapterFirestore.OnModificaClickListener md){
+        this.modificaClickListener=md;
+    }
 }

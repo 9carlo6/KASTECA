@@ -53,6 +53,7 @@ import com.kasteca.R;
 import com.kasteca.adapter.CommentiAdapterFirestore;
 import com.kasteca.adapter.RisposteAdapterFirestore;
 
+import com.kasteca.fragment.ModificaDialogFragment;
 import com.kasteca.object.Commento;
 import com.kasteca.object.Post;
 import com.kasteca.object.Risposta;
@@ -262,10 +263,8 @@ public class PostActivity extends AppCompatActivity {
         final Point size = new Point();
         display.getSize(size);
 
-
         // si inizializza la recyclerView
         setRecyclerView();
-
 
         // si setta la grandezza della pop window a seconda delle dimensioni del dispositivo
         popWindow = new PopupWindow(inflatedView, size.x - 50,size.y - 400, true );
@@ -292,6 +291,9 @@ public class PostActivity extends AppCompatActivity {
         // si mostra la finestra dal basso dello schermo
         popWindow.showAtLocation(this.testoView, Gravity.BOTTOM, 0,100);
     }
+
+
+
 
     private void setRecyclerView(){
 
@@ -351,6 +353,36 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
+        adapter.setModificaClickListener(new CommentiAdapterFirestore.OnModificaClickListener() {
+            @Override
+            public void onItemClick(final DocumentSnapshot documentSnapshot, int position) {
+                ModificaDialogFragment md= new ModificaDialogFragment();
+                md.setListener(new ModificaDialogFragment.EditDialogListener() {
+                    @Override
+                    public void applyText(String newText) {
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        CollectionReference commentiReference = db.collection("Commenti");
+                        commentiReference.document(documentSnapshot.getId()).update("testo",newText)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(LOG,"Commento modificato con successo.");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e(LOG,"Modifica commento non riuscita.");
+                                    }
+                                });
+                    }
+                });
+
+                md.show(getSupportFragmentManager(),"Modifica Commento");
+
+            }
+        });
+
     }
 
     private void setRecyclerViewRisposte(DocumentSnapshot commentoSnapshot ,Boolean isAddingRespond){
@@ -391,6 +423,36 @@ public class PostActivity extends AppCompatActivity {
                         Log.d(LOG,"Risposta correttamente eliminata.");
                     }
                 });
+            }
+        });
+
+        risposteAdapterFirestore.setModificaClickListener(new CommentiAdapterFirestore.OnModificaClickListener() {
+            @Override
+            public void onItemClick(final DocumentSnapshot documentSnapshot, int position) {
+                ModificaDialogFragment md= new ModificaDialogFragment();
+                md.setListener(new ModificaDialogFragment.EditDialogListener() {
+                    @Override
+                    public void applyText(String newText) {
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        CollectionReference commentiReference = db.collection("Risposte_Commenti");
+                        commentiReference.document(documentSnapshot.getId()).update("testo",newText)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(LOG,"Risposta modificato con successo.");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e(LOG,"Modifica Risposta non riuscita.");
+                                    }
+                                });
+                    }
+                });
+
+                md.show(getSupportFragmentManager(),"Modifica Risposta");
+
             }
         });
 

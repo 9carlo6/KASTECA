@@ -38,6 +38,7 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
     private OnRispondiClickListener mRispondiClickListener;
     private OnVisualizzaRisposteClickListener mVisualizzaRisposteClickListener;
     private RisposteAdapterFirestore.Delete delete;
+    private OnModificaClickListener modificaClickListener;
     private String idDocente;
     private String nomeCognomeDocente;
     private String nomeCognomeStudente;
@@ -67,12 +68,15 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
 
             if(idDocente.equals(model.getProprietarioCommento())){
                 holder.nome_proprietario.setText(nomeCognomeDocente);
-                if(idStudente==null)
+                if(idStudente==null){
                     holder.elimina.setVisibility(View.VISIBLE);
+                    holder.modifica.setVisibility(View.VISIBLE);
+                }
             }else
              if(idStudente!=null && nomeCognomeStudente!=null && idStudente.equals(model.getProprietarioCommento())){
                     holder.nome_proprietario.setText(nomeCognomeStudente);
                     holder.elimina.setVisibility(View.VISIBLE);
+                    holder.modifica.setVisibility(View.VISIBLE);
              }else
                  holder.nome_proprietario.setText(model.getProprietarioCommento().substring(0, 6));
 
@@ -92,6 +96,7 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
         public TextView risposta;
         public TextView tutte_risposte;
         public TextView elimina;
+        public TextView modifica;
 
         public ViewHolder(View v) {
             super(v);
@@ -102,6 +107,7 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
             risposta = v.findViewById(R.id.rispondi_view);
             tutte_risposte = v.findViewById(R.id.visualizza_risposte_view);
             elimina= v.findViewById(R.id.elimina_commento_view);
+            modifica= v.findViewById(R.id.modifica_commento_view);
 
             risposta.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -131,6 +137,16 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
                     }
                 }
             });
+
+            modifica.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION && modificaClickListener != null){
+                        modificaClickListener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+            });
         }
     }
 
@@ -139,6 +155,10 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
     }
 
     public interface OnVisualizzaRisposteClickListener {
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public interface OnModificaClickListener{
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
@@ -152,5 +172,9 @@ public class CommentiAdapterFirestore extends FirestoreRecyclerAdapter<Commento,
 
     public void setDelete(RisposteAdapterFirestore.Delete clickDelete){
         delete=clickDelete;
+    }
+
+    public void setModificaClickListener(OnModificaClickListener md){
+        this.modificaClickListener=md;
     }
 }
