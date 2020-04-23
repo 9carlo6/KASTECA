@@ -239,8 +239,8 @@ public class PostActivity extends AppCompatActivity {
                     newCommento.put("data", new Date());
                     newCommento.put("lista_risposte", new ArrayList<String>());
                     newCommento.put("post", post.getId());
-                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    FirebaseAuth mauth = FirebaseAuth.getInstance();
+                    FirebaseUser currentUser = mauth.getCurrentUser();
                     newCommento.put("proprietarioCommento", currentUser.getUid());
 
                     commentiRef.add(newCommento)
@@ -331,7 +331,7 @@ public class PostActivity extends AppCompatActivity {
                 CollectionReference commentiReference = db.collection("Commenti");
                 commentiReference.document(documentSnapshot.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onSuccess(Void avoid) {
                         Log.d(LOG,"Commento eliminato");
                     }
                 });
@@ -365,7 +365,7 @@ public class PostActivity extends AppCompatActivity {
                         commentiReference.document(documentSnapshot.getId()).update("testo",newText)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
-                                    public void onSuccess(Void aVoid) {
+                                    public void onSuccess(Void avoid) {
                                         Log.d(LOG,"Commento modificato con successo.");
                                     }
                                 })
@@ -419,7 +419,7 @@ public class PostActivity extends AppCompatActivity {
                 CollectionReference risposteReference = db.collection("Risposte_Commenti");
                 risposteReference.document(documentSnapshot.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onSuccess(Void avoid) {
                         Log.d(LOG,"Risposta correttamente eliminata.");
                     }
                 });
@@ -438,7 +438,7 @@ public class PostActivity extends AppCompatActivity {
                         commentiReference.document(documentSnapshot.getId()).update("testo",newText)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
-                                    public void onSuccess(Void aVoid) {
+                                    public void onSuccess(Void avoid) {
                                         Log.d(LOG,"Risposta modificato con successo.");
                                     }
                                 })
@@ -474,23 +474,23 @@ public class PostActivity extends AppCompatActivity {
 
         //settiamo il layout del commento di riferimento
         //Settiamo il nome del proprietario del commento nel modo giusto
-        TextView nome_comm= inflatedView.findViewById(R.id.nome_cognome_comm_view);
+        TextView nomeComm= inflatedView.findViewById(R.id.nome_cognome_comm_view);
         if(!commento.getProprietarioCommento().equals(idDocente)) {
             //Controlliamo se è loggato lo studente
             if(nomeCognomeStudente!=null && idStudente!= null && commento.getProprietarioCommento().equals(idStudente)){
-                nome_comm.setText(nomeCognomeStudente);
+                nomeComm.setText(nomeCognomeStudente);
             }else{
-                nome_comm.setText(commento.getProprietarioCommento().substring(0, 6));
+                nomeComm.setText(commento.getProprietarioCommento().substring(0, 6));
 
             }
-            nome_comm.setText(commento.getProprietarioCommento().substring(0, 6));
+            nomeComm.setText(commento.getProprietarioCommento().substring(0, 6));
         }
         else{
-            nome_comm.setText(nomeCognome);
+            nomeComm.setText(nomeCognome);
         }
 
-        TextView testo_comm= inflatedView.findViewById(R.id.testo_comm_view);
-        testo_comm.setText(commento.getTesto());
+        TextView testoComm= inflatedView.findViewById(R.id.testo_comm_view);
+        testoComm.setText(commento.getTesto());
         // si cerca la recycle view nel popup layout
         recyclerView = inflatedView.findViewById(R.id.recycler_view_risposte);
         // si cerca l'Edit Text nel popup layout
@@ -510,8 +510,8 @@ public class PostActivity extends AppCompatActivity {
                     newRisposta.put("testo", scriviRisposta.getText().toString());
                     newRisposta.put("data", new Date());
                     newRisposta.put("commento", commento.getId());
-                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    FirebaseAuth mauth = FirebaseAuth.getInstance();
+                    FirebaseUser currentUser = mauth.getCurrentUser();
                     newRisposta.put("proprietario", currentUser.getUid());
 
                     risposteReference.add(newRisposta)

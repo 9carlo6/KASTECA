@@ -34,9 +34,9 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
      *
      * @param options
      */
-    public RisposteAdapterFirestore(@NonNull FirestoreRecyclerOptions<Risposta> options, String id_docente, String nomeCognome,  String nomeCognomeStudente, String idStudente) {
+    public RisposteAdapterFirestore(@NonNull FirestoreRecyclerOptions<Risposta> options, String idDocente, String nomeCognome,  String nomeCognomeStudente, String idStudente) {
         super(options);
-        this.idDocente = id_docente;
+        this.idDocente = idDocente;
         this.idStudente= idStudente;
         this.nomeCognomeDocente = nomeCognome;
         this.nomeCognomeStudente= nomeCognomeStudente;
