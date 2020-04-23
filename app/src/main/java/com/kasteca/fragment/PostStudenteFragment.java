@@ -36,13 +36,15 @@ public class PostStudenteFragment extends Fragment {
     private String codice_docente;
     private String nome_cognome_docente;
     private PostAdapterFirestore adapter;
+    private Bundle bundle;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Bundle bundle= getArguments();
+        bundle= getArguments();
         corso_id = bundle.getString("id_corso");
         codice_docente = bundle.getString("docente");
+
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docenteReference = db.collection("Docenti").document(codice_docente);
@@ -90,6 +92,9 @@ public class PostStudenteFragment extends Fragment {
                 intent.putExtra("docente", nome_cognome_docente);
                 intent.putExtra("post", post);
                 intent.putExtra("id_docente", codice_docente);
+                intent.putExtra("nome",bundle.getString("nome"));
+                intent.putExtra("cognome",bundle.getString("cognome"));
+                intent.putExtra("id",bundle.getString("id"));
                 getActivity().startActivity(intent);
             }
         });
