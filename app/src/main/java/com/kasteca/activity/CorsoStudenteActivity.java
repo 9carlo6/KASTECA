@@ -53,6 +53,7 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
         setContentView(R.layout.activity_corso_studente);
 
         Toolbar toolbar = findViewById(R.id.toolbar_studente);
+        toolbar.setTitle(nome_corso);
         setSupportActionBar(toolbar);
 
         bundleStudente= getIntent().getExtras();

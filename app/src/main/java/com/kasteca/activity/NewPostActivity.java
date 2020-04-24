@@ -5,8 +5,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +34,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.kasteca.R;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -70,6 +75,7 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
         testo_post_text = findViewById(R.id.text_post__Edit_Text);
         link_text = findViewById(R.id.link_Edit_Text);
         pdf_text = findViewById(R.id.uri_pdf);
+        pdf_text.setMovementMethod(new ScrollingMovementMethod());
         uriPdf = null;
 
         tags = new ArrayList<>();
@@ -92,7 +98,8 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
         });
     }
 
-    public void uploadPdf(View v){
+    // Metodo che viene chiamato quando si preme sul bottone per il caricamento di un file pdf
+    public void selectPdf(View v){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("application/pdf");
         startActivityForResult(intent, SELECT_FILE);
@@ -104,7 +111,24 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
         if(resultCode == Activity.RESULT_OK){
             if(requestCode == SELECT_FILE){
                 uriPdf = ritorno.getData();
-                pdf_text.setText(uriPdf.toString());
+                String uriString = uriPdf.toString();
+                File file = new File(uriString);
+                String displayName = null;
+
+                if (uriString.startsWith("content://")) {
+                    Cursor cursor = null;
+                    try {
+                        cursor = getContentResolver().query(uriPdf, null, null, null, null);
+                        if (cursor != null && cursor.moveToFirst()) {
+                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+                } else if (uriString.startsWith("file://")) {
+                    displayName = file.getName();
+                }
+                pdf_text.setText(displayName);
             }
         }
     }

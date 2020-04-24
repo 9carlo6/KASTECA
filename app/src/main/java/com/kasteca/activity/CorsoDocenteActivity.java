@@ -17,6 +17,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kasteca.R;
@@ -34,6 +35,8 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
     private CardView option_Post;
 
     private AppBarConfiguration mAppBarConfiguration;
+
+    private FloatingActionButton fab;
     private DrawerLayout drawer;
     private Bundle bundleCorso;
     private Docente docente;
@@ -69,6 +72,7 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         anno_accademico = bundleCorso.getString("anno_accademico");
 
         Toolbar toolbar = findViewById(R.id.toolbar_docente);
+        toolbar.setTitle(nome_corso);
         setSupportActionBar(toolbar);
 
 
@@ -80,9 +84,6 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        toolbar.setTitle(nome_corso);
-        toolbar.setSubtitle(anno_accademico);
 
         if(savedInstanceState == null){
             PostDocenteFragment pf = new PostDocenteFragment();
@@ -99,7 +100,18 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         email_TextView.setText(docente.getEmail());
 
         navigationView.setCheckedItem(R.id.nav_post_corso);
+
+        fab = findViewById(R.id.fab_add_post);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), NewPostActivity.class);
+                intent.putExtra("corso_id", id_corso);
+                startActivity(intent);
+            }
+        });
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

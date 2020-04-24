@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/new_post_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/colorBackground"
+    android:backgroundTint="@color/colorBackground">
 
     <EditText
         android:id="@+id/text_post__Edit_Text"
@@ -27,17 +29,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.032" />
 
-    <TextView
-        android:id="@+id/uri_pdf"
-        android:layout_width="202dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/pdfButton"
-        app:layout_constraintTop_toBottomOf="@+id/link_Edit_Text"
-        app:layout_constraintVertical_bias="0.187" />
-
     <EditText
         android:id="@+id/link_Edit_Text"
         android:layout_width="286dp"
@@ -59,19 +50,35 @@
         android:id="@+id/pdfButton"
         android:layout_width="68dp"
         android:layout_height="71dp"
-        android:onClick="uploadPdf"
+        android:backgroundTint="@color/colorBackground"
+        android:foregroundTint="@color/colorButton"
+        android:onClick="selectPdf"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.18"
+        app:layout_constraintHorizontal_bias="0.154"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/link_Edit_Text"
-        app:layout_constraintVertical_bias="0.157"
+        app:layout_constraintVertical_bias="0.152"
         app:srcCompat="@drawable/pdf_icon_foreground" />
+
+    <ImageButton
+        android:id="@+id/uploadButton"
+        android:layout_width="72dp"
+        android:layout_height="65dp"
+        android:background="@drawable/round_button"
+        android:backgroundTint="@color/colorBackground"
+        android:onClick="upload"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tags_spinner"
+        app:srcCompat="@drawable/upload_icon_foreground" />
 
     <Spinner
         android:id="@+id/tags_spinner"
         android:layout_width="282dp"
         android:layout_height="37dp"
+        android:foregroundTint="@color/colorButton"
         android:prompt="@string/spinner_tag"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,16 +87,18 @@
         app:layout_constraintTop_toBottomOf="@+id/pdfButton"
         app:layout_constraintVertical_bias="0.203" />
 
-    <ImageButton
-        android:id="@+id/uploadButton"
-        android:layout_width="72dp"
-        android:layout_height="65dp"
-        android:onClick="upload"
+    <TextView
+        android:id="@+id/uri_pdf"
+        android:layout_width="202dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:maxLines="3"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tags_spinner"
-        app:srcCompat="@drawable/upload_icon_foreground"
-        android:background = "@drawable/round_button"/>
+        app:layout_constraintHorizontal_bias="0.125"
+        app:layout_constraintStart_toEndOf="@+id/pdfButton"
+        app:layout_constraintTop_toBottomOf="@+id/link_Edit_Text"
+        app:layout_constraintVertical_bias="0.185" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,7 +28,6 @@ import com.kasteca.object.Post;
 public class PostDocenteFragment extends Fragment{
 
     private RecyclerView recyclerView;
-    private FloatingActionButton fab;
     private String corso_id;
     private String nome_cognome;
     private String id_docente;
@@ -73,16 +72,6 @@ public class PostDocenteFragment extends Fragment{
             }
         });
 
-
-        fab = getActivity().findViewById(R.id.fab_add_post);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), NewPostActivity.class);
-                intent.putExtra("corso_id", corso_id);
-                startActivity(intent);
-            }
-        });
 
         return view;
     }

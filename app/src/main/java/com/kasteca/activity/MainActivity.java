@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView create_new_account_text;
     private EditText email_edit_text;
     private EditText password_edit_text;
+    private Button loginButton;
     private SharedPreferences prefs;
 
     private Bundle docente;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         password_edit_text = findViewById(R.id.Password_Edit_Text);
         password_edit_text.setText("password");// lo teniamo per velocizzare, ma andra cancellato.
         email_edit_text.setText(prefs.getString(LAST_USER,""));
+        loginButton = findViewById(R.id.button);
 
         // testo che rimanda all'activity per la creazione di un nuovo account (RegistrationActivity)
         create_new_account_text.setOnClickListener(new View.OnClickListener(){
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void login(View v) {
+        loginButton.setEnabled(false);
 
         FirebaseAuth mauth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
         mauth.signOut(); // serve per fare il logout, nel caso in cui ci fosse un utente già loggato
@@ -205,5 +209,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         alertDialog.show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loginButton.setEnabled(true);
     }
 }
