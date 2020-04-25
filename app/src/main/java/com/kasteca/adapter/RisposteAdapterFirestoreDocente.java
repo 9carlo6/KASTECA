@@ -1,6 +1,5 @@
 package com.kasteca.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +17,14 @@ import com.kasteca.object.Risposta;
 
 import java.text.SimpleDateFormat;
 
-public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta, RisposteAdapterFirestore.ViewHolder> {
+public class RisposteAdapterFirestoreDocente extends FirestoreRecyclerAdapter<Risposta, RisposteAdapterFirestoreDocente.ViewHolder> {
     private final String LOG= "RISPOSTE_ADAPTER";
-    private CommentiAdapterFirestore.OnRispondiClickListener mRispondiClickListener;
-    private RisposteAdapterFirestore.Delete delete;
-    private CommentiAdapterFirestore.OnModificaClickListener modificaClickListener;
+    private CommentiAdapterFirestoreDocente.OnRispondiClickListener mRispondiClickListener;
+    private RisposteAdapterFirestoreDocente.Delete delete;
+    private CommentiAdapterFirestoreDocente.OnModificaClickListener modificaClickListener;
     private String idDocente;
     private String nomeCognomeDocente;
-    private String nomeCognomeStudente;
-    private String idStudente;
+
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -34,18 +32,17 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
      *
      * @param options
      */
-    public RisposteAdapterFirestore(@NonNull FirestoreRecyclerOptions<Risposta> options, String idDocente, String nomeCognome,  String nomeCognomeStudente, String idStudente) {
+    public RisposteAdapterFirestoreDocente(@NonNull FirestoreRecyclerOptions<Risposta> options, String idDocente, String nomeCognome) {
         super(options);
         this.idDocente = idDocente;
-        this.idStudente= idStudente;
         this.nomeCognomeDocente = nomeCognome;
-        this.nomeCognomeStudente= nomeCognomeStudente;
+
     }
 
-    public RisposteAdapterFirestore.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RisposteAdapterFirestoreDocente.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.risposta_item, parent, false);
-        RisposteAdapterFirestore.ViewHolder vh = new RisposteAdapterFirestore.ViewHolder(v);
+        RisposteAdapterFirestoreDocente.ViewHolder vh = new RisposteAdapterFirestoreDocente.ViewHolder(v);
         return vh;
     }
 
@@ -58,15 +55,9 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
 
             if(idDocente.equals(model.getProprietario())){
                 holder.nomeProprietario.setText(nomeCognomeDocente);
-                if(idStudente==null) {
-                    holder.elimina.setVisibility(View.VISIBLE);
-                    holder.modifica.setVisibility(View.VISIBLE);
-                }
-            }else
-            if(idStudente!=null && nomeCognomeStudente!=null && idStudente.equals(model.getProprietario())){
-                holder.nomeProprietario.setText(nomeCognomeStudente);
                 holder.elimina.setVisibility(View.VISIBLE);
                 holder.modifica.setVisibility(View.VISIBLE);
+
             }else
                 holder.nomeProprietario.setText(model.getProprietario().substring(0, 6));
 
@@ -120,7 +111,7 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
         }
     }
 
-    public void setOnRispondiClickListener(CommentiAdapterFirestore.OnRispondiClickListener clickListener){
+    public void setOnRispondiClickListener(CommentiAdapterFirestoreDocente.OnRispondiClickListener clickListener){
         mRispondiClickListener = clickListener;
     }
 
@@ -128,11 +119,32 @@ public class RisposteAdapterFirestore extends FirestoreRecyclerAdapter<Risposta,
         void deleteOnClick(DocumentSnapshot documentSnapshot);
     }
 
-    public void setDelete(RisposteAdapterFirestore.Delete clickDelete){
+    public void setDelete(RisposteAdapterFirestoreDocente.Delete clickDelete){
         delete=clickDelete;
     }
 
-    public void setModificaClickListener(CommentiAdapterFirestore.OnModificaClickListener md){
+    public void setModificaClickListener(CommentiAdapterFirestoreDocente.OnModificaClickListener md){
         this.modificaClickListener=md;
+    }
+
+
+    public CommentiAdapterFirestoreDocente.OnRispondiClickListener getmRispondiClickListener() {
+        return mRispondiClickListener;
+    }
+
+    public Delete getDelete() {
+        return delete;
+    }
+
+    public CommentiAdapterFirestoreDocente.OnModificaClickListener getModificaClickListener() {
+        return modificaClickListener;
+    }
+
+    public String getIdDocente() {
+        return idDocente;
+    }
+
+    public String getNomeCognomeDocente() {
+        return nomeCognomeDocente;
     }
 }
