@@ -13,23 +13,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -45,14 +39,12 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.WriteBatch;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.kasteca.R;
-import com.kasteca.adapter.CommentiAdapterFirestore;
-import com.kasteca.adapter.RisposteAdapterFirestore;
+import com.kasteca.adapter.CommentiAdapterFirestoreDocente;
+import com.kasteca.adapter.CommentiAdapterFirestoreStudente;
+import com.kasteca.adapter.RisposteAdapterFirestoreDocente;
 
+import com.kasteca.adapter.RisposteAdapterFirestoreStudente;
 import com.kasteca.fragment.ModificaDialogFragment;
 import com.kasteca.object.Commento;
 import com.kasteca.object.Post;
@@ -89,13 +81,13 @@ public class PostActivity extends AppCompatActivity {
     private TextView linkView;
     private TextView visuale;
     private PopupWindow popWindow;
-    private CommentiAdapterFirestore adapter = null;
+    private CommentiAdapterFirestoreDocente adapter = null;
     private RecyclerView recyclerView;
     private ImageButton inviaCommento;
     private EditText scriviCommento;
     private ImageButton inviaRisposta;
     private EditText scriviRisposta;
-    private RisposteAdapterFirestore risposteAdapterFirestore= null;
+    private RisposteAdapterFirestoreDocente risposteAdapterFirestore= null;
     private View viewPop;
 
 
@@ -106,6 +98,9 @@ public class PostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+
+
+
 
         if(getIntent().hasExtra("post")){
             post = getIntent().getParcelableExtra("post");
@@ -118,14 +113,21 @@ public class PostActivity extends AppCompatActivity {
         if(getIntent().hasExtra("id_docente")){
             idDocente = getIntent().getStringExtra("id_docente");
         }
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference postReference = db.collection("Commenti");
+        Query query = postReference.whereEqualTo("post", post.getId()).orderBy("data", Query.Direction.ASCENDING);
+        FirestoreRecyclerOptions<Commento> options = new FirestoreRecyclerOptions.Builder<Commento>().setQuery(query, Commento.class).build();
+
         if(getIntent().hasExtra("nome") && getIntent().hasExtra("cognome") && getIntent().hasExtra("id")){
             nomeCognomeStudente = getIntent().getStringExtra("nome")+" "+getIntent().getStringExtra("cognome");
             idStudente= getIntent().getStringExtra("id");
-        }
+            adapter = new CommentiAdapterFirestoreStudente(options, idDocente, nomeCognome, nomeCognomeStudente, idStudente);
+        }else
+            adapter = new CommentiAdapterFirestoreDocente(options, idDocente, nomeCognome);
 
         //Verifichiamo il current user per vedere se èp uno studente
         //Nel caso è uno studente salviamo il suo nome ed il suo cognome
-        //verificaStudente();
 
         nomeCognomeView = findViewById(R.id.nome_cognome_textView);
         dataView = findViewById(R.id.data_textView);
@@ -151,11 +153,6 @@ public class PostActivity extends AppCompatActivity {
             findViewById(R.id.getPdfButton).setVisibility(View.INVISIBLE);
         }
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference postReference = db.collection("Commenti");
-        Query query = postReference.whereEqualTo("post", post.getId()).orderBy("data", Query.Direction.ASCENDING);
-        FirestoreRecyclerOptions<Commento> options = new FirestoreRecyclerOptions.Builder<Commento>().setQuery(query, Commento.class).build();
-        adapter = new CommentiAdapterFirestore(options, idDocente, nomeCognome, nomeCognomeStudente, idStudente);
     }
 
     public void downloadPdf(View v){
@@ -300,6 +297,8 @@ public class PostActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+        //Controllo l'adapter
+
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -308,7 +307,7 @@ public class PostActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnRispondiClickListener(new CommentiAdapterFirestore.OnRispondiClickListener() {
+        adapter.setOnRispondiClickListener(new CommentiAdapterFirestoreDocente.OnRispondiClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 setRecyclerViewRisposte(adapter.getSnapshots().getSnapshot(position),true);
@@ -316,7 +315,7 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        adapter.setOnVisualizzaRisposteClickListener(new CommentiAdapterFirestore.OnVisualizzaRisposteClickListener() {
+        adapter.setOnVisualizzaRisposteClickListener(new CommentiAdapterFirestoreDocente.OnVisualizzaRisposteClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 setRecyclerViewRisposte(adapter.getSnapshots().getSnapshot(position),false);
@@ -324,7 +323,7 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        adapter.setDelete(new RisposteAdapterFirestore.Delete() {
+        adapter.setDelete(new RisposteAdapterFirestoreDocente.Delete() {
             @Override
             public void deleteOnClick(DocumentSnapshot documentSnapshot) {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -353,7 +352,7 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        adapter.setModificaClickListener(new CommentiAdapterFirestore.OnModificaClickListener() {
+        adapter.setModificaClickListener(new CommentiAdapterFirestoreDocente.OnModificaClickListener() {
             @Override
             public void onItemClick(final DocumentSnapshot documentSnapshot, int position) {
                 ModificaDialogFragment md= new ModificaDialogFragment();
@@ -402,7 +401,12 @@ public class PostActivity extends AppCompatActivity {
         //Query query = risposteReference.whereEqualTo("commento", commento.getId()).orderBy("data", Query.Direction.ASCENDING);
         Query query = risposteReference.whereEqualTo("commento", commento.getId()).orderBy("data", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Risposta> options = new FirestoreRecyclerOptions.Builder<Risposta>().setQuery(query, Risposta.class).build();
-        risposteAdapterFirestore = new RisposteAdapterFirestore(options, idDocente, nomeCognome, nomeCognomeStudente, idStudente);
+
+        //Controlliamo se è un docente o uno studente e scegliamo l'adapter
+        if(nomeCognomeStudente != null && idStudente!= null)
+            risposteAdapterFirestore = new RisposteAdapterFirestoreStudente(options, idDocente, nomeCognome, nomeCognomeStudente, idStudente);
+        else
+            risposteAdapterFirestore = new RisposteAdapterFirestoreDocente(options, idDocente, nomeCognome);
 
         risposteAdapterFirestore.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -412,7 +416,7 @@ public class PostActivity extends AppCompatActivity {
         });
 
         //Aggiungo interfaccia per l'eliminazione del commento
-        risposteAdapterFirestore.setDelete(new RisposteAdapterFirestore.Delete() {
+        risposteAdapterFirestore.setDelete(new RisposteAdapterFirestoreDocente.Delete() {
             @Override
             public void deleteOnClick(DocumentSnapshot documentSnapshot) {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -426,7 +430,7 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        risposteAdapterFirestore.setModificaClickListener(new CommentiAdapterFirestore.OnModificaClickListener() {
+        risposteAdapterFirestore.setModificaClickListener(new CommentiAdapterFirestoreDocente.OnModificaClickListener() {
             @Override
             public void onItemClick(final DocumentSnapshot documentSnapshot, int position) {
                 ModificaDialogFragment md= new ModificaDialogFragment();
