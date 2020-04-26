@@ -132,7 +132,7 @@ public class ListaStudentiIscrittiActivityTestRimozioneStudente {
                 });
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(5000);
+        Thread.sleep(8000);
     }
 
     @After()
