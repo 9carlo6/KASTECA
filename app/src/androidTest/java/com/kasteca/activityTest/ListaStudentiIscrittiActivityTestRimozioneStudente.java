@@ -66,7 +66,7 @@ public class ListaStudentiIscrittiActivityTestRimozioneStudente {
         String pwd = "passwordProva";
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(1000);
+        Thread.sleep(3000);
 
         mAuth.signInWithEmailAndPassword(mail, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -132,7 +132,7 @@ public class ListaStudentiIscrittiActivityTestRimozioneStudente {
                 });
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(8000);
+        Thread.sleep(15000);
     }
 
     @After()
