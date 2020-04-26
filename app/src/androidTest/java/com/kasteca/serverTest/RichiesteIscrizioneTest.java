@@ -55,7 +55,7 @@ public class RichiesteIscrizioneTest {
                 Log.d(TAG, "Login Docente ok");
 
                 Map<String, Object> obj = new HashMap<>();
-                obj.put("anno_accademico", "anno_accademico_prova" );
+                obj.put("anno_accademico", "2019/2020" );
                 obj.put("codice", "codice_corso_prova");
                 obj.put("descrizione", "descrizione_prova");
                 obj.put("docente", "docente_prova");
