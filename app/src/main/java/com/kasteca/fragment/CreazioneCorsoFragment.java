@@ -1,5 +1,7 @@
 package com.kasteca.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -146,6 +148,7 @@ public class CreazioneCorsoFragment extends Fragment {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Log.d(LOG, "Error writing document", e);
+                    showAlert("problema con i vincoli" );
                 }
             });
 
@@ -172,9 +175,17 @@ public class CreazioneCorsoFragment extends Fragment {
                     }
                 }
         );
+    }
 
-
-
+    public void showAlert(String s){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle(s);
+        alertDialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
     }
 
 }
