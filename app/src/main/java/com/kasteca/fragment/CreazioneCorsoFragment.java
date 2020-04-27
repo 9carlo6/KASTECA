@@ -133,7 +133,7 @@ public class CreazioneCorsoFragment extends Fragment {
             calendar.setTime(date);
             documentSend.put("anno_accademico",calendar.get(Calendar.YEAR)+"/"+(calendar.get(Calendar.YEAR)+1));
 
-            Log.e(LOG,"anno_accademico: "+calendar.get(Calendar.YEAR)+"/"+calendar.get(Calendar.YEAR)+1);
+            Log.e(LOG,"anno_accademico: "+calendar.get(Calendar.YEAR)+"/"+(calendar.get(Calendar.YEAR)+1) );
 
             //Invio il documento
             //Utilizzo add in questo modo si autogenererà l'id del documento
