@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.kasteca.activity.ListaStudentiIscrittiActivity;
@@ -33,6 +34,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,44 +55,54 @@ public class ListaStudentiIscrittiActivityTestSenzaStudenti {
 
     @Before()
     public void singIn() throws InterruptedException {
-        IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-        String mail = "docenteprova@unisannio.it";
+        String mail = "docenteProva@unisannio.it";
         String pwd = "passwordProva";
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(1000);
 
-        mAuth.signInWithEmailAndPassword(mail, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(mail, pwd).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+            public void onSuccess(AuthResult authResult) {
                 Log.d(TAG, "login ok");
+
+                // bisogna creare il corso
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference corsi = db.collection("Corsi");
+
+                Date date= new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+
+                Map<String,Object> documentSend= new HashMap<>();
+                documentSend.put("anno_accademico", calendar.get(Calendar.YEAR)+"/"+(calendar.get(Calendar.YEAR)+1));
+                documentSend.put("codice", "codice");
+                documentSend.put("descrizione", "descrizione_prova");
+                documentSend.put("docente", "xXqhMcCwc3R5RibdcLtTOuoMVgm1");
+                documentSend.put("lista_post", new ArrayList<String>());
+                documentSend.put("lista_studenti", new ArrayList<String>());
+                documentSend.put("nome_corso", "nome_corso_prova");
+
+
+                corsi.document("id_corso_prova").set(documentSend).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "Corsi: creazione corso ok");
+                        }else{
+                            Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
+                        }
+                    }
+                });
             }
-        });
-
-        // bisogna creare il corso
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference corsi = db.collection("Corsi");
-
-        Map<String, Object> obj = new HashMap<>();
-        obj.put("anno_accademico", "anno_accademico_prova" );
-        obj.put("codice", "codice_corso_prova");
-        obj.put("descrizione", "descrizione_prova");
-        obj.put("docente", "docente_prova");
-        obj.put("lista_post", new ArrayList<String>());
-        obj.put("lista_studenti", new ArrayList<String>());
-        obj.put("nome_corso", "nome_corso_prova");
-
-        corsi.document("id_corso_prova").set(obj).addOnCompleteListener(new OnCompleteListener<Void>() {
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Log.d(TAG, "Corsi: creazione corso ok");
-                }else{
-                    Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
-                }
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "login negato");
             }
         });
+
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(3000);
@@ -117,6 +131,11 @@ public class ListaStudentiIscrittiActivityTestSenzaStudenti {
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(2000);
+
+        FirebaseAuth mauth = FirebaseAuth.getInstance();
+        mauth.signOut();
+
+        Thread.sleep(1000);
     }
 
     @Test()
