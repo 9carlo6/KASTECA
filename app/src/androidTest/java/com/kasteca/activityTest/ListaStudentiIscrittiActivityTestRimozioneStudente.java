@@ -72,67 +72,67 @@ public class ListaStudentiIscrittiActivityTestRimozioneStudente {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Log.d(TAG, "login ok");
-            }
-        });
+                // bisogna creare il corso
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference corsi = db.collection("Corsi");
 
-        // bisogna creare il corso
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference corsi = db.collection("Corsi");
+                Map<String, Object> obj = new HashMap<>();
+                obj.put("anno_accademico", "anno_accademico_prova" );
+                obj.put("codice", "codice_corso_prova");
+                obj.put("descrizione", "descrizione_prova");
+                obj.put("docente", "docente_prova");
+                obj.put("lista_post", new ArrayList<String>());
+                obj.put("lista_studenti", new ArrayList<String>());
+                obj.put("nome_corso", "nome_corso_prova");
 
-        Map<String, Object> obj = new HashMap<>();
-        obj.put("anno_accademico", "anno_accademico_prova" );
-        obj.put("codice", "codice_corso_prova");
-        obj.put("descrizione", "descrizione_prova");
-        obj.put("docente", "docente_prova");
-        obj.put("lista_post", new ArrayList<String>());
-        obj.put("lista_studenti", new ArrayList<String>());
-        obj.put("nome_corso", "nome_corso_prova");
-
-        corsi.document("id_corso_prova").set(obj).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Log.d(TAG, "Corsi: creazione corso ok");
-                }else{
-                    Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
-                }
-            }
-        });
-
-        // bisogna iscrivere lo studente al corso
-        // caricare il corso nella lista dei corsi dello studente in questione
-        FirebaseFirestore db1 = FirebaseFirestore.getInstance();
-        CollectionReference studenti = db1.collection("Studenti");
-        studenti.document("SotSWWJIZHNALPZ32EAARRed9RG2")
-                .update("lista_corsi", FieldValue.arrayUnion("id_corso_prova"))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                corsi.document("id_corso_prova").set(obj).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            Log.d(TAG, "caricamento corso nella lista_corsi studente ok");
-                            // caricare lo studente nella lista degli studenti del corso
-                            FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                            CollectionReference corsi = db2.collection("Corsi");
-                            corsi.document("id_corso_prova")
-                                    .update("lista_studenti", FieldValue.arrayUnion("SotSWWJIZHNALPZ32EAARRed9RG2"))
+                            Log.d(TAG, "Corsi: creazione corso ok");
+
+                            // bisogna iscrivere lo studente al corso
+                            // caricare il corso nella lista dei corsi dello studente in questione
+                            FirebaseFirestore db1 = FirebaseFirestore.getInstance();
+                            CollectionReference studenti = db1.collection("Studenti");
+                            studenti.document("SotSWWJIZHNALPZ32EAARRed9RG2")
+                                    .update("lista_corsi", FieldValue.arrayUnion("id_corso_prova"))
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
-                                                Log.d(TAG, "caricamento studente nella lista_studenti corso ok");
+                                                Log.d(TAG, "caricamento corso nella lista_corsi studente ok");
+                                                // caricare lo studente nella lista degli studenti del corso
+                                                FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                                                CollectionReference corsi = db2.collection("Corsi");
+                                                corsi.document("id_corso_prova")
+                                                        .update("lista_studenti", FieldValue.arrayUnion("SotSWWJIZHNALPZ32EAARRed9RG2"))
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful()){
+                                                                    Log.d(TAG, "caricamento studente nella lista_studenti corso ok");
+                                                                }else{
+                                                                    Log.d(TAG, "ERRORE caricamento studente nella lista_studenti corso");
+                                                                }
+                                                            }
+                                                        });
                                             }else{
-                                                Log.d(TAG, "ERRORE caricamento studente nella lista_studenti corso");
+                                                Log.d(TAG, "ERRORE caricamento corso nella lista_corsi studente");
                                             }
                                         }
                                     });
                         }else{
-                            Log.d(TAG, "ERRORE caricamento corso nella lista_corsi studente");
+                            Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
                         }
                     }
                 });
+            }
+        });
+
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(5000);
+        Thread.sleep(10000);
     }
 
     @After()
@@ -176,22 +176,6 @@ public class ListaStudentiIscrittiActivityTestRimozioneStudente {
         Thread.sleep(4000);
     }
 
-    @Test()
-    public void ListaStudentiIscrittiActivityTestRimozioneStudenteConfermata() throws InterruptedException {
-
-        Intent i = new Intent();
-        i.putExtra("id_corso", "id_corso_prova");
-        listaStudentiIscrittiActivityActivityTestRule.launchActivity(i);
-
-        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(2000);
-
-        ViewInteraction recyclerView2 = onView(withText("NomeProva CognomeProva"));
-        recyclerView2.perform(longClick());
-
-        ViewInteraction appCompatButton8 = onView(withText("Si"));
-        appCompatButton8.perform(scrollTo(), click());
-    }
 
     @Test()
     public void ListaStudentiIscrittiActivityTestRimozioneStudenteNegata() throws InterruptedException {
@@ -209,6 +193,23 @@ public class ListaStudentiIscrittiActivityTestRimozioneStudente {
         ViewInteraction appCompatButton8 = onView(withText("No"));
         appCompatButton8.perform(scrollTo(), click());
     }
+
+/*    @Test()
+    public void ListaStudentiIscrittiActivityTestRimozioneStudenteConfermata() throws InterruptedException {
+
+        Intent i = new Intent();
+        i.putExtra("id_corso", "id_corso_prova");
+        listaStudentiIscrittiActivityActivityTestRule.launchActivity(i);
+
+        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
+        Thread.sleep(2000);
+
+        ViewInteraction recyclerView2 = onView(withText("NomeProva CognomeProva"));
+        recyclerView2.perform(longClick());
+
+        ViewInteraction appCompatButton8 = onView(withText("Si"));
+        appCompatButton8.perform(scrollTo(), click());
+    }*/
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {

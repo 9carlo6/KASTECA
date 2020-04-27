@@ -95,88 +95,91 @@ public class MainActivity extends AppCompatActivity {
                                 editor.putString(LAST_USER, mail);
                                 editor.apply();
 
-                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                CollectionReference docenti = db.collection("Docenti");
 
-                                Source source = Source.SERVER;
-                                //Contatore idling resource per test con espresso
-                                EspressoIdlingResource.increment();
+                                if(!email_edit_text.getText().toString().contains("studenti")){
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                    CollectionReference docenti = db.collection("Docenti");
 
-                                // controlla se l'utente che ha eseguito l'accesso è un docente
-                                docenti.get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        //Contatore idling resource per test con espresso
-                                        EspressoIdlingResource.decrement();
+                                    Source source = Source.SERVER;
+                                    //Contatore idling resource per test con espresso
+                                    EspressoIdlingResource.increment();
 
-                                        FirebaseAuth mauth1 = FirebaseAuth.getInstance();
-                                        FirebaseUser currentUser1 = mauth1.getCurrentUser();
+                                    // controlla se l'utente che ha eseguito l'accesso è un docente
+                                    docenti.get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            //Contatore idling resource per test con espresso
+                                            EspressoIdlingResource.decrement();
 
-                                        for (DocumentSnapshot document : task.getResult()) {
-                                            // per ogni documento controllo presente nella collezione 'Docenti' controllo
-                                            // se l'id dell'utente (appena loggato) è associato a un docente
-                                            if (currentUser1.getUid().equalsIgnoreCase(document.getId())) {
-                                                Intent intent = new Intent(getApplicationContext(), LogDocenteActivity.class);
+                                            FirebaseAuth mauth1 = FirebaseAuth.getInstance();
+                                            FirebaseUser currentUser1 = mauth1.getCurrentUser();
 
-                                                //scarico i dati relativi al docente e li carico in un nuovo oggetto Docente
-                                                //per passare un oggetto bisogna usare la classe Bundle
-                                                docente = new Bundle();
+                                            for (DocumentSnapshot document : task.getResult()) {
+                                                // per ogni documento controllo presente nella collezione 'Docenti' controllo
+                                                // se l'id dell'utente (appena loggato) è associato a un docente
+                                                if (currentUser1.getUid().equalsIgnoreCase(document.getId())) {
+                                                    Intent intent = new Intent(getApplicationContext(), LogDocenteActivity.class);
 
-                                                docente.putString("id", document.getId());
-                                                docente.putString("nome", document.getData().get("nome").toString());
-                                                docente.putString("cognome", document.getData().get("cognome").toString());
-                                                docente.putString("email", document.getData().get("email").toString());
+                                                    //scarico i dati relativi al docente e li carico in un nuovo oggetto Docente
+                                                    //per passare un oggetto bisogna usare la classe Bundle
+                                                    docente = new Bundle();
 
-                                                intent.putExtras(docente);
-                                                startActivity(intent);
+                                                    docente.putString("id", document.getId());
+                                                    docente.putString("nome", document.getData().get("nome").toString());
+                                                    docente.putString("cognome", document.getData().get("cognome").toString());
+                                                    docente.putString("email", document.getData().get("email").toString());
+
+                                                    intent.putExtras(docente);
+                                                    startActivity(intent);
+                                                }
                                             }
                                         }
-                                    }
-                                });
+                                    });
+                                }else{
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                    CollectionReference studenti = db.collection("Studenti");
+                                    //Contatore idling resource per test con espresso
+                                    EspressoIdlingResource.increment();
 
-                                CollectionReference studenti = db.collection("Studenti");
-                                //Contatore idling resource per test con espresso
-                                EspressoIdlingResource.increment();
+                                    Source source = Source.SERVER;
+                                    // controlla se l'utente che ha eseguito l'accesso è uno studente
+                                    studenti.get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            //Contatore idling resource per test con espresso
+                                            EspressoIdlingResource.decrement();
 
+                                            FirebaseAuth mauth = FirebaseAuth.getInstance();
+                                            FirebaseUser currentUser1 = mauth.getCurrentUser();
 
-                                // controlla se l'utente che ha eseguito l'accesso è uno studente
-                                studenti.get(source).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        //Contatore idling resource per test con espresso
-                                        EspressoIdlingResource.decrement();
+                                            for (DocumentSnapshot document : task.getResult()) {
+                                                // per ogni documento controllo presente nella collezione 'Docenti' controllo
+                                                // se l'id dell'utente (appena loggato) è associato a un docente
+                                                if (currentUser1.getUid().equalsIgnoreCase(document.getId())) {
+                                                    Intent intent = new Intent(getApplicationContext(), LogStudenteActivity.class);
 
-                                        FirebaseAuth mauth = FirebaseAuth.getInstance();
-                                        FirebaseUser currentUser1 = mauth.getCurrentUser();
+                                                    //scarico i dati relativi al docente e li carico in un nuovo oggetto Docente
+                                                    //per passare un oggetto bisogna usare la classe Bundle
+                                                    studente = new Bundle();
 
-                                        for (DocumentSnapshot document : task.getResult()) {
-                                            // per ogni documento controllo presente nella collezione 'Docenti' controllo
-                                            // se l'id dell'utente (appena loggato) è associato a un docente
-                                            if (currentUser1.getUid().equalsIgnoreCase(document.getId())) {
-                                                Intent intent = new Intent(getApplicationContext(), LogStudenteActivity.class);
+                                                    studente.putString("id", document.getId());
+                                                    studente.putString("nome", document.getData().get("nome").toString());
+                                                    studente.putString("cognome", document.getData().get("cognome").toString());
+                                                    studente.putString("email", document.getData().get("email").toString());
+                                                    studente.putString("matricola", document.getData().get("matricola").toString());
 
-                                                //scarico i dati relativi al docente e li carico in un nuovo oggetto Docente
-                                                //per passare un oggetto bisogna usare la classe Bundle
-                                                studente = new Bundle();
+                                                    Log.e("LOGIC","Inizializzazione array di corsi.");
+                                                    //Array con tutti i corsi a cui è iscritto lo studente
+                                                    studente.putStringArrayList("id_corsi",(ArrayList<String>) document.getData().get("lista_corsi"));
+                                                    //Log.e("LOGIC","Array dei corsi: "+studente.get("id_corsi").toString());
 
-                                                studente.putString("id", document.getId());
-                                                studente.putString("nome", document.getData().get("nome").toString());
-                                                studente.putString("cognome", document.getData().get("cognome").toString());
-                                                studente.putString("email", document.getData().get("email").toString());
-                                                studente.putString("matricola", document.getData().get("matricola").toString());
-
-                                                Log.e("LOGIC","Inizializzazione array di corsi.");
-                                                //Array con tutti i corsi a cui è iscritto lo studente
-                                                studente.putStringArrayList("id_corsi",(ArrayList<String>) document.getData().get("lista_corsi"));
-                                                //Log.e("LOGIC","Array dei corsi: "+studente.get("id_corsi").toString());
-
-                                                intent.putExtras(studente);
-                                                startActivity(intent);
+                                                    intent.putExtras(studente);
+                                                    startActivity(intent);
+                                                }
                                             }
                                         }
-                                    }
-                                });
-
+                                    });
+                                }
                             } else {
                                 // se il LOGIN FALLISCE viene mostrato un dialog
                                 EspressoIdlingResource.decrement();

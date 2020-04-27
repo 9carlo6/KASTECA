@@ -1,5 +1,7 @@
 package com.kasteca.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,7 +133,7 @@ public class CreazioneCorsoFragment extends Fragment {
             calendar.setTime(date);
             documentSend.put("anno_accademico",calendar.get(Calendar.YEAR)+"/"+(calendar.get(Calendar.YEAR)+1));
 
-            Log.e(LOG,"anno_accademico: "+calendar.get(Calendar.YEAR)+"/"+calendar.get(Calendar.YEAR)+1);
+            Log.e(LOG,"anno_accademico: "+calendar.get(Calendar.YEAR)+"/"+(calendar.get(Calendar.YEAR)+1) );
 
             //Invio il documento
             //Utilizzo add in questo modo si autogenererà l'id del documento
@@ -146,6 +148,7 @@ public class CreazioneCorsoFragment extends Fragment {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Log.d(LOG, "Error writing document", e);
+                    showAlert("problema con i vincoli" );
                 }
             });
 
@@ -172,9 +175,17 @@ public class CreazioneCorsoFragment extends Fragment {
                     }
                 }
         );
+    }
 
-
-
+    public void showAlert(String s){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle(s);
+        alertDialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
     }
 
 }
