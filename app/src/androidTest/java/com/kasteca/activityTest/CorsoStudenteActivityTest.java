@@ -56,6 +56,35 @@ import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class CorsoStudenteActivityTest {
+    private String mail = "studenteprova@studenti.unisannio.it";
+    private String pwd = "passwordProva";
+
+    private String anno_accademico =  "2019/2020";
+    private String codice ="ABC";
+    private String descrizione = "descrizione_prova";
+    private String docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
+    private ArrayList<String> lista_post = new ArrayList<String>();
+    private ArrayList<String>  lista_studenti = new ArrayList<String>();
+    private String nome_corso = "nome_corso_prova";
+    private String id_corso = "id_corso_prova";
+
+    private String testo = "testo di prova";
+    private String link = null;
+    private String pdf = null;
+    private String tag = "esercizio";
+    private ArrayList<String>  lista_commenti = new ArrayList<String>();
+    private Date data = new Date(0);
+    private String id_post = "id_post_prova";
+
+    private String id_studente = "SotSWWJIZHNALPZ32EAARRed9RG2";
+    private String nome_studente = "NomeProva";
+    private String cognome_studente = "CognomeProva";
+    private String matricola =  "Matricola";
+    private ArrayList<String>  lista_corsi = new ArrayList<String>();
+
+    private String nome_docente = "NomeDocenteProva";
+    private String cognome_docente = "CognomeDocenteProva";
+
     @Rule
     public ActivityTestRule<CorsoStudenteActivity> activityTestRule = new ActivityTestRule<>(CorsoStudenteActivity.class, false, false);
 
@@ -63,8 +92,6 @@ public class CorsoStudenteActivityTest {
     public void setUp() throws Exception {
         IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-        String mail = "studenteprova@studenti.unisannio.it";
-        String pwd = "passwordProva";
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(1000);
@@ -81,25 +108,23 @@ public class CorsoStudenteActivityTest {
         CollectionReference corsi = db.collection("Corsi");
 
         Map<String, Object> corso = new HashMap<>();
-        corso.put("anno_accademico", "anno_accademico_prova" );
-        corso.put("codice", "codice_corso_prova");
-        corso.put("descrizione", "descrizione_prova");
-        corso.put("docente", "xXqhMcCwc3R5RibdcLtTOuoMVgm1");
-        corso.put("lista_post", new ArrayList<String>());
-        ArrayList<String> studentiCorso = new ArrayList<>();
-        studentiCorso.add("SotSWWJIZHNALPZ32EAARRed9RG2");
-        corso.put("lista_studenti", studentiCorso);
-        corso.put("nome_corso", "nome_corso_prova");
+        corso.put("anno_accademico", anno_accademico);
+        corso.put("codice", codice);
+        corso.put("descrizione", descrizione);
+        corso.put("docente", docente);
+        corso.put("lista_post", lista_post);
+        corso.put("lista_studenti", lista_studenti);
+        corso.put("nome_corso", nome_corso);
 
-        corsi.document("id_corso_prova").set(corso).addOnCompleteListener(new OnCompleteListener<Void>() {
+        corsi.document(id_corso).set(corso).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Log.d(TAG, "Corsi: creazione corso ok");
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     CollectionReference studenti = db.collection("Studenti");
-                    studenti.document("SotSWWJIZHNALPZ32EAARRed9RG2")
-                            .update("lista_corsi", FieldValue.arrayUnion("id_corso_prova"))
+                    studenti.document(id_studente)
+                            .update("lista_corsi", FieldValue.arrayUnion(id_corso))
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -116,25 +141,38 @@ public class CorsoStudenteActivityTest {
             }
         });
 
+        corsi.document(id_studente)
+                .update("lista_studenti", FieldValue.arrayUnion(id_studente))
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "caricamento studente nella lista_studenti del corso ok");
+                        }else{
+                            Log.d(TAG, "ERRORE caricamento studente nella lista_studenti del corso");
+                        }
+                    }
+                });
+
         // bisogna creare il post
         CollectionReference posts = db.collection("Post");
         Map<String, Object> post = new HashMap<>();
-        post.put("testo", "testo di prova" );
-        post.put("link", "");
-        post.put("pdf", "");
-        post.put("tag", "esercizio");
-        post.put("lista_commenti", new ArrayList<String>());
-        post.put("data", new Date(0));
-        post.put("corso", "id_corso_prova");
-        posts.document("id_post_prova").set(post).addOnCompleteListener(new OnCompleteListener<Void>() {
+        post.put("testo", testo);
+        post.put("link", link);
+        post.put("pdf", pdf);
+        post.put("tag", tag);
+        post.put("lista_commenti", lista_commenti);
+        post.put("data", data);
+        post.put("corso", id_corso);
+        posts.document(id_post).set(post).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Log.d(TAG, "Post: creazione post ok");
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     CollectionReference corsi = db.collection("Corsi");
-                    corsi.document("id_corso_prova")
-                            .update("lista_post", FieldValue.arrayUnion("id_post_prova"))
+                    corsi.document(id_corso)
+                            .update("lista_post", FieldValue.arrayUnion(id_post))
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -152,25 +190,24 @@ public class CorsoStudenteActivityTest {
         });
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(4000);
+        Thread.sleep(6000);
 
         Intent i = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putString("id_corso", "id_corso_prova");
-        bundle.putString("codice_corso", "codice_corso_prova");
-        bundle.putString("nome_corso", "nome_corso_prova");
-        bundle.putString("anno_accademico", "anno_accademico_prova");
+        bundle.putString("id_corso", id_corso);
+        bundle.putString("codice_corso", codice);
+        bundle.putString("nome_corso", nome_corso);
+        bundle.putString("anno_accademico", anno_accademico);
 
-        bundle.putString("docente", "xXqhMcCwc3R5RibdcLtTOuoMVgm1");
+        bundle.putString("docente", docente);
 
-        bundle.putString("id", "SotSWWJIZHNALPZ32EAARRed9RG2");
-        bundle.putString("nome", "NomeProva");
-        bundle.putString("cognome", "CognomeProva");
-        bundle.putString("email", "studenteprova@studenti.unisannio.it");
-        bundle.putString("matricola", "MatricolaProva");
-        ArrayList<String> corsiStudente= new ArrayList<>();
-        corsiStudente.add("id_corso_prova");
-        bundle.putStringArrayList("id_corsi", corsiStudente);
+        bundle.putString("id", id_studente);
+        bundle.putString("nome", nome_studente);
+        bundle.putString("cognome", cognome_studente);
+        bundle.putString("email", mail);
+        bundle.putString("matricola", matricola);
+        lista_corsi.add(id_corso);
+        bundle.putStringArrayList("id_corsi", lista_corsi);
         i.putExtras(bundle);
         activityTestRule.launchActivity(i);
 
@@ -184,7 +221,7 @@ public class CorsoStudenteActivityTest {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsi = db.collection("Corsi");
 
-        corsi.document("id_corso_prova")
+        corsi.document(id_corso)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -201,7 +238,7 @@ public class CorsoStudenteActivityTest {
 
         // cancellare il post
         CollectionReference posts = db.collection("Post");
-        posts.document("id_post_prova")
+        posts.document(id_post)
                 .delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -216,8 +253,8 @@ public class CorsoStudenteActivityTest {
 
         // cancellare il corso dalla lista_corsi a cui lo studente è iscritto
         CollectionReference studenti = db.collection("Studenti");
-        studenti.document("SotSWWJIZHNALPZ32EAARRed9RG2")
-                .update("lista_corsi", FieldValue.arrayRemove("id_corso_prova"))
+        studenti.document(id_studente)
+                .update("lista_corsi", FieldValue.arrayRemove(id_corso))
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -246,7 +283,7 @@ public class CorsoStudenteActivityTest {
         onView(withId(R.id.fragment_container_corso_studente)).check(matches(isDisplayed()));
         onView(withId(R.id.recycler_view_post_studente)).check(matches(isDisplayed()));
         onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar_studente))))
-                .check(matches(withText("nome_corso_prova")));
+                .check(matches(withText(nome_corso)));
     }
 
     // Verifica che la selezione di un elemento porta alla PostActivity, che mostra i dettagli corretti
@@ -254,10 +291,10 @@ public class CorsoStudenteActivityTest {
     public void test_SelectItem_isPostActivityVisible(){
         onView(withId(R.id.recycler_view_post_studente)).perform(actionOnItemAtPosition(0, click()));
         onView(withId(R.id.post_layout)).check(matches(isDisplayed()));
-        onView(withId(R.id.nome_cognome_textView)).check(matches(withText("NomeDocenteProva CognomeDocenteProva")));
-        onView(withId(R.id.tagTextView)).check(matches(withText("esercizio")));
-        onView(withId(R.id.testoPostTextView)).check(matches(withText("testo di prova")));
-        onView(withId(R.id.data_textView)).check(matches(withText(new SimpleDateFormat(activityTestRule.getActivity().getResources().getString(R.string.formato_data)).format(new Date(0)))));
+        onView(withId(R.id.nome_cognome_textView)).check(matches(withText(nome_docente + " " + cognome_docente)));
+        onView(withId(R.id.tagTextView)).check(matches(withText(tag)));
+        onView(withId(R.id.testoPostTextView)).check(matches(withText(testo)));
+        onView(withId(R.id.data_textView)).check(matches(withText(new SimpleDateFormat(activityTestRule.getActivity().getResources().getString(R.string.formato_data)).format(data))));
     }
 
     // Verifica della presenza della Navigation Bar con gli elementi corretti
@@ -265,9 +302,9 @@ public class CorsoStudenteActivityTest {
     public void test_isNavigationBarOpenableAndCorrect(){
         onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.studente_nav_header)).check(matches(isDisplayed()));
-        onView(withId(R.id.nome_cognome_nav_header)).check(matches(withText("NomeProva CognomeProva")));
-        onView(withId(R.id.email_nav_header)).check(matches(withText("studenteprova@studenti.unisannio.it")));
-        onView(withId(R.id.matricola_nav_header)).check(matches(withText("MatricolaProva")));
+        onView(withId(R.id.nome_cognome_nav_header)).check(matches(withText(nome_studente + " " + cognome_studente)));
+        onView(withId(R.id.email_nav_header)).check(matches(withText(mail)));
+        onView(withId(R.id.matricola_nav_header)).check(matches(withText(matricola)));
         onView(withId(R.id.nav_view_corso_studente)).check(matches(isDisplayed()));
     }
 
