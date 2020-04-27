@@ -16,7 +16,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.kasteca.R;
-import com.kasteca.activity.CorsoDocenteActivity;
+import com.kasteca.activity.CorsoStudenteActivity;
 import com.kasteca.util.EspressoIdlingResource;
 
 import org.junit.After;
@@ -39,10 +39,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
-import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
@@ -52,17 +52,18 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
-public class CorsoDocenteActivityTest {
+public class CorsoStudenteActivityTest {
     @Rule
-    public ActivityTestRule<CorsoDocenteActivity> activityTestRule = new ActivityTestRule<>(CorsoDocenteActivity.class, false, false);
+    public ActivityTestRule<CorsoStudenteActivity> activityTestRule = new ActivityTestRule<>(CorsoStudenteActivity.class, false, false);
 
     @Before
     public void setUp() throws Exception {
         IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-        String mail = "docenteprova@unisannio.it";
+        String mail = "studenteprova@studenti.unisannio.it";
         String pwd = "passwordProva";
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
@@ -85,7 +86,9 @@ public class CorsoDocenteActivityTest {
         corso.put("descrizione", "descrizione_prova");
         corso.put("docente", "xXqhMcCwc3R5RibdcLtTOuoMVgm1");
         corso.put("lista_post", new ArrayList<String>());
-        corso.put("lista_studenti", new ArrayList<String>());
+        ArrayList<String> studentiCorso = new ArrayList<>();
+        studentiCorso.add("SotSWWJIZHNALPZ32EAARRed9RG2");
+        corso.put("lista_studenti", studentiCorso);
         corso.put("nome_corso", "nome_corso_prova");
 
         corsi.document("id_corso_prova").set(corso).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -93,7 +96,20 @@ public class CorsoDocenteActivityTest {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Log.d(TAG, "Corsi: creazione corso ok");
-
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    CollectionReference studenti = db.collection("Studenti");
+                    studenti.document("SotSWWJIZHNALPZ32EAARRed9RG2")
+                            .update("lista_corsi", FieldValue.arrayUnion("id_corso_prova"))
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Log.d(TAG, "caricamento corso nella lista_corsi dello studente ok");
+                                    }else{
+                                        Log.d(TAG, "ERRORE caricamento corso nella lista_corsi dello studente");
+                                    }
+                                }
+                            });
                 }else{
                     Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
                 }
@@ -145,10 +161,16 @@ public class CorsoDocenteActivityTest {
         bundle.putString("nome_corso", "nome_corso_prova");
         bundle.putString("anno_accademico", "anno_accademico_prova");
 
-        bundle.putString("id_docente", "xXqhMcCwc3R5RibdcLtTOuoMVgm1");
-        bundle.putString("nome_docente", "nome");
-        bundle.putString("cognome_docente", "cognome");
-        bundle.putString("email_docente", "docenteprova@unisannio.it");
+        bundle.putString("docente", "xXqhMcCwc3R5RibdcLtTOuoMVgm1");
+
+        bundle.putString("id", "SotSWWJIZHNALPZ32EAARRed9RG2");
+        bundle.putString("nome", "NomeProva");
+        bundle.putString("cognome", "CognomeProva");
+        bundle.putString("email", "studenteprova@studenti.unisannio.it");
+        bundle.putString("matricola", "MatricolaProva");
+        ArrayList<String> corsiStudente= new ArrayList<>();
+        corsiStudente.add("id_corso_prova");
+        bundle.putStringArrayList("id_corsi", corsiStudente);
         i.putExtras(bundle);
         activityTestRule.launchActivity(i);
 
@@ -192,6 +214,21 @@ public class CorsoDocenteActivityTest {
                     }
                 });
 
+        // cancellare il corso dalla lista_corsi a cui lo studente è iscritto
+        CollectionReference studenti = db.collection("Studenti");
+        studenti.document("SotSWWJIZHNALPZ32EAARRed9RG2")
+                .update("lista_corsi", FieldValue.arrayRemove("id_corso_prova"))
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Studente: cancellazione corso dalla lista ok");
+                        } else {
+                            Log.d(TAG, "Studente: ERRORE cancellazione corso dalla lista");
+                        }
+                    }
+                });
+
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(4000);
     }
@@ -200,24 +237,24 @@ public class CorsoDocenteActivityTest {
     // Verifica che Activity visibile, con tutti gli elementi grafici previsti
     @Test
     public void test_isActivityOnView(){
-        onView(withId(R.id.corso_drawer_layout)).check(matches(isDisplayed()));
-        onView(withId(R.id.corso_drawer_layout)).check(matches(isClosed(Gravity.LEFT)));
+        onView(withId(R.id.corso_studente_drawer_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.corso_studente_drawer_layout)).check(matches(isClosed(Gravity.LEFT)));
 
-        onView(withId(R.id.toolbar_layout_docente)).check(matches(isDisplayed()));
-        onView(withId(R.id.toolbar_docente)).check(matches(isDisplayed()));
-        onView(withId(R.id.fab_add_post)).check(matches(isDisplayed()));
-        onView(withId(R.id.fragment_container_corso_docente)).check(matches(isDisplayed()));
-        onView(withId(R.id.recycler_view_post_docente)).check(matches(isDisplayed()));
-        onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar_docente))))
+        onView(withId(R.id.toolbar_layout_studente)).check(matches(isDisplayed()));
+        onView(withId(R.id.toolbar_studente)).check(matches(isDisplayed()));
+        onView(withId(R.id.fab_add_post)).check(doesNotExist());
+        onView(withId(R.id.fragment_container_corso_studente)).check(matches(isDisplayed()));
+        onView(withId(R.id.recycler_view_post_studente)).check(matches(isDisplayed()));
+        onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar_studente))))
                 .check(matches(withText("nome_corso_prova")));
     }
 
     // Verifica che la selezione di un elemento porta alla PostActivity, che mostra i dettagli corretti
     @Test
     public void test_SelectItem_isPostActivityVisible(){
-        onView(withId(R.id.recycler_view_post_docente)).perform(actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.recycler_view_post_studente)).perform(actionOnItemAtPosition(0, click()));
         onView(withId(R.id.post_layout)).check(matches(isDisplayed()));
-        onView(withId(R.id.nome_cognome_textView)).check(matches(withText("nome cognome")));
+        onView(withId(R.id.nome_cognome_textView)).check(matches(withText("NomeDocenteProva CognomeDocenteProva")));
         onView(withId(R.id.tagTextView)).check(matches(withText("esercizio")));
         onView(withId(R.id.testoPostTextView)).check(matches(withText("testo di prova")));
         onView(withId(R.id.data_textView)).check(matches(withText(new SimpleDateFormat(activityTestRule.getActivity().getResources().getString(R.string.formato_data)).format(new Date(0)))));
@@ -226,41 +263,28 @@ public class CorsoDocenteActivityTest {
     // Verifica della presenza della Navigation Bar con gli elementi corretti
     @Test
     public void test_isNavigationBarOpenableAndCorrect(){
-        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.docente_nav_header)).check(matches(isDisplayed()));
-        onView(withId(R.id.nome_cognome_nav_header)).check(matches(withText("nome cognome")));
-        onView(withId(R.id.email_nav_header)).check(matches(withText("docenteprova@unisannio.it")));
-        onView(withId(R.id.nav_view_corso_docente)).check(matches(isDisplayed()));
+        onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.studente_nav_header)).check(matches(isDisplayed()));
+        onView(withId(R.id.nome_cognome_nav_header)).check(matches(withText("NomeProva CognomeProva")));
+        onView(withId(R.id.email_nav_header)).check(matches(withText("studenteprova@studenti.unisannio.it")));
+        onView(withId(R.id.matricola_nav_header)).check(matches(withText("MatricolaProva")));
+        onView(withId(R.id.nav_view_corso_studente)).check(matches(isDisplayed()));
     }
 
     // Verifica che il click su ogni elemento del menu porti alla Activity giusta
     @Test
     public void test_SelectItem_isTheCorrectActivityVisible(){
-        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
 
-        onView(withId(R.id.nav_view_corso_docente)).perform(NavigationViewActions.navigateTo(R.id.nav_visualizza_studenti_iscritti));
-        onView(withId(R.id.swipeLayout_lista_studenti_iscritti)).check(matches(isDisplayed()));
+        onView(withId(R.id.nav_view_corso_studente)).perform(NavigationViewActions.navigateTo(R.id.nav_post_corso));
+        onView(withId(R.id.fragment_container_corso_studente)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.nav_view_corso_studente)).perform(NavigationViewActions.navigateTo(R.id.nav_cancellazione_dal_corso));
+        onView(withText(activityTestRule.getActivity().getResources().getString(R.string.Dialog_titolo_conferma_cancellazione))).check(matches(isDisplayed()));
         pressBack();
 
-        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view_corso_docente)).perform(NavigationViewActions.navigateTo(R.id.nav_post_corso));
-        onView(withId(R.id.fragment_container_corso_docente)).check(matches(isDisplayed()));
-
-        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view_corso_docente)).perform(NavigationViewActions.navigateTo(R.id.nav_visualizza_richieste_studente));
-        onView(withId(R.id.swipeLayout_lista_richieste_studenti)).check(matches(isDisplayed()));
-        pressBack();
-
-        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view_corso_docente)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
+        onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.nav_view_corso_studente)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
         onView(withId(R.id.main)).check(matches(isDisplayed()));
-
-    }
-
-    // Verifica che cliccando sul Floating Button si apra la NewPostActivity
-    @Test
-    public void test_ClickFab_isNewPostActivityVisible(){
-        onView(withId(R.id.fab_add_post)).perform(click());
-        onView(withId(R.id.new_post_layout)).check(matches(isDisplayed()));
     }
 }

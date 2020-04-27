@@ -180,12 +180,14 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 // se il LOGIN FALLISCE viene mostrato un dialog
                                 EspressoIdlingResource.decrement();
+                                loginButton.setEnabled(true);
                                 showAlert(getResources().getString(R.string.Try_Again));
                             }
                         }
                     });
         }else{
             //EspressoIdlingResource.decrement();
+            loginButton.setEnabled(true);
             showAlert(getResources().getString(R.string.Insert_correct_data));
         }
     }

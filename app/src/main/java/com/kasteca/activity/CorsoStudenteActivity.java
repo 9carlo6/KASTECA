@@ -44,6 +44,7 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
 
     private TextView nome_cognome_TextView;
     private TextView email_TextView;
+    private TextView matricola_TextView;
     private DrawerLayout drawer;
 
 
@@ -52,9 +53,6 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_corso_studente);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_studente);
-        toolbar.setTitle(nome_corso);
-        setSupportActionBar(toolbar);
 
         bundleStudente= getIntent().getExtras();
 
@@ -76,6 +74,10 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
         NavigationView navigationView = findViewById(R.id.nav_view_corso_studente);
         navigationView.setNavigationItemSelectedListener(this);
 
+        Toolbar toolbar = findViewById(R.id.toolbar_studente);
+        toolbar.setTitle(nome_corso);
+        setSupportActionBar(toolbar);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -92,9 +94,11 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
         View header=navigationView.getHeaderView(0);
         nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
         email_TextView = header.findViewById(R.id.email_nav_header);
+        matricola_TextView = header.findViewById(R.id.matricola_nav_header);
         //setto le info del menu a tendina con i dati relativi al docente
         nome_cognome_TextView.setText(studente.getNome() + " " + studente.getCognome());
         email_TextView.setText(studente.getEmail());
+        matricola_TextView.setText(studente.getMatricola());
 
         navigationView.setCheckedItem(R.id.nav_post_corso);
 
