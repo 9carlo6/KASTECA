@@ -257,21 +257,24 @@ public class CorsoDocenteActivityTest {
     @Test
     public void test_SelectItem_isTheCorrectActivityVisible(){
         onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
-
+        onView(withId(R.id.nav_view_corso_docente)).check(matches(isDisplayed()));
         onView(withId(R.id.nav_view_corso_docente)).perform(NavigationViewActions.navigateTo(R.id.nav_visualizza_studenti_iscritti));
         onView(withId(R.id.swipeLayout_lista_studenti_iscritti)).check(matches(isDisplayed()));
         pressBack();
 
         onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.nav_view_corso_docente)).check(matches(isDisplayed()));
         onView(withId(R.id.nav_view_corso_docente)).perform(NavigationViewActions.navigateTo(R.id.nav_post_corso));
         onView(withId(R.id.fragment_container_corso_docente)).check(matches(isDisplayed()));
 
         onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.nav_view_corso_docente)).check(matches(isDisplayed()));
         onView(withId(R.id.nav_view_corso_docente)).perform(NavigationViewActions.navigateTo(R.id.nav_visualizza_richieste_studente));
         onView(withId(R.id.swipeLayout_lista_richieste_studenti)).check(matches(isDisplayed()));
         pressBack();
 
         onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.nav_view_corso_docente)).check(matches(isDisplayed()));
         onView(withId(R.id.nav_view_corso_docente)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
         onView(withId(R.id.main)).check(matches(isDisplayed()));
 
