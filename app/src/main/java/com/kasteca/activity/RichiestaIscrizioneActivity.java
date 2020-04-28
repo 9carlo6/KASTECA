@@ -140,7 +140,7 @@ public class RichiestaIscrizioneActivity extends AppCompatActivity {
                                                     });
                                                 }
                                             } else {
-                                                Toast.makeText(RichiestaIscrizioneActivity.this, ("qualcosa è andato storto nel db"), Toast.LENGTH_LONG).show();
+                                                Toast.makeText(RichiestaIscrizioneActivity.this, ("errore connessione database"), Toast.LENGTH_LONG).show();
 
                                                 EspressoIdlingResource.decrement();
                                             }
@@ -151,7 +151,7 @@ public class RichiestaIscrizioneActivity extends AppCompatActivity {
                         }
                     }
                 }else{
-                    Toast.makeText(RichiestaIscrizioneActivity.this, ("qualcosa è andato storto nel db"), Toast.LENGTH_LONG).show();
+                    Toast.makeText(RichiestaIscrizioneActivity.this, ("qualcosa è andato storto nel db, codice"), Toast.LENGTH_LONG).show();
 
                     EspressoIdlingResource.decrement();
                 }
