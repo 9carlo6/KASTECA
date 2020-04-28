@@ -273,7 +273,7 @@ public class CorsoStudenteActivityTest {
 
     // Verifica che Activity visibile, con tutti gli elementi grafici previsti
     @Test
-    public void test_isActivityOnView(){
+    public void test_isCorsoStudenteActivityOnView(){
         onView(withId(R.id.corso_studente_drawer_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.corso_studente_drawer_layout)).check(matches(isClosed(Gravity.LEFT)));
 
@@ -299,7 +299,7 @@ public class CorsoStudenteActivityTest {
 
     // Verifica della presenza della Navigation Bar con gli elementi corretti
     @Test
-    public void test_isNavigationBarOpenableAndCorrect(){
+    public void test_isNavigationBarStudenteOpenableAndCorrect(){
         onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.studente_nav_header)).check(matches(isDisplayed()));
         onView(withId(R.id.nome_cognome_nav_header)).check(matches(withText(nome_studente + " " + cognome_studente)));
@@ -310,9 +310,8 @@ public class CorsoStudenteActivityTest {
 
     // Verifica che il click su ogni elemento del menu porti alla Activity giusta
     @Test
-    public void test_SelectItem_isTheCorrectActivityVisible(){
+    public void test_SelectItem_isTheCorrectStudenteActivityVisible(){
         onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
-
         onView(withId(R.id.nav_view_corso_studente)).perform(NavigationViewActions.navigateTo(R.id.nav_post_corso));
         onView(withId(R.id.fragment_container_corso_studente)).check(matches(isDisplayed()));
 
@@ -323,5 +322,14 @@ public class CorsoStudenteActivityTest {
         onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.nav_view_corso_studente)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
         onView(withId(R.id.main)).check(matches(isDisplayed()));
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
+
+        mAuth.signInWithEmailAndPassword(mail, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.d(TAG, "login ok");
+            }
+        });
     }
 }

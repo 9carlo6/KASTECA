@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,6 +22,10 @@ import com.kasteca.R;
 import com.kasteca.activity.CorsoDocenteActivity;
 import com.kasteca.util.EspressoIdlingResource;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -33,6 +40,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -46,6 +54,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -178,6 +187,8 @@ public class CorsoDocenteActivityTest {
 
     @After
     public void tearDown() throws Exception {
+
+
         // cancellare il corso
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsi = db.collection("Corsi");
@@ -219,7 +230,7 @@ public class CorsoDocenteActivityTest {
 
     // Verifica che Activity visibile, con tutti gli elementi grafici previsti
     @Test
-    public void test_isActivityOnView(){
+    public void test_isCorsoDocenteActivityOnView(){
         onView(withId(R.id.corso_drawer_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.corso_drawer_layout)).check(matches(isClosed(Gravity.LEFT)));
 
@@ -245,7 +256,7 @@ public class CorsoDocenteActivityTest {
 
     // Verifica della presenza della Navigation Bar con gli elementi corretti
     @Test
-    public void test_isNavigationBarOpenableAndCorrect(){
+    public void test_isNavigationBarDocenteOpenableAndCorrect(){
         onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.docente_nav_header)).check(matches(isDisplayed()));
         onView(withId(R.id.nome_cognome_nav_header)).check(matches(withText(nome_docente + " " + cognome_docente)));
@@ -253,32 +264,101 @@ public class CorsoDocenteActivityTest {
         onView(withId(R.id.nav_view_corso_docente)).check(matches(isDisplayed()));
     }
 
-    // Verifica che il click su ogni elemento del menu porti alla Activity giusta
+    // Verifica della presenza della Navigation Bar con gli elementi corretti
     @Test
-    public void test_SelectItem_isTheCorrectActivityVisible(){
-        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view_corso_docente)).check(matches(isDisplayed()));
-        onView(withId(R.id.nav_view_corso_docente)).perform(NavigationViewActions.navigateTo(R.id.nav_visualizza_studenti_iscritti));
-        onView(withId(R.id.swipeLayout_lista_studenti_iscritti)).check(matches(isDisplayed()));
+    public void test_SelectItem_isTheCorrectDocenteActivityVisible() throws InterruptedException {
+
+        // Verifica 1
+        onView(allOf(withContentDescription("Open navigation drawer"), isDisplayed())).perform(click());
+        onView(allOf(childAtPosition(
+                allOf(withId(R.id.design_navigation_view),
+                        childAtPosition(withId(R.id.nav_view_corso_docente),
+                                0)),
+                1),
+                isDisplayed())).perform(click());
+        onView(allOf(withId(R.id.corso_drawer_layout))).check(matches(isDisplayed()));
+
+        // Verifica 2
+        onView(allOf(withContentDescription("Open navigation drawer"), isDisplayed())).perform(click());
+        onView(allOf(childAtPosition(
+                allOf(withId(R.id.design_navigation_view),
+                        childAtPosition(withId(R.id.nav_view_corso_docente),
+                                0)),
+                2),
+                isDisplayed())).perform(click());
+
+        Thread.sleep(3000);
+
+        onView(allOf(IsInstanceOf.<View>instanceOf(android.widget.TextView.class), withText(activityTestRule.getActivity().getResources().getString(R.string.nessuno_studente_iscritto)),
+                        isDisplayed())).check(matches(withText("Non ci sono studenti iscritti al corso")));
+
         pressBack();
+        Thread.sleep(1000);
 
-        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view_corso_docente)).check(matches(isDisplayed()));
-        onView(withId(R.id.nav_view_corso_docente)).perform(NavigationViewActions.navigateTo(R.id.nav_post_corso));
-        onView(withId(R.id.fragment_container_corso_docente)).check(matches(isDisplayed()));
+        //Verifica 3
+        onView(allOf(withContentDescription("Open navigation drawer"), isDisplayed())).perform(click());
+        onView(allOf(childAtPosition(
+                allOf(withId(R.id.design_navigation_view),
+                        childAtPosition(withId(R.id.nav_view_corso_docente),
+                                0)),
+                3),
+                isDisplayed())).perform(click());
 
-        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view_corso_docente)).check(matches(isDisplayed()));
-        onView(withId(R.id.nav_view_corso_docente)).perform(NavigationViewActions.navigateTo(R.id.nav_visualizza_richieste_studente));
-        onView(withId(R.id.swipeLayout_lista_richieste_studenti)).check(matches(isDisplayed()));
+        Thread.sleep(1000);
+
+        onView(allOf(IsInstanceOf.<View>instanceOf(android.widget.TextView.class), withText("Non ci sono nuove richieste"),
+                        isDisplayed())).check(matches(withText("Non ci sono nuove richieste")));
+
         pressBack();
+        Thread.sleep(1000);
 
-        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view_corso_docente)).check(matches(isDisplayed()));
-        onView(withId(R.id.nav_view_corso_docente)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
-        onView(withId(R.id.main)).check(matches(isDisplayed()));
+        // Verifica 4
+        onView(allOf(withContentDescription("Open navigation drawer"), isDisplayed())).perform(click());
+        onView(allOf(childAtPosition(
+                allOf(withId(R.id.design_navigation_view),
+                        childAtPosition(withId(R.id.nav_view_corso_docente),
+                                0)),
+                4),
+                isDisplayed())).perform(click());
 
+        Thread.sleep(1000);
+
+        onView(allOf(withId(R.id.main), isDisplayed())).check(matches(isDisplayed()));
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
+
+        mAuth.signInWithEmailAndPassword(mail, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.d(TAG, "login ok");
+            }
+        });
+
+        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
+        Thread.sleep(3000);
     }
+
+    private static Matcher<View> childAtPosition(
+            final Matcher<View> parentMatcher, final int position) {
+
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Child at position " + position + " in parent ");
+                parentMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                ViewParent parent = view.getParent();
+                return parent instanceof ViewGroup && parentMatcher.matches(parent)
+                        && view.equals(((ViewGroup) parent).getChildAt(position));
+            }
+        };
+    }
+
+
+
 
     // Verifica che cliccando sul Floating Button si apra la NewPostActivity
     @Test

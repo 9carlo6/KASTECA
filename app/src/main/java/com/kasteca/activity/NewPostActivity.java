@@ -72,7 +72,7 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
         if(getIntent().hasExtra("corso_id")) {
              corso_id = getIntent().getStringExtra("corso_id");
         }
-        testo_post_text = findViewById(R.id.text_post__Edit_Text);
+        testo_post_text = findViewById(R.id.text_post_Edit_Text);
         link_text = findViewById(R.id.link_Edit_Text);
         pdf_text = findViewById(R.id.uri_pdf);
         pdf_text.setMovementMethod(new ScrollingMovementMethod());
