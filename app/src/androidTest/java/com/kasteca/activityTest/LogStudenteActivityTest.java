@@ -18,7 +18,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.kasteca.R;
-import com.kasteca.activity.LogDocenteActivity;
 import com.kasteca.activity.LogStudenteActivity;
 
 import org.junit.After;
