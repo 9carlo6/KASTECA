@@ -100,8 +100,6 @@ public class PostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post);
 
 
-
-
         if(getIntent().hasExtra("post")){
             post = getIntent().getParcelableExtra("post");
         }
@@ -154,6 +152,8 @@ public class PostActivity extends AppCompatActivity {
         }
 
     }
+
+
 
     public void downloadPdf(View v){
         if( haveStoragePermission()){
@@ -349,6 +349,14 @@ public class PostActivity extends AppCompatActivity {
                     }
                 });
 
+                //Elimino il commento dall'array Commenti del Post
+                CollectionReference postCollection= db.collection("Post");
+                postCollection.document(post.getId()).update(
+                        "lista_commenti",
+                            FieldValue.
+                                arrayRemove(documentSnapshot.getId())
+                        );
+
             }
         });
 
@@ -427,6 +435,14 @@ public class PostActivity extends AppCompatActivity {
                         Log.d(LOG,"Risposta correttamente eliminata.");
                     }
                 });
+
+                //Rimuovo l'id della risposta dall'array risposte del commento
+                CollectionReference postCollection= db.collection("Commenti");
+                postCollection.document(commento.getId()).update(
+                        "lista_risposte",
+                        FieldValue.
+                                arrayRemove(documentSnapshot.getId())
+                );
             }
         });
 
