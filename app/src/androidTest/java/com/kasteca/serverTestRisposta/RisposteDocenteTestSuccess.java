@@ -44,20 +44,20 @@ public class RisposteDocenteTestSuccess {
 
     private final static String TAG="Testing-Risposte-Backend";
 
-    private static String mailStu = "studenteProva@studenti.unisannio.it";
-    private static String pwdStu = "passwordProva";
-    private static String mailDoc = "docenteProva@unisannio.it";
-    private static String pwdDoc = "passwordProva";
-    private static String nameDocente = "NomeDocenteProva";
-    private static String surnameDocente = "CognomeDocenteProva";
-    private static String idDocente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
+    private String mailStu = "studenteProva@studenti.unisannio.it";
+    private String pwdStu = "passwordProva";
+    private String mailDoc = "docenteProva@unisannio.it";
+    private String pwdDoc = "passwordProva";
+    private String nameDocente = "NomeDocenteProva";
+    private String surnameDocente = "CognomeDocenteProva";
+    private String idDocente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
 
-    private static String idCorso = "wgB2wdRBM5mBOmZuWG85";
-    private static String idPost = "Jw37QTjNbSf4MTbEvHzi";
-    private static String idCommento = "FWoOCqujjKsffuFHJ9ql";
-    private static String idRisposta = null;
+    private String idCorso = "wgB2wdRBM5mBOmZuWG85";
+    private String idPost = "Jw37QTjNbSf4MTbEvHzi";
+    private String idCommento = "FWoOCqujjKsffuFHJ9ql";
+    private String idRisposta = null;
     private String idRispostaDaLeggere = "XMH9QKnUw2B5RyK0nJ17";
-    private static String data;
+    private String data;
 
     private String preparazione= null;
     private String result= null;
