@@ -261,7 +261,6 @@ public class ListaStudentiIscrittiActivityTestRimozioneStudente {
         i.putExtra("id_corso", "id_corso_prova");
         listaStudentiIscrittiActivityActivityTestRule.launchActivity(i);
 
-        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(2000);
 
         ViewInteraction recyclerView2 = onView(withText("NomeProva CognomeProva"));
@@ -271,7 +270,7 @@ public class ListaStudentiIscrittiActivityTestRimozioneStudente {
         appCompatButton8.perform(scrollTo(), click());
     }
 
-/*    @Test()
+    @Test()
     public void ListaStudentiIscrittiActivityTestRimozioneStudenteConfermata() throws InterruptedException {
 
         Intent i = new Intent();
@@ -285,8 +284,8 @@ public class ListaStudentiIscrittiActivityTestRimozioneStudente {
         recyclerView2.perform(longClick());
 
         ViewInteraction appCompatButton8 = onView(withText("Si"));
-        appCompatButton8.perform(scrollTo(), click());
-    }*/
+        appCompatButton8.perform(click());
+    }
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
