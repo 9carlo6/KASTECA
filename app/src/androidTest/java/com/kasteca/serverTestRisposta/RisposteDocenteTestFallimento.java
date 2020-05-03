@@ -215,7 +215,7 @@ public class RisposteDocenteTestFallimento {
         result=null;
     }
 
-
+/*
     @Test
     public void creazioneCommentoNull(){
         result= null;
@@ -256,6 +256,8 @@ public class RisposteDocenteTestFallimento {
         assertEquals("success",result);
         result=null;
     }
+*/
+
 
     @Test
     public void creazioneCommentoNotExist(){
