@@ -31,18 +31,17 @@ public class RisposteStudenteTestFallimento {
     private final String pwdStu = "passwordProva";
     private final String idStudente="SotSWWJIZHNALPZ32EAARRed9RG2";
 
-    private String idCorso = null;
 
     private final String idCommento = "FWoOCqujjKsffuFHJ9ql";
-    private final String idRispostaDaLeggere = "XMH9QKnUw2B5RyK0nJ17";
-    private final String idRispostaStudente = "gpeq156bQS2lLwmSvfUt";
+    private final String idRispostaDaLeggere = "gpeq156bQS2lLwmSvfUt";
+    private final String idRispostaNonStudente = "zd5JNL8hZvmW1CK0O5ex";
 
 
     private String preparazione= null;
     private String result= null;
 
     @Before
-    public void signInDocente()  throws InterruptedException {
+    public void signInDocente() {
         login();
     }
 
@@ -297,6 +296,114 @@ public class RisposteStudenteTestFallimento {
         result=null;
     }
 
+    /*
+    Test fallimento modifica di una risposta
+     */
+    @Test
+    public void modificaTestoNull(){
+        result= null;
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference risposteReference = db.collection("Risposte_Commenti");
+        risposteReference.document(idRispostaDaLeggere).update("testo",null)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        result="fail";
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                result="success";
+            }
+        });
+        while(result == null);
+        assertEquals("success",result);
+        result=null;
+    }
+
+    @Test
+    public void modificaTestoOverSize(){
+        result= null;
+
+        String testoOversize="test";
+        while(testoOversize.length()<=120)
+            testoOversize=testoOversize+testoOversize;
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference risposteReference = db.collection("Risposte_Commenti");
+        risposteReference.document(idRispostaDaLeggere).update("testo",testoOversize)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        result="fail";
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                result="success";
+            }
+        });
+        while(result == null);
+        assertEquals("success",result);
+        result=null;
+    }
+
+    @Test
+    public void modificaNonDalProprietario(){
+        //Usiamo un id di una risposta non appartenente allo studente
+        result=null;
+
+        //Proviamo a fare una rischiesta di modifica
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference risposteReference = db.collection("Risposte_Commenti");
+        risposteReference.document(idRispostaNonStudente).update("testo","modificaNonDalProprietario")
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        result="fail";
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                result="success";
+            }
+        });
+
+        while(result == null);
+        assertEquals("success",result);
+        result=null;
+
+    }
+
+
+    /*
+    Test fallimento eliminazione di una risposta
+     */
+    @Test
+    public void eliminazioneProprietazioDiverso(){
+
+        //Effettuiamo richiesta di eliminazione per una risposta che non appartiene allo studente.
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference risposteReference = db.collection("Risposte_Commenti");
+        risposteReference.document(idRispostaNonStudente).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        result="fail";
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                result="success";
+            }
+        });
+
+        while(result == null);
+        assertEquals("success",result);
+        result=null;
+    }
+
 
 
 
@@ -326,5 +433,7 @@ public class RisposteStudenteTestFallimento {
             preparazione=null;      //Riporto preparazione nello stato iniziale potrebbe essere riutilizzata.
 
     }
+
+
 
 }

@@ -33,10 +33,8 @@ public class RisposteStudentTestSuccess {
     private final String pwdStu = "passwordProva";
     private final String idStudente="SotSWWJIZHNALPZ32EAARRed9RG2";
 
-    private String idCorso = null;
-
     private final String idCommentoEsistente = "FWoOCqujjKsffuFHJ9ql";
-    private final String idRispostaDaLeggere = "XMH9QKnUw2B5RyK0nJ17";
+    private final String idRispostaDaLeggere = "zd5JNL8hZvmW1CK0O5ex";
     private final String idRispostaStudente = "gpeq156bQS2lLwmSvfUt";
 
 

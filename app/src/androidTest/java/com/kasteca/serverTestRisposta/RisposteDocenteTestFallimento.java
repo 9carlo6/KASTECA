@@ -31,35 +31,17 @@ public class RisposteDocenteTestFallimento {
 
     private String idDocente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
 
-    private String idCorso = "wgB2wdRBM5mBOmZuWG85";
-    private String idPost = "Jw37QTjNbSf4MTbEvHzi";
     private String idCommento = "FWoOCqujjKsffuFHJ9ql";
-    private String idRisposta = null;
-    private String idRispostaDaLeggere = "XMH9QKnUw2B5RyK0nJ17";
-    private String data;
+    private String idRispostaDaLeggere = "zd5JNL8hZvmW1CK0O5ex";
+    private final String idRispostaNonDocente= "gpeq156bQS2lLwmSvfUt";
+
 
     private String preparazione= null;
     private String result= null;
 
-    /*allow read: if isDocente(request.auth.uid) || isStudente(request.auth.uid);
-
-      allow create: if isDocente(request.auth.uid) || isStudente(request.auth.uid) &&
-      request.resource.data.testo != null && request.resource.data.testo.size() < 100 &&
-      request.resource.data.data != null &&
-      request.resource.data.proprietario != null && isStudenteOrDocente(request.resource.data.proprietario) &&
-      request.resource.data.commento != null && exists(/databases/$(database)/documents/Commenti/$(request.resource.data.commento));
-
-      //modifico rispettando la grandezza massima del testo impostata
-      allow update:if isDocente(request.auth.uid) || isStudente(request.auth.uid) &&
-      request.resource.data.testo != null && request.resource.data.testo.size() < 100 &&
-      request.auth.uid == request.resource.data.proprietario;
-
-      //Elimino solo se il proprietario del commento è la stessa persona che è loggata
-      allow delete: if request.auth.uid == resource.data.proprietario;
-     */
 
     @Before
-    public void signInDocente()  throws InterruptedException {
+    public void signInDocente() {
         login();
     }
 
@@ -320,20 +302,108 @@ public class RisposteDocenteTestFallimento {
     Test fallimento modifica di una risposta
      */
     @Test
-    public void modificaDataNull(){}
+    public void modificaTestoNull(){
+        result= null;
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference risposteReference = db.collection("Risposte_Commenti");
+        risposteReference.document(idRispostaDaLeggere).update("testo",null)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        result="fail";
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                result="success";
+            }
+        });
+        while(result == null);
+        assertEquals("success",result);
+        result=null;
+    }
 
     @Test
-    public void modificaTestoOverSize(){}
+    public void modificaTestoOverSize(){
+        result= null;
+
+        String testoOversize="test";
+        while(testoOversize.length()<=120)
+            testoOversize=testoOversize+testoOversize;
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference risposteReference = db.collection("Risposte_Commenti");
+        risposteReference.document(idRispostaDaLeggere).update("testo",testoOversize)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        result="fail";
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                result="success";
+            }
+        });
+        while(result == null);
+        assertEquals("success",result);
+        result=null;
+    }
 
     @Test
-    public void modificaProprietarioDiverso(){}
+    public void modificaNonDalProprietario(){
+        //Effettuiamo il login con un account diverso da quello che ha creato la risposta
+        result=null;
+
+        //Proviamo a fare una rischiesta di modifica
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference risposteReference = db.collection("Risposte_Commenti");
+        risposteReference.document(idRispostaNonDocente).update("testo","modificaNonDalProprietario")
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        result="fail";
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        result="success";
+                    }
+        });
+
+        while(result == null);
+        assertEquals("success",result);
+        result=null;
+
+    }
+
 
     /*
     Test fallimento eliminazione di una risposta
      */
     @Test
     public void eliminazioneProprietazioDiverso(){
-        //Bisogna cambiare il
+
+        //Effettuiamo richiesta di eliminazione di una risposta non di questo Docente
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference risposteReference = db.collection("Risposte_Commenti");
+        risposteReference.document(idRispostaNonDocente).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        result="fail";
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                result="success";
+            }
+        });
+
+        while(result == null);
+        assertEquals("success",result);
+        result=null;
     }
 
     /*
@@ -344,6 +414,7 @@ public class RisposteDocenteTestFallimento {
 
 
     private void login() throws RuntimeException{
+        preparazione=null;
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
         mAuth.signOut();
 
@@ -369,6 +440,7 @@ public class RisposteDocenteTestFallimento {
             preparazione=null;      //Riporto preparazione nello stato iniziale potrebbe essere riutilizzata.
 
     }
+
 
 
 }

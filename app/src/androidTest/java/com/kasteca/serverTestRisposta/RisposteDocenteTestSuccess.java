@@ -36,7 +36,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
 
 
 @RunWith(JUnit4.class)
@@ -44,41 +43,21 @@ public class RisposteDocenteTestSuccess {
 
     private final static String TAG="Testing-Risposte-Backend";
 
-    private String mailStu = "studenteProva@studenti.unisannio.it";
-    private String pwdStu = "passwordProva";
+
     private String mailDoc = "docenteProva@unisannio.it";
     private String pwdDoc = "passwordProva";
-    private String nameDocente = "NomeDocenteProva";
-    private String surnameDocente = "CognomeDocenteProva";
+
     private String idDocente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
 
     private String idCorso = "wgB2wdRBM5mBOmZuWG85";
     private String idPost = "Jw37QTjNbSf4MTbEvHzi";
     private String idCommento = "FWoOCqujjKsffuFHJ9ql";
     private String idRisposta = null;
-    private String idRispostaDaLeggere = "XMH9QKnUw2B5RyK0nJ17";
-    private String data;
+    private String idRispostaDaLeggere = "zd5JNL8hZvmW1CK0O5ex";
 
     private String preparazione= null;
     private String result= null;
 
-
-    /*allow read: if isDocente(request.auth.uid) || isStudente(request.auth.uid);
-
-      allow create: if isDocente(request.auth.uid) || isStudente(request.auth.uid) &&
-      request.resource.data.testo != null && request.resource.data.testo.size() < 100 &&
-      request.resource.data.data != null &&
-      request.resource.data.proprietario != null && isStudenteOrDocente(request.resource.data.proprietario) &&
-      request.resource.data.commento != null && exists(/databases/$(database)/documents/Commenti/$(request.resource.data.commento));
-
-      //modifico rispettando la grandezza massima del testo impostata
-      allow update:if isDocente(request.auth.uid) || isStudente(request.auth.uid) &&
-      request.resource.data.testo != null && request.resource.data.testo.size() < 100 &&
-      request.auth.uid == request.resource.data.proprietario;
-
-      //Elimino solo se il proprietario del commento è la stessa persona che è loggata
-      allow delete: if request.auth.uid == resource.data.proprietario;
-     */
 
     @Before
     public void signInDocente()  throws InterruptedException {
