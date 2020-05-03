@@ -73,6 +73,7 @@ public class LogDocenteActivityTest {
     @After
     public void signOut() throws InterruptedException{
         cancellazioneCorso();
+        Thread.sleep(5000);
         logout();
     }
 
