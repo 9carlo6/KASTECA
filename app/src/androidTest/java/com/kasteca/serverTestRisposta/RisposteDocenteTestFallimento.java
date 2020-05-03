@@ -176,7 +176,7 @@ public class RisposteDocenteTestFallimento {
 
     @Test
     public void creazioneProprietarioNull(){
-        result= null;
+        result = null;
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference risposteReference = db.collection("Risposte_Commenti");
