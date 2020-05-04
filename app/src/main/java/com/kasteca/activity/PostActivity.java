@@ -16,8 +16,10 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -59,6 +61,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -208,6 +211,7 @@ public class PostActivity extends AppCompatActivity {
         onShowPopup(v, true);
     }
 
+
     public void onShowPopup(View v, boolean isAddCommentClicked){
 
         final LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -263,8 +267,8 @@ public class PostActivity extends AppCompatActivity {
         // si inizializza la recyclerView
         setRecyclerView();
 
-        // si setta la grandezza della pop window a seconda delle dimensioni del dispositivo
-        popWindow = new PopupWindow(inflatedView, size.x - 50,size.y - 400, true );
+        // si setta la grandezza della pop window a seconda delle dimensioni del dispositivo  size.y - 400
+        popWindow = new PopupWindow(inflatedView, size.x - 50,WindowManager.LayoutParams.WRAP_CONTENT, true );
         // si setta come background una forma rettangolare con gli angoli arrotondati
         popWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_shape));
         // si vuole vedere la testiera e scrivere nell'EditText
@@ -274,19 +278,24 @@ public class PostActivity extends AppCompatActivity {
             scriviCommento.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+
                     InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputMethodManager.showSoftInput(scriviCommento, InputMethodManager.SHOW_IMPLICIT);
                 }
             }, 200);
         }
+
         // si fa in modo che si possa toccare lo schermo al di fuori della finestra,
         // cosa che porta alla chiusura della finestra stessa
         popWindow.setOutsideTouchable(true);
+
+        popWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         popWindow.setAnimationStyle(R.style.PopupAnimation);
 
         // si mostra la finestra dal basso dello schermo
         popWindow.showAtLocation(this.testoView, Gravity.BOTTOM, 0,100);
+
     }
 
 
@@ -556,11 +565,15 @@ public class PostActivity extends AppCompatActivity {
 
 
         // si setta la grandezza della pop window a seconda delle dimensioni del dispositivo
-        popWindow = new PopupWindow(inflatedView, size.x - 50,size.y - 400, true );
+        popWindow = new PopupWindow(inflatedView, size.x - 50,WindowManager.LayoutParams.WRAP_CONTENT, true );
         //popWindow.setContentView(inflatedView);
 
         // si setta come background una forma rettangolare con gli angoli arrotondati
         popWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_shape));
+
+        //Per fare in modo che la popup si ricostruisca nel modo corretto
+        popWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         // si vuole vedere la testiera e scrivere nell'EditText
         // lo si fa solo se il booleano passato al metodo come argomento è true
         if(isAddingRespond){
