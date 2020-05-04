@@ -1,7 +1,6 @@
-package com.kasteca.serverTestRisposta;
+package com.kasteca.serverTest.serverTestRisposta;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,18 +11,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kasteca.R;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -57,7 +52,7 @@ public class RisposteDocenteTestSuccess {
 
     private String preparazione= null;
     private String result= null;
-
+    private int counter=0;
 
     @Before
     public void signInDocente()  throws InterruptedException {
@@ -167,7 +162,7 @@ public class RisposteDocenteTestSuccess {
 
 
 
-    private void login() throws RuntimeException{
+    private void login() throws RuntimeException,InterruptedException{
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
         mAuth.signOut();
 
@@ -186,7 +181,12 @@ public class RisposteDocenteTestSuccess {
         });
 
         //attesa login
-        while(preparazione==null);
+        while((preparazione==null) && (counter<10)){
+            Thread.sleep(1000);
+            counter=counter+1;
+        };
+        counter=0;
+
         if(!preparazione.equalsIgnoreCase("ok")){
                throw new RuntimeException();
         }else

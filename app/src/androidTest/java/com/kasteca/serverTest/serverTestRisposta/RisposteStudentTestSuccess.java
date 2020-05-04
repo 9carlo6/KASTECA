@@ -1,4 +1,4 @@
-package com.kasteca.serverTestRisposta;
+package com.kasteca.serverTest.serverTestRisposta;
 
 import android.util.Log;
 
@@ -40,6 +40,7 @@ public class RisposteStudentTestSuccess {
 
     private String preparazione= null;
     private String result= null;
+    private int counter=0;
 
     @Before
     public void signInStudente()  throws InterruptedException {
@@ -141,7 +142,7 @@ public class RisposteStudentTestSuccess {
 
 
 
-    private void login() throws RuntimeException{
+    private void login() throws RuntimeException,InterruptedException{
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
         mAuth.signOut();
 
@@ -160,7 +161,11 @@ public class RisposteStudentTestSuccess {
         });
 
         //attesa login
-        while(preparazione==null);
+        while((preparazione==null) && (counter<10)){
+            Thread.sleep(1000);
+            counter=counter+1;
+        };
+        counter=0;
         if(!preparazione.equalsIgnoreCase("ok")){
             throw new RuntimeException();
         }else
