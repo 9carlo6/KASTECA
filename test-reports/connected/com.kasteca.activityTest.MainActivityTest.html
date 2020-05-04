@@ -28,13 +28,13 @@
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">0</div>
+<div class="counter">1</div>
 <p>failures</p>
 </div>
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">11.772s</div>
+<div class="counter">21.038s</div>
 <p>duration</p>
 </div>
 </td>
@@ -43,8 +43,8 @@
 </div>
 </td>
 <td>
-<div class="infoBox success" id="successRate">
-<div class="percent">100%</div>
+<div class="infoBox failures" id="successRate">
+<div class="percent">66%</div>
 <p>successful</p>
 </div>
 </td>
@@ -54,10 +54,119 @@
 <div id="tabs">
 <ul class="tabLinks">
 <li>
-<a href="#tab0">Tests</a>
+<a href="#tab0">Failed tests</a>
+</li>
+<li>
+<a href="#tab1">Tests</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
+<h2>Failed tests</h2>
+<div class="test">
+<a name="A_mainActivityCorrectLoginStudente"></a>
+<h3 class="failures">A_mainActivityCorrectLoginStudente</h3>
+<span class="code">
+<pre>androidx.test.espresso.PerformException: Error performing 'single click - At Coordinates: 540, 1081 and precision: 16, 16' on view 'with id: com.kasteca:id/button'.
+at androidx.test.espresso.PerformException$Builder.build(PerformException.java:86)
+at androidx.test.espresso.base.DefaultFailureHandler.getUserFriendlyError(DefaultFailureHandler.java:87)
+at androidx.test.espresso.base.DefaultFailureHandler.handle(DefaultFailureHandler.java:59)
+at androidx.test.espresso.ViewInteraction.waitForAndHandleInteractionResults(ViewInteraction.java:322)
+at androidx.test.espresso.ViewInteraction.desugaredPerform(ViewInteraction.java:178)
+at androidx.test.espresso.ViewInteraction.perform(ViewInteraction.java:119)
+at com.kasteca.activityTest.MainActivityTest.A_mainActivityCorrectLoginStudente(MainActivityTest.java:102)
+at java.lang.reflect.Method.invoke(Native Method)
+at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+at androidx.test.rule.ActivityTestRule$ActivityStatement.evaluate(ActivityTestRule.java:531)
+at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:104)
+at org.junit.runners.Suite.runChild(Suite.java:128)
+at org.junit.runners.Suite.runChild(Suite.java:27)
+at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:56)
+at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:395)
+at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2074)
+Caused by: com.google.android.gms.tasks.RuntimeExecutionException: com.google.firebase.firestore.FirebaseFirestoreException: Failed to get documents from server. (However, these documents may exist in the local cache. Run again without setting source to SERVER to retrieve the cached documents.)
+at com.google.android.gms.tasks.zzu.getResult(Unknown Source:15)
+at com.kasteca.activity.MainActivity$2$2.onComplete(MainActivity.java:151)
+at com.google.android.gms.tasks.zzj.run(Unknown Source:4)
+at android.os.Handler.handleCallback(Handler.java:789)
+at android.os.Handler.dispatchMessage(Handler.java:98)
+at androidx.test.espresso.base.Interrogator.loopAndInterrogate(Interrogator.java:148)
+at androidx.test.espresso.base.UiControllerImpl.loopUntil(UiControllerImpl.java:525)
+at androidx.test.espresso.base.UiControllerImpl.loopMainThreadUntilIdle(UiControllerImpl.java:447)
+at androidx.test.espresso.base.UiControllerImpl.injectMotionEvent(UiControllerImpl.java:252)
+at androidx.test.espresso.action.MotionEvents.sendUp(MotionEvents.java:162)
+at androidx.test.espresso.action.MotionEvents.sendUp(MotionEvents.java:139)
+at androidx.test.espresso.action.Tap.sendSingleTap(Tap.java:170)
+at androidx.test.espresso.action.Tap.access$100(Tap.java:31)
+at androidx.test.espresso.action.Tap$1.sendTap(Tap.java:47)
+at androidx.test.espresso.action.GeneralClickAction.perform(GeneralClickAction.java:137)
+at androidx.test.espresso.ViewInteraction$SingleExecutionViewAction.perform(ViewInteraction.java:366)
+at androidx.test.espresso.ViewInteraction.doPerform(ViewInteraction.java:255)
+at androidx.test.espresso.ViewInteraction.access$100(ViewInteraction.java:65)
+at androidx.test.espresso.ViewInteraction$1.call(ViewInteraction.java:158)
+at androidx.test.espresso.ViewInteraction$1.call(ViewInteraction.java:155)
+at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+at android.os.Handler.handleCallback(Handler.java:789)
+at android.os.Handler.dispatchMessage(Handler.java:98)
+at android.os.Looper.loop(Looper.java:164)
+at android.app.ActivityThread.main(ActivityThread.java:6541)
+at java.lang.reflect.Method.invoke(Native Method)
+at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:240)
+at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:767)
+Caused by: com.google.firebase.firestore.FirebaseFirestoreException: Failed to get documents from server. (However, these documents may exist in the local cache. Run again without setting source to SERVER to retrieve the cached documents.)
+at com.google.firebase.firestore.Query.lambda$getViaSnapshotListener$1(com.google.firebase:firebase-firestore@@21.3.0:879)
+at com.google.firebase.firestore.Query$$Lambda$2.onEvent(Unknown Source:8)
+at com.google.firebase.firestore.Query.lambda$addSnapshotListenerInternal$2(com.google.firebase:firebase-firestore@@21.3.0:1025)
+at com.google.firebase.firestore.Query$$Lambda$3.onEvent(Unknown Source:6)
+at com.google.firebase.firestore.core.AsyncEventListener.lambda$onEvent$0(com.google.firebase:firebase-firestore@@21.3.0:42)
+at com.google.firebase.firestore.core.AsyncEventListener$$Lambda$1.run(Unknown Source:6)
+at com.google.firebase.firestore.util.Executors$$Lambda$1.execute(Unknown Source:0)
+at com.google.firebase.firestore.core.AsyncEventListener.onEvent(com.google.firebase:firebase-firestore@@21.3.0:39)
+at com.google.firebase.firestore.core.QueryListener.raiseInitialEvent(com.google.firebase:firebase-firestore@@21.3.0:176)
+at com.google.firebase.firestore.core.QueryListener.onOnlineStateChanged(com.google.firebase:firebase-firestore@@21.3.0:116)
+at com.google.firebase.firestore.core.EventManager.handleOnlineStateChange(com.google.firebase:firebase-firestore@@21.3.0:178)
+at com.google.firebase.firestore.core.SyncEngine.handleOnlineStateChange(com.google.firebase:firebase-firestore@@21.3.0:321)
+at com.google.firebase.firestore.core.FirestoreClient.handleOnlineStateChange(com.google.firebase:firebase-firestore@@21.3.0:331)
+at com.google.firebase.firestore.remote.RemoteStore$$Lambda$1.handleOnlineStateChange(Unknown Source:2)
+at com.google.firebase.firestore.remote.OnlineStateTracker.setAndBroadcastState(com.google.firebase:firebase-firestore@@21.3.0:176)
+at com.google.firebase.firestore.remote.OnlineStateTracker.lambda$handleWatchStreamStart$0(com.google.firebase:firebase-firestore@@21.3.0:116)
+at com.google.firebase.firestore.remote.OnlineStateTracker$$Lambda$1.run(Unknown Source:2)
+at com.google.firebase.firestore.util.AsyncQueue$DelayedTask.handleDelayElapsed(com.google.firebase:firebase-firestore@@21.3.0:134)
+at com.google.firebase.firestore.util.AsyncQueue$DelayedTask.access$lambda$0(Unknown Source:0)
+at com.google.firebase.firestore.util.AsyncQueue$DelayedTask$$Lambda$1.run(Unknown Source:2)
+at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:457)
+at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:301)
+at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1162)
+at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:636)
+at com.google.firebase.firestore.util.AsyncQueue$SynchronizedShutdownAwareExecutor$DelayedStartFactory.run(com.google.firebase:firebase-firestore@@21.3.0:224)
+at java.lang.Thread.run(Thread.java:764)
+</pre>
+</span>
+</div>
+</div>
+<div id="tab1" class="tab">
 <h2>Tests</h2>
 <table>
 <thead>
@@ -68,22 +177,22 @@
 </thead>
 <tr>
 <td>A_mainActivityCorrectLoginStudente</td>
-<td class="success">passed (4.548s)</td>
+<td class="failures">failed (13.172s)</td>
 </tr>
 <tr>
 <td>B_mainActivityCorrectLoginDocenteTest</td>
-<td class="success">passed (4.373s)</td>
+<td class="success">passed (4.627s)</td>
 </tr>
 <tr>
 <td>C_mainActivityLoginFailTest</td>
-<td class="success">passed (2.851s)</td>
+<td class="success">passed (3.239s)</td>
 </tr>
 </table>
 </div>
 </div>
 <div id="footer">
 <p>Generated by 
-<a href="http://www.gradle.org">Gradle 5.6.4</a> at 27-apr-2020 20.27.18</p>
+<a href="http://www.gradle.org">Gradle 5.6.4</a> at 28-apr-2020 22.32.55</p>
 </div>
 </div>
 </body>

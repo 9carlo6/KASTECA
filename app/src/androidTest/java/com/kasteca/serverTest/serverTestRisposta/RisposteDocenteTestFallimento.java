@@ -1,4 +1,4 @@
-package com.kasteca.serverTest.serverTestRisposta;
+package com.kasteca.serverTestRisposta;
 
 import android.util.Log;
 
@@ -38,11 +38,10 @@ public class RisposteDocenteTestFallimento {
 
     private String preparazione= null;
     private String result= null;
-    private int counter=0;
 
 
     @Before
-    public void signInDocente()throws InterruptedException {
+    public void signInDocente() {
         login();
     }
 
@@ -50,8 +49,7 @@ public class RisposteDocenteTestFallimento {
     Test sul Fallimento della creazione di una Risposta
  */
     @Test
-    public void creazioneTestoNull() throws InterruptedException{
-        counter=0;
+    public void creazioneTestoNull(){
         result= null;
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -85,19 +83,14 @@ public class RisposteDocenteTestFallimento {
             }
         });
 
-        //Attendiamo la risposta, aspettiamo per 10 secondi che la risposta arrivi
-        while((result == null) && (counter<10)){
-            Log.d(TAG,"Attesa risposta...");
-            Thread.sleep(1000);
-            counter=counter + 1;
-        };
-        counter=0;
+        //Attendiamo la risposta
+        while(result == null);
         assertEquals("success",result);
         result=null;
     }
 
     @Test
-    public void creazioneTestoOverSize() throws InterruptedException{
+    public void creazioneTestoOverSize(){
         result= null;
 
         String testoOversize="test";
@@ -134,19 +127,14 @@ public class RisposteDocenteTestFallimento {
             }
         });
 
-        //Attendiamo la risposta, aspettiamo per 10 secondi che la risposta arrivi
-        while((result == null) && (counter<10)){
-            Log.d(TAG,"Attesa risposta...");
-            Thread.sleep(1000);
-            counter=counter + 1;
-        };
-        counter=0;
+        //Attendiamo la risposta
+        while(result == null);
         assertEquals("success",result);
         result=null;
     }
 
     @Test
-    public void creazioneDataNull() throws InterruptedException{
+    public void creazioneDataNull(){
         result= null;
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -180,20 +168,15 @@ public class RisposteDocenteTestFallimento {
             }
         });
 
-        //Attendiamo la risposta, aspettiamo per 10 secondi che la risposta arrivi
-        while((result == null) && (counter<10)){
-            Log.d(TAG,"Attesa risposta...");
-            Thread.sleep(1000);
-            counter=counter + 1;
-        };
-        counter=0;
+        //Attendiamo la risposta
+        while(result == null);
         assertEquals("success",result);
         result=null;
     }
 
     @Test
-    public void creazioneProprietarioNull() throws InterruptedException{
-        result= null;
+    public void creazioneProprietarioNull(){
+        result = null;
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference risposteReference = db.collection("Risposte_Commenti");
@@ -226,20 +209,15 @@ public class RisposteDocenteTestFallimento {
             }
         });
 
-        //Attendiamo la risposta, aspettiamo per 10 secondi che la risposta arrivi
-        while((result == null) && (counter<10)){
-            Log.d(TAG,"Attesa risposta...");
-            Thread.sleep(1000);
-            counter=counter + 1;
-        };
-        counter=0;
+        //Attendiamo la risposta
+        while(result == null);
         assertEquals("success",result);
         result=null;
     }
 
 
     @Test
-    public void creazioneCommentoNull() throws InterruptedException{
+    public void creazioneCommentoNull(){
         result= null;
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -273,21 +251,14 @@ public class RisposteDocenteTestFallimento {
             }
         });
 
-        //Attendiamo la risposta, aspettiamo per 10 secondi che la risposta arrivi
-        while((result == null) && (counter<10)){
-            Log.d(TAG,"Attesa risposta...");
-            Thread.sleep(1000);
-            counter=counter + 1;
-        };
-        counter=0;
+        //Attendiamo la risposta
+        while(result == null);
         assertEquals("success",result);
         result=null;
     }
 
-
-
     @Test
-    public void creazioneCommentoNotExist() throws InterruptedException{
+    public void creazioneCommentoNotExist(){
         result= null;
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -321,13 +292,8 @@ public class RisposteDocenteTestFallimento {
             }
         });
 
-        //Attendiamo la risposta, aspettiamo per 10 secondi che la risposta arrivi
-        while((result == null) && (counter<10)){
-            Log.d(TAG,"Attesa risposta...");
-            Thread.sleep(1000);
-            counter=counter + 1;
-        };
-        counter=0;
+        //Attendiamo la risposta
+        while(result == null);
         assertEquals("success",result);
         result=null;
     }
@@ -336,7 +302,7 @@ public class RisposteDocenteTestFallimento {
     Test fallimento modifica di una risposta
      */
     @Test
-    public void modificaTestoNull() throws InterruptedException{
+    public void modificaTestoNull(){
         result= null;
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -353,20 +319,13 @@ public class RisposteDocenteTestFallimento {
                 result="success";
             }
         });
-
-        //Attendiamo la risposta, aspettiamo per 10 secondi che la risposta arrivi
-        while((result == null) && (counter<10)){
-            Log.d(TAG,"Attesa risposta...");
-            Thread.sleep(1000);
-            counter=counter + 1;
-        };
-        counter=0;
+        while(result == null);
         assertEquals("success",result);
         result=null;
     }
 
     @Test
-    public void modificaTestoOverSize() throws InterruptedException{
+    public void modificaTestoOverSize(){
         result= null;
 
         String testoOversize="test";
@@ -387,20 +346,13 @@ public class RisposteDocenteTestFallimento {
                 result="success";
             }
         });
-
-        //Attendiamo la risposta, aspettiamo per 10 secondi che la risposta arrivi
-        while((result == null) && (counter<10)){
-            Log.d(TAG,"Attesa risposta...");
-            Thread.sleep(1000);
-            counter=counter + 1;
-        };
-        counter=0;
+        while(result == null);
         assertEquals("success",result);
         result=null;
     }
 
     @Test
-    public void modificaNonDalProprietario() throws InterruptedException{
+    public void modificaNonDalProprietario(){
         //Effettuiamo il login con un account diverso da quello che ha creato la risposta
         result=null;
 
@@ -420,13 +372,7 @@ public class RisposteDocenteTestFallimento {
                     }
         });
 
-        //Attendiamo la risposta, aspettiamo per 10 secondi che la risposta arrivi
-        while((result == null) && (counter<10)){
-            Log.d(TAG,"Attesa risposta...");
-            Thread.sleep(1000);
-            counter=counter + 1;
-        };
-        counter=0;
+        while(result == null);
         assertEquals("success",result);
         result=null;
 
@@ -437,7 +383,7 @@ public class RisposteDocenteTestFallimento {
     Test fallimento eliminazione di una risposta
      */
     @Test
-    public void eliminazioneProprietazioDiverso() throws InterruptedException{
+    public void eliminazioneProprietazioDiverso(){
 
         //Effettuiamo richiesta di eliminazione di una risposta non di questo Docente
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -455,13 +401,7 @@ public class RisposteDocenteTestFallimento {
             }
         });
 
-        //Attendiamo la risposta, aspettiamo per 10 secondi che la risposta arrivi
-        while((result == null) && (counter<10)){
-            Log.d(TAG,"Attesa risposta...");
-            Thread.sleep(1000);
-            counter=counter + 1;
-        };
-        counter=0;
+        while(result == null);
         assertEquals("success",result);
         result=null;
     }
@@ -473,7 +413,7 @@ public class RisposteDocenteTestFallimento {
 
 
 
-    private void login() throws RuntimeException,InterruptedException{
+    private void login() throws RuntimeException{
         preparazione=null;
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
         mAuth.signOut();
@@ -493,12 +433,7 @@ public class RisposteDocenteTestFallimento {
         });
 
         //attesa login
-        while((preparazione==null) && (counter<10)){
-            Thread.sleep(1000);
-            counter=counter+1;
-        };
-        counter=0;
-
+        while(preparazione==null);
         if(!preparazione.equalsIgnoreCase("ok")){
             throw new RuntimeException();
         }else
