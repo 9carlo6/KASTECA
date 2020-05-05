@@ -51,14 +51,14 @@ public class RichiesteIscrizioneTest {
     private String id_studente = "SotSWWJIZHNALPZ32EAARRed9RG2";
     private static String id_docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
 
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    @Before
+    public void Before() throws Exception {
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
 
         mAuth.signOut();
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         mAuth.signInWithEmailAndPassword(mailDoc, pwdDoc).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
@@ -101,12 +101,14 @@ public class RichiesteIscrizioneTest {
 
     }
 
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
+    @After
+    public void tearDownAfterClass() throws Exception {
         Thread.sleep(1000);
 
         FirebaseAuth mauth = FirebaseAuth.getInstance();
         mauth.signOut();
+
+        Thread.sleep(1000);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
         String mail = "docenteProva@unisannio.it";
@@ -170,19 +172,14 @@ public class RichiesteIscrizioneTest {
 
     }
 
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
 
     @Test
     public void RichiesteIscrizioneTestOk() throws ExecutionException, InterruptedException {
 
         FirebaseAuth mauth = FirebaseAuth.getInstance();
         mauth.signOut();
+
+        Thread.sleep(1000);
 
         String mail = "studenteProva@studenti.unisannio.it";
         String pwd = "passwordProva";
@@ -234,6 +231,8 @@ public class RichiesteIscrizioneTest {
         FirebaseAuth mauth = FirebaseAuth.getInstance();
         mauth.signOut();
 
+        Thread.sleep(1000);
+
         String mail = "studenteProva@studenti.unisannio.it";
         String pwd = "passwordProva";
 
@@ -284,6 +283,8 @@ public class RichiesteIscrizioneTest {
         FirebaseAuth mauth = FirebaseAuth.getInstance();
         mauth.signOut();
 
+        Thread.sleep(1000);
+
         String mail = "studenteProva@studenti.unisannio.it";
         String pwd = "passwordProva";
 
@@ -333,6 +334,8 @@ public class RichiesteIscrizioneTest {
 
         FirebaseAuth mauth = FirebaseAuth.getInstance();
         mauth.signOut();
+
+        Thread.sleep(1000);
 
         String mail = "studenteProva@studenti.unisannio.it";
         String pwd = "passwordProva";
@@ -386,6 +389,8 @@ public class RichiesteIscrizioneTest {
 
         String mail = "studenteProva@studenti.unisannio.it";
         String pwd = "passwordProva";
+
+        Thread.sleep(1000);
 
         mauth.signInWithEmailAndPassword(mail, pwd).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
