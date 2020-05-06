@@ -40,15 +40,16 @@ public class RisposteDocenteTestFallimento {
     private String result= null;
     private int counter=0;
 
+    /*
+        @Before
+        public void signInDocente() throws InterruptedException {
+            login();
+        }
 
-    @Before
-    public void signInDocente() throws InterruptedException {
-        login();
-    }
-
-/*
-    Test sul Fallimento della creazione di una Risposta
- */
+    /*
+        Test sul Fallimento della creazione di una Risposta
+     */
+    /*
     @Test
     public void creazioneTestoNull(){
         result= null;
@@ -302,6 +303,7 @@ public class RisposteDocenteTestFallimento {
     /*
     Test fallimento modifica di una risposta
      */
+    /*
     @Test
     public void modificaTestoNull(){
         result= null;
@@ -383,6 +385,7 @@ public class RisposteDocenteTestFallimento {
     /*
     Test fallimento eliminazione di una risposta
      */
+    /*
     @Test
     public void eliminazioneProprietazioDiverso(){
 
@@ -412,7 +415,7 @@ public class RisposteDocenteTestFallimento {
     o studente o docente. Si potrebbe creare un account di test non studente o docente.
      */
 
-
+/*
 
     private void login() throws RuntimeException,InterruptedException{
         if (preparazione.equalsIgnoreCase("notLogged")) {
@@ -451,6 +454,8 @@ public class RisposteDocenteTestFallimento {
         }
 
     }
+
+ */
 
 
 

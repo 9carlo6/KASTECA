@@ -42,6 +42,7 @@ public class RisposteStudentTestSuccess {
     private String result= null;
     private int counter=0;
 
+    /*
     @Before
     public void signInStudente()  throws InterruptedException {
         login();
@@ -192,6 +193,8 @@ public class RisposteStudentTestSuccess {
     }
 
 
+
+     */
 
 
 }

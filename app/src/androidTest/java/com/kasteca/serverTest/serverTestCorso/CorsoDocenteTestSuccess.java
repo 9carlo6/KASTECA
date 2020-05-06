@@ -41,7 +41,7 @@ public class CorsoDocenteTestSuccess {
     private String result= null;
     private int counter=0;
 
-
+/*
     @Before
     public void signInDocente()throws InterruptedException {
         login();
@@ -195,4 +195,6 @@ public class CorsoDocenteTestSuccess {
         }
     }
 
+
+ */
 }

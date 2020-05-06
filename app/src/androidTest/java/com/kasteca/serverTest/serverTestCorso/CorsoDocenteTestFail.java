@@ -43,7 +43,7 @@ public class CorsoDocenteTestFail {
     private String result= null;
     private int counter=0;
 
-
+/*
     @Before
     public void signInDocente()throws InterruptedException {
         login();
@@ -54,7 +54,7 @@ public class CorsoDocenteTestFail {
     @Test
     public void creazioneNotDocente(){}
      */
-
+/*
     @Test
     public void creazioneYearOverSize() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -299,6 +299,7 @@ public class CorsoDocenteTestFail {
     /*
     Fallimento modifica
      */
+/*
     @Test
     public void updateDocenteNonProprietario() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -333,6 +334,7 @@ public class CorsoDocenteTestFail {
     /*
     Fallimento eliminazione
      */
+    /*
     @Test
     public void deliteDocenteNonProprietario() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -399,5 +401,5 @@ public class CorsoDocenteTestFail {
 
         }
     }
-
+*/
 }

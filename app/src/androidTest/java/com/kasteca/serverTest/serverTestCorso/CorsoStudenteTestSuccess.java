@@ -30,7 +30,7 @@ public class CorsoStudenteTestSuccess {
     private String preparazione= "notLogged";
     private String result= null;
     private int counter=0;
-
+/*
     @Before
     public void signInStudente()  throws InterruptedException {
         login();
@@ -101,5 +101,7 @@ public class CorsoStudenteTestSuccess {
         }
 
     }
+
+ */
 
 }

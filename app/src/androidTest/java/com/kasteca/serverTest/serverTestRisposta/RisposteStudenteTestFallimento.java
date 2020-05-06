@@ -41,6 +41,8 @@ public class RisposteStudenteTestFallimento {
     private String result= null;
     private int counter=0;
 
+    /*
+
     @Before
     public void signInDocente() throws InterruptedException {
         login();
@@ -300,6 +302,8 @@ public class RisposteStudenteTestFallimento {
     /*
     Test fallimento modifica di una risposta
      */
+
+    /*
     @Test
     public void modificaTestoNull(){
         result= null;
@@ -381,6 +385,7 @@ public class RisposteStudenteTestFallimento {
     /*
     Test fallimento eliminazione di una risposta
      */
+    /*
     @Test
     public void eliminazioneProprietazioDiverso(){
 
@@ -445,6 +450,8 @@ public class RisposteStudenteTestFallimento {
         }
 
     }
+
+     */
 
 
 

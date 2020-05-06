@@ -35,6 +35,7 @@ public class CorsoStudenteFailFail {
     private String result= null;
     private int counter=0;
 
+    /*
     @Before
     public void signInStudente()  throws InterruptedException {
         login();
@@ -86,6 +87,7 @@ public class CorsoStudenteFailFail {
     /*
     Fallimento modifica
      */
+    /*
     @Test
     public void updateStudenteNonConsentito() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -117,6 +119,7 @@ public class CorsoStudenteFailFail {
     /*
     Fallimento eliminazione.
      */
+    /*
     @Test
     public void deliteStudente() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -181,5 +184,7 @@ public class CorsoStudenteFailFail {
 
         }
     }
+
+     */
 
 }
