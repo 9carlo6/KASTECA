@@ -37,9 +37,11 @@ public class RisposteStudenteTestFallimento {
     private final String idRispostaNonStudente = "zd5JNL8hZvmW1CK0O5ex";
 
 
-    private String preparazione= null;
+    private String preparazione= "notLogged";
     private String result= null;
     private int counter=0;
+
+    /*
 
     @Before
     public void signInDocente() throws InterruptedException {
@@ -300,6 +302,8 @@ public class RisposteStudenteTestFallimento {
     /*
     Test fallimento modifica di una risposta
      */
+
+    /*
     @Test
     public void modificaTestoNull(){
         result= null;
@@ -381,6 +385,7 @@ public class RisposteStudenteTestFallimento {
     /*
     Test fallimento eliminazione di una risposta
      */
+    /*
     @Test
     public void eliminazioneProprietazioDiverso(){
 
@@ -409,36 +414,44 @@ public class RisposteStudenteTestFallimento {
 
 
     private void login() throws RuntimeException,InterruptedException{
-        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-        mAuth.signOut();
+        if (preparazione.equalsIgnoreCase("notLogged")) {
+            //preparazione = null;
+            FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
+            mAuth.signOut();
 
-        mAuth.signInWithEmailAndPassword(mailStu, pwdStu).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                preparazione="ok";
-                Log.d(TAG,"Login Effettuato");
+            mAuth.signInWithEmailAndPassword(mailStu, pwdStu).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                @Override
+                public void onSuccess(AuthResult authResult) {
+                    preparazione = "ok";
+                    Log.d(TAG, "Login Effettuato");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    preparazione = "notLogged";
+                    Log.d(TAG, "Login Fallito");
+                }
+            });
+
+            //attesa login
+            //attesa login
+            while ((preparazione.equalsIgnoreCase("notLogged")) && (counter < 10)) {
+                Thread.sleep(1000);
+                counter = counter + 1;
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                preparazione="notOk";
-                Log.d(TAG,"Login Fallito");
-            }
-        });
+            ;
+            counter = 0;
 
-        //attesa login
-        while((preparazione==null) && (counter<10)){
-            Thread.sleep(1000);
-            counter=counter+1;
-        };
-        counter=0;
+            if (!preparazione.equalsIgnoreCase("ok")) {
+                throw new RuntimeException();
+            } else
+                preparazione = "notLogged";      //Riporto preparazione nello stato iniziale potrebbe essere riutilizzata.
 
-        if(!preparazione.equalsIgnoreCase("ok")){
-            throw new RuntimeException();
-        }else
-            preparazione=null;      //Riporto preparazione nello stato iniziale potrebbe essere riutilizzata.
+        }
 
     }
+
+     */
 
 
 
