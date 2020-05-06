@@ -1,4 +1,4 @@
-package com.kasteca.serverTestRisposta;
+package com.kasteca.serverTest.serverTestRisposta;
 
 import android.util.Log;
 
