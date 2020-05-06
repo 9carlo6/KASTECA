@@ -33,7 +33,7 @@ import java.util.Map;
 import static junit.framework.TestCase.assertEquals;
 
 
-@RunWith(JUnit4.class)
+//@RunWith(JUnit4.class)
 public class RisposteDocenteTestSuccess {
 
     private final static String TAG="Testing-Risposte-Backend";
