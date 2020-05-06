@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import androidx.annotation.NonNull;
-import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
@@ -21,9 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.kasteca.R;
+import com.kasteca.activity.InfoStudenteActivity;
 import com.kasteca.activity.ListaStudentiIscrittiActivity;
-import com.kasteca.util.EspressoIdlingResource;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -40,22 +38,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.longClick;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 
 
 @LargeTest
-public class ListaStudentiIscrittiActivityTestRimozioneStudente {
-    private static final String TAG = "DEBUG_LISTA_STUDENTI_ISCRITTI_TEST";
+public class InfoStudenteActivityTest {
+    private static final String TAG = "DEBUG_INFO_STUDENTE_TEST";
 
     private String mailDoc = "docenteProva@unisannio.it";
     private String pwdDoc = "passwordProva";
@@ -66,7 +56,7 @@ public class ListaStudentiIscrittiActivityTestRimozioneStudente {
     private String id_docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
 
     @Rule
-    public ActivityTestRule<ListaStudentiIscrittiActivity> listaStudentiIscrittiActivityActivityTestRule = new ActivityTestRule<>(ListaStudentiIscrittiActivity.class, false, false);
+    public ActivityTestRule<InfoStudenteActivity> infoStudenteActivityActivityTestRule = new ActivityTestRule<>(InfoStudenteActivity.class, false, false);
 
     @Before()
     public void singIn() throws InterruptedException {
@@ -253,38 +243,26 @@ public class ListaStudentiIscrittiActivityTestRimozioneStudente {
         Thread.sleep(4000);
     }
 
-
     @Test()
-    public void ListaStudentiIscrittiActivityTestRimozioneStudenteNegata() throws InterruptedException {
+    public void InfoStudenteActivityTest() throws InterruptedException {
 
         Intent i = new Intent();
-        i.putExtra("id_corso", "id_corso_prova");
-        listaStudentiIscrittiActivityActivityTestRule.launchActivity(i);
-
-        Thread.sleep(2000);
-
-        ViewInteraction recyclerView2 = onView(withText("NomeProva CognomeProva"));
-        recyclerView2.perform(longClick());
-
-        ViewInteraction appCompatButton8 = onView(withText("No"));
-        appCompatButton8.perform(scrollTo(), click());
-    }
-
-    @Test()
-    public void ListaStudentiIscrittiActivityTestRimozioneStudenteConfermata() throws InterruptedException {
-
-        Intent i = new Intent();
-        i.putExtra("id_corso", "id_corso_prova");
-        listaStudentiIscrittiActivityActivityTestRule.launchActivity(i);
+        i.putExtra("nome_cognome", "NomeProva" + " " + "CognomeProva");
+        i.putExtra("email", "studenteprova@studenti.unisannio.it");
+        i.putExtra("matricola", "Matricola");
+        infoStudenteActivityActivityTestRule.launchActivity(i);
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(2000);
 
-        ViewInteraction recyclerView2 = onView(withText("NomeProva CognomeProva"));
-        recyclerView2.perform(longClick());
+        ViewInteraction textView = onView(withText("Matricola"));
+        textView.check(matches(isDisplayed()));
 
-        ViewInteraction appCompatButton8 = onView(withText("Si"));
-        appCompatButton8.perform(click());
+        ViewInteraction textView1 = onView(withText("NomeProva CognomeProva"));
+        textView1.check(matches(isDisplayed()));
+
+        ViewInteraction textView2 = onView(withText("studenteprova@studenti.unisannio.it"));
+        textView2.check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(
