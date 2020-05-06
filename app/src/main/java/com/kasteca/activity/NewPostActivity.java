@@ -112,6 +112,7 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
             if(requestCode == SELECT_FILE){
                 uriPdf = ritorno.getData();
                 String uriString = uriPdf.toString();
+                Log.e(TAG, "PDF URI: " + uriString);
                 File file = new File(uriString);
                 String displayName = null;
 
@@ -127,6 +128,8 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
                     }
                 } else if (uriString.startsWith("file://")) {
                     displayName = file.getName();
+                } else {
+                    displayName = uriPdf.getPath();
                 }
                 pdf_text.setText(displayName);
             }
@@ -170,14 +173,15 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
         FirebaseStorage myStorage = FirebaseStorage.getInstance();
         StorageReference rootStorageRef = myStorage.getReference();
         StorageReference documentRef = rootStorageRef.child("pdf");
+        Log.e(TAG, "pdf uri in upload: " + uriPdf.toString());
 
-        final StorageReference pdfRef = documentRef.child(uriPdf.getLastPathSegment());
+        final StorageReference pdfRef = documentRef.child(pdf_text.getText().toString());
         final UploadTask uploadTask = pdfRef.putFile(uriPdf);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Nel caso di fallimento dell'upload
-                showAlert(getResources().getString(R.string.upload_failed));
+                showAlert(getResources().getString(R.string.upload_pdf_fallito));
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override

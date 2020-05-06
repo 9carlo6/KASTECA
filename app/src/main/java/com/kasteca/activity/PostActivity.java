@@ -608,7 +608,7 @@ public class PostActivity extends AppCompatActivity {
 
         DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(post.getPdf()))
-                .setTitle(getResources().getString(R.string.titolo))
+                .setTitle(nomeFile)
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 .setDestinationUri(Uri.fromFile(file));
 

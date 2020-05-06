@@ -105,7 +105,8 @@
     <string name="spinner_tag">Tag</string>
     <string name="upload_failed">Upload fallito</string>
     <string name="missing_data">Perfavore, inserisci i dati mancanti.</string>
-    <string name="upload_pdf_fallito">Il pdf non è stato caricato.</string>
+    <string name="file_non_trovato">Non è stato trovato il file pdf. Il post non è stato caricato</string>
+    <string name="upload_pdf_fallito">Non è stato possibile caricare il pdf. Il post non è stato caricato</string>
     <string name="upload_pdf_successo">Il pdf è stato caricato.</string>
     <string name="upload_successo">Il post è stato caricato.</string>
 
