@@ -21,18 +21,14 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import static android.app.Activity.RESULT_OK;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -43,11 +39,8 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasType;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
 public class NewPostActivityTestWithoutUpload {
@@ -97,9 +90,9 @@ public class NewPostActivityTestWithoutUpload {
         onView(withId(R.id.pdfButton)).perform(click());
         intended(expectedIntent);
 
-        onView(withId(R.id.uri_pdf)).check(matches(withText(String.valueOf(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)) + "/mypdf/test.pdf")));
+        onView(withId(R.id.uri_pdf)).check(matches(withText((getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)) + "/mypdf/test.pdf")));
 
-        File fdelete = new File(String.valueOf(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)) + "/mypdf/test.pdf");
+        File fdelete = new File((getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)) + "/mypdf/test.pdf");
         if (fdelete.exists()) {
             if (fdelete.delete()) {
                 Log.e(TAG, "file Deleted");
@@ -111,8 +104,6 @@ public class NewPostActivityTestWithoutUpload {
 
     // Metodo per simulare la selezione del file pdf
     private Instrumentation.ActivityResult createFilePickActivityResultStub(){
-        //Resources resources = InstrumentationRegistry.getInstrumentation().getContext().getResources();
-
 
 
         PdfDocument document = new PdfDocument();
@@ -128,7 +119,7 @@ public class NewPostActivityTestWithoutUpload {
         // finish the page
         document.finishPage(page);
         // write the document content
-        String directory_path = String.valueOf(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)) + "/mypdf/";
+        String directory_path = (getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)) + "/mypdf/";
         File file = new File(directory_path);
         if (!file.exists()) {
             file.mkdirs();
@@ -151,14 +142,6 @@ public class NewPostActivityTestWithoutUpload {
         Intent resultIntent = new Intent();
         resultIntent.setData(Uri.parse(targetPdf));
         return new Instrumentation.ActivityResult(RESULT_OK, resultIntent);
-    }
-
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while((read = in.read(buffer)) != -1){
-            out.write(buffer, 0, read);
-        }
     }
 
 }

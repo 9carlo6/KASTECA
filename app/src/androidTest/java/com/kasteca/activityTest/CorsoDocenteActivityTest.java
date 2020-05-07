@@ -40,9 +40,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.DrawerActions;
-import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
@@ -66,12 +64,8 @@ public class CorsoDocenteActivityTest {
     private String mail = "docenteprova@unisannio.it";
     private String pwd = "passwordProva";
 
-    private String anno_accademico =  "2019/2020";
-    private String codice ="ABC";
-    private String descrizione = "descrizione_prova";
-    private String docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
-    private ArrayList<String> lista_post = new ArrayList<String>();
-    private ArrayList<String>  lista_studenti = new ArrayList<String>();
+    private ArrayList<String> lista_post = new ArrayList<>();
+    private ArrayList<String>  lista_studenti = new ArrayList<>();
     private String nome_corso = "nome_corso_prova";
     private String id_corso = "id_corso_prova";
 
@@ -79,7 +73,7 @@ public class CorsoDocenteActivityTest {
     private String link = null;
     private String pdf = null;
     private String tag = "esercizio";
-    private ArrayList<String>  lista_commenti = new ArrayList<String>();
+    private ArrayList<String>  lista_commenti = new ArrayList<>();
     private Date data = new Date(0);
     private String id_post = "id_post_prova";
 
@@ -91,6 +85,10 @@ public class CorsoDocenteActivityTest {
 
     @Before
     public void setUp() throws Exception {
+        String anno_accademico =  "2019/2020";
+        String codice ="ABC";
+        String descrizione = "descrizione_prova";
+        String docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
         IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
 

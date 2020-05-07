@@ -52,19 +52,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class CorsoStudenteActivityTest {
     private String mail = "studenteprova@studenti.unisannio.it";
     private String pwd = "passwordProva";
 
-    private String anno_accademico =  "2019/2020";
-    private String codice ="ABC";
-    private String descrizione = "descrizione_prova";
-    private String docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
-    private ArrayList<String> lista_post = new ArrayList<String>();
-    private ArrayList<String>  lista_studenti = new ArrayList<String>();
+
+    private ArrayList<String> lista_post = new ArrayList<>();
+    private ArrayList<String>  lista_studenti = new ArrayList<>();
     private String nome_corso = "nome_corso_prova";
     private String id_corso = "id_corso_prova";
 
@@ -72,7 +68,7 @@ public class CorsoStudenteActivityTest {
     private String link = null;
     private String pdf = null;
     private String tag = "esercizio";
-    private ArrayList<String>  lista_commenti = new ArrayList<String>();
+    private ArrayList<String>  lista_commenti = new ArrayList<>();
     private Date data = new Date(0);
     private String id_post = "id_post_prova";
 
@@ -80,16 +76,19 @@ public class CorsoStudenteActivityTest {
     private String nome_studente = "NomeProva";
     private String cognome_studente = "CognomeProva";
     private String matricola =  "Matricola";
-    private ArrayList<String>  lista_corsi = new ArrayList<String>();
+    private ArrayList<String>  lista_corsi = new ArrayList<>();
 
-    private String nome_docente = "NomeDocenteProva";
-    private String cognome_docente = "CognomeDocenteProva";
+
 
     @Rule
     public ActivityTestRule<CorsoStudenteActivity> activityTestRule = new ActivityTestRule<>(CorsoStudenteActivity.class, false, false);
 
     @Before
     public void setUp() throws Exception {
+        String anno_accademico =  "2019/2020";
+        String codice ="ABC";
+        String descrizione = "descrizione_prova";
+        String docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
         IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
 
@@ -289,6 +288,8 @@ public class CorsoStudenteActivityTest {
     // Verifica che la selezione di un elemento porta alla PostActivity, che mostra i dettagli corretti
     @Test
     public void test_SelectItem_isPostActivityVisible(){
+        String nome_docente = "NomeDocenteProva";
+        String cognome_docente = "CognomeDocenteProva";
         onView(withId(R.id.recycler_view_post_studente)).perform(actionOnItemAtPosition(0, click()));
         onView(withId(R.id.post_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.nome_cognome_textView)).check(matches(withText(nome_docente + " " + cognome_docente)));

@@ -32,8 +32,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -150,7 +148,7 @@ public class NewPostActivityTestWithUpload {
 
                         //cancellare il post
                         ArrayList<String> listaPost = (ArrayList<String>) documentSnapshot.getData().get("lista_post");
-                        if(!listaPost.isEmpty()){
+                        if(((listaPost != null) &&!listaPost.isEmpty())){
                             id_post = listaPost.get(0);
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                             CollectionReference posts = db.collection("Post");
@@ -269,7 +267,7 @@ public class NewPostActivityTestWithUpload {
         onView(withText(R.string.Dialog_neutral_button_login_failed)).perform(click());
         onView(withText(R.string.upload_pdf_fallito)).check(doesNotExist());
 
-        File fdelete = new File(String.valueOf(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)) + "/mypdf/test.pdf");
+        File fdelete = new File((getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)) + "/mypdf/test.pdf");
         if (fdelete.exists()) {
             if (fdelete.delete()) {
                 Log.e(TAG, "file Deleted");
@@ -295,8 +293,9 @@ public class NewPostActivityTestWithUpload {
         // finish the page
         document.finishPage(page);
         // write the document content
-        String directory_path = String.valueOf(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)) + "/mypdf/";
-        File file = new File(directory_path);
+        String directory_path = (getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)) + "/mypdf/";
+        File file;
+        file = new File(directory_path);
         if (!file.exists()) {
             file.mkdirs();
         }
@@ -318,13 +317,7 @@ public class NewPostActivityTestWithUpload {
         return new Instrumentation.ActivityResult(RESULT_OK, resultIntent);
     }
 
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while((read = in.read(buffer)) != -1){
-            out.write(buffer, 0, read);
-        }
-    }
+
 
 
 }
