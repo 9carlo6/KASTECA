@@ -1,11 +1,7 @@
 package com.kasteca.activityTest;
 
 import android.app.Instrumentation;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -75,17 +71,6 @@ public class NewPostActivityTestWithoutUpload {
     }
 
 
-    // Verifica che lo spinner funziona correttamente
-    @Test
-    public void test_isSpinnerCorrect(){
-        String tag = "esercizio";
-        closeSoftKeyboard();
-        onView(withId(R.id.tags_spinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is(tag))).perform(click());
-        onView(withId(R.id.tags_spinner)).check(matches(withSpinnerText(tag)));
-    }
-
-
     // Verifica che non viene permesso l'upload di un post privo di testo
     @Test
     public void test_isUploadDenied_WithEmptyText(){
@@ -112,7 +97,7 @@ public class NewPostActivityTestWithoutUpload {
         onView(withId(R.id.pdfButton)).perform(click());
         intended(expectedIntent);
 
-        onView(withId(R.id.uri_pdf)).check(matches(withText("/storage/emulated/0/Android/data/com.kasteca/files/Documents/mypdf/test.pdf")));
+        onView(withId(R.id.uri_pdf)).check(matches(withText(String.valueOf(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)) + "/mypdf/test.pdf")));
 
         File fdelete = new File(String.valueOf(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)) + "/mypdf/test.pdf");
         if (fdelete.exists()) {

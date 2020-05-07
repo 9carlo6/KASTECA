@@ -46,6 +46,7 @@ import static android.app.Activity.RESULT_OK;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -56,8 +57,11 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasType;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 
 public class NewPostActivityTestWithUpload {
 
@@ -194,6 +198,22 @@ public class NewPostActivityTestWithUpload {
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(2000);
+    }
+
+    // Verifica che lo spinner funziona correttamente
+    @Test
+    public void test_isSpinnerCorrect(){
+        String tag = "esercizio";
+        closeSoftKeyboard();
+        onView(withId(R.id.tags_spinner)).perform(click());
+        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onData(allOf(is(instanceOf(String.class)), is(tag))).perform(click());
+        onView(withId(R.id.tags_spinner)).check(matches(withSpinnerText(tag)));
     }
 
     // Verifica che cliccando sul bottone di upload, viene effetivamente mandato al server un post
