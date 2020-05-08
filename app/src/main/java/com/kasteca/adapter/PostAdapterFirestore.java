@@ -39,10 +39,12 @@ public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAda
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull final Post model) {
-        if(model.getTesto().length() > 30){
-            model.setTesto(model.getTesto().substring(0, 31) + "...");
+        if(model.getTesto().length() > 20){
+            holder.text_post.setText(model.getTesto().trim().substring(0, 21) + "...");
         }
-        holder.text_post.setText(model.getTesto());
+        else{
+            holder.text_post.setText(model.getTesto().trim());
+        }
         holder.tag.setText(model.getTag());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         holder.data.setText(sdf.format(model.getData()));

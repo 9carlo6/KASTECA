@@ -124,7 +124,8 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
                     }
                     if(lista_richieste.isEmpty()){
                         Log.d(TAG, "Non ci sono richieste in attesa per questo corso");
-                        showAlert();
+                        if(!isFinishing())
+                            showAlert();
                     }else{
                         Log.d(TAG, "Ci sono richieste in attesa per questo corso");
                         FirebaseFirestore dbs = FirebaseFirestore.getInstance();
