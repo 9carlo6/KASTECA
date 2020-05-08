@@ -44,7 +44,6 @@ import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class NewPostActivityTestWithoutUpload {
-
     @Rule
     public IntentsTestRule<NewPostActivity> intentsTestRule = new IntentsTestRule<>(NewPostActivity.class);
 
@@ -143,5 +142,4 @@ public class NewPostActivityTestWithoutUpload {
         resultIntent.setData(Uri.parse(targetPdf));
         return new Instrumentation.ActivityResult(RESULT_OK, resultIntent);
     }
-
 }
