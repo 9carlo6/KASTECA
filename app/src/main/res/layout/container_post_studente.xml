@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/tab_layout_toolbar_studente">
+    tools:showIn="@layout/activity_corso_studente">
 
     <FrameLayout android:id="@+id/fragment_container_corso_studente"
         android:layout_width="match_parent"

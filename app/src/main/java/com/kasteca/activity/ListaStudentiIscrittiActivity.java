@@ -112,7 +112,8 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                                                             }
                                                         }
                                                         if(studenti.isEmpty()){
-                                                            showAlert();
+                                                            if(!isFinishing())
+                                                                showAlert();
                                                         }
                                                         ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti, id_corso);
                                                         rv.setAdapter(adapter);
@@ -169,7 +170,8 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                                             }
                                         }
                                         if(studenti.isEmpty()){
-                                            showAlert();
+                                            if(!isFinishing())
+                                                showAlert();
                                         }
                                         ListaStudentiIscrittiAdapter adapter = new ListaStudentiIscrittiAdapter(studenti, id_corso);
                                         rv.setAdapter(adapter);
