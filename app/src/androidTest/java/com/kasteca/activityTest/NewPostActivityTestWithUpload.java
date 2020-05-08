@@ -18,6 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.kasteca.R;
 import com.kasteca.activity.NewPostActivity;
@@ -64,6 +65,13 @@ import static org.hamcrest.Matchers.is;
 public class NewPostActivityTestWithUpload {
 
     private String id_corso = "id_corso_prova";
+    private String anno_accademico =  "2019/2020";
+    private String codice ="ABC";
+    private String descrizione = "descrizione_prova";
+    private String docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
+    private ArrayList<String> lista_post = new ArrayList<>();
+    private ArrayList<String>  lista_studenti = new ArrayList<>();
+    private String nome_corso = "nome_corso_prova";
     private String id_post = null;
 
     @Rule
@@ -74,49 +82,39 @@ public class NewPostActivityTestWithUpload {
         String mail = "docenteprova@unisannio.it";
         String pwd = "passwordProva";
 
-        String anno_accademico =  "2019/2020";
-        String codice ="ABC";
-        String descrizione = "descrizione_prova";
-        String docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
-        ArrayList<String> lista_post = new ArrayList<>();
-        ArrayList<String>  lista_studenti = new ArrayList<>();
-        String nome_corso = "nome_corso_prova";
 
         IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-
-        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(1000);
-
-        mAuth.signInWithEmailAndPassword(mail, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(mail, pwd).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "login ok");
-            }
-        });
+            public void onSuccess(AuthResult authResult) {
+                Log.d(TAG, "login docente ok");
 
-        // bisogna creare il corso
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference corsi = db.collection("Corsi");
+                // bisogna creare il corso
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference corsi = db.collection("Corsi");
 
-        Map<String, Object> corso = new HashMap<>();
-        corso.put("anno_accademico", anno_accademico );
-        corso.put("codice", codice);
-        corso.put("descrizione", descrizione);
-        corso.put("docente", docente);
-        corso.put("lista_post", lista_post);
-        corso.put("lista_studenti", lista_studenti);
-        corso.put("nome_corso", nome_corso);
+                Map<String, Object> corso = new HashMap<>();
+                corso.put("anno_accademico", anno_accademico );
+                corso.put("codice", codice);
+                corso.put("descrizione", descrizione);
+                corso.put("docente", docente);
+                corso.put("lista_post", lista_post);
+                corso.put("lista_studenti", lista_studenti);
+                corso.put("nome_corso", nome_corso);
 
-        corsi.document(id_corso).set(corso).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Log.d(TAG, "Corsi: creazione corso ok");
+                corsi.document(id_corso).set(corso).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "Corsi: creazione corso ok");
 
-                }else{
-                    Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
-                }
+
+                        }else{
+                            Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
+                        }
+                    }
+                });
             }
         });
 

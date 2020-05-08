@@ -68,6 +68,10 @@ public class CorsoDocenteActivityTest {
     private ArrayList<String>  lista_studenti = new ArrayList<>();
     private String nome_corso = "nome_corso_prova";
     private String id_corso = "id_corso_prova";
+    private String anno_accademico =  "2019/2020";
+    private String codice ="ABC";
+    private String descrizione = "descrizione_prova";
+    private String docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
 
     private String testo = "testo di prova";
     private String link = null;
@@ -84,86 +88,81 @@ public class CorsoDocenteActivityTest {
     public ActivityTestRule<CorsoDocenteActivity> activityTestRule = new ActivityTestRule<>(CorsoDocenteActivity.class, false, false);
 
     @Before
-    public void setUp() throws Exception {
-        String anno_accademico =  "2019/2020";
-        String codice ="ABC";
-        String descrizione = "descrizione_prova";
-        String docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
+    public void setUp() throws InterruptedException {
         IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
 
-        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(1000);
 
-        mAuth.signInWithEmailAndPassword(mail, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(mail, pwd).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "login ok");
-            }
-        });
+            public void onSuccess(AuthResult authResult) {
+                Log.d(TAG, "login docente ok");
 
-        // bisogna creare il corso
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference corsi = db.collection("Corsi");
+                // bisogna creare il corso
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference corsi = db.collection("Corsi");
 
-        Map<String, Object> corso = new HashMap<>();
-        corso.put("anno_accademico", anno_accademico );
-        corso.put("codice", codice);
-        corso.put("descrizione", descrizione);
-        corso.put("docente", docente);
-        corso.put("lista_post", lista_post);
-        corso.put("lista_studenti", lista_studenti);
-        corso.put("nome_corso", nome_corso);
+                Map<String, Object> corso = new HashMap<>();
+                corso.put("anno_accademico", anno_accademico );
+                corso.put("codice", codice);
+                corso.put("descrizione", descrizione);
+                corso.put("docente", docente);
+                corso.put("lista_post", lista_post);
+                corso.put("lista_studenti", lista_studenti);
+                corso.put("nome_corso", nome_corso);
 
-        corsi.document(id_corso).set(corso).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Log.d(TAG, "Corsi: creazione corso ok");
+                corsi.document(id_corso).set(corso).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "Corsi: creazione corso ok");
 
-                }else{
-                    Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
-                }
-            }
-        });
-
-        // bisogna creare il post
-        CollectionReference posts = db.collection("Post");
-        Map<String, Object> post = new HashMap<>();
-        post.put("testo", testo);
-        post.put("link", link);
-        post.put("pdf", pdf);
-        post.put("tag", tag);
-        post.put("lista_commenti", lista_commenti);
-        post.put("data", data);
-        post.put("corso", id_corso);
-        posts.document(id_post).set(post).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Log.d(TAG, "Post: creazione post ok");
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    CollectionReference corsi = db.collection("Corsi");
-                    corsi.document(id_corso)
-                            .update("lista_post", FieldValue.arrayUnion(id_post))
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            // bisogna creare il post
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            CollectionReference posts = db.collection("Post");
+                            Map<String, Object> post = new HashMap<>();
+                            post.put("testo", testo);
+                            post.put("link", link);
+                            post.put("pdf", pdf);
+                            post.put("tag", tag);
+                            post.put("lista_commenti", lista_commenti);
+                            post.put("data", data);
+                            post.put("corso", id_corso);
+                            posts.document(id_post).set(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        Log.d(TAG, "caricamento post nella lista_post corso ok");
+                                        Log.d(TAG, "Post: creazione post ok");
+                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                        CollectionReference corsi = db.collection("Corsi");
+                                        corsi.document(id_corso)
+                                                .update("lista_post", FieldValue.arrayUnion(id_post))
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if(task.isSuccessful()){
+                                                            Log.d(TAG, "caricamento post nella lista_post corso ok");
+                                                        }else{
+                                                            Log.d(TAG, "ERRORE caricamento post nella lista_post corso");
+                                                        }
+                                                    }
+                                                });
                                     }else{
-                                        Log.d(TAG, "ERRORE caricamento post nella lista_post corso");
+                                        Log.d(TAG, "Post: FALLIMENTO creazione post");
                                     }
                                 }
                             });
-                }else{
-                    Log.d(TAG, "Post: FALLIMENTO creazione post");
-                }
+
+                        }else{
+                            Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
+                        }
+                    }
+                });
             }
         });
 
-        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(4000);
+        Thread.sleep(6000);
+
 
         Intent i = new Intent();
         Bundle bundle = new Bundle();
@@ -179,34 +178,13 @@ public class CorsoDocenteActivityTest {
         i.putExtras(bundle);
         activityTestRule.launchActivity(i);
 
-        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(2000);
     }
 
     @After
-    public void tearDown() throws Exception {
-
-
-        // cancellare il corso
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference corsi = db.collection("Corsi");
-
-        corsi.document(id_corso)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Corsi: cancellazione corso ok");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Corsi: ERRORE cancellazione corso");
-                    }
-                });
+    public void tearDown() throws InterruptedException {
 
         // cancellare il post
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference posts = db.collection("Post");
         posts.document(id_post)
                 .delete()
@@ -215,14 +193,32 @@ public class CorsoDocenteActivityTest {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "Post: cancellazione post ok");
+
+                            // cancellare il corso
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            CollectionReference corsi = db.collection("Corsi");
+
+                            corsi.document(id_corso)
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "Corsi: cancellazione corso ok");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d(TAG, "Corsi: ERRORE cancellazione corso");
+                                        }
+                                    });
                         } else {
                             Log.d(TAG, "Post: ERRORE cancellazione post");
                         }
                     }
                 });
 
-        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(4000);
+        Thread.sleep(2000);
     }
 
 
@@ -354,8 +350,6 @@ public class CorsoDocenteActivityTest {
             }
         };
     }
-
-
 
 
     // Verifica che cliccando sul Floating Button si apra la NewPostActivity

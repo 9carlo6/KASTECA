@@ -55,14 +55,19 @@ import static org.hamcrest.Matchers.instanceOf;
 
 @RunWith(AndroidJUnit4.class)
 public class CorsoStudenteActivityTest {
-    private String mail = "studenteprova@studenti.unisannio.it";
-    private String pwd = "passwordProva";
+    private String mailStud = "studenteprova@studenti.unisannio.it";
+    private String mailDoc = "docenteprova@unisannio.it";
+    private String pwdDoc = "passwordProva";
 
 
     private ArrayList<String> lista_post = new ArrayList<>();
     private ArrayList<String>  lista_studenti = new ArrayList<>();
     private String nome_corso = "nome_corso_prova";
     private String id_corso = "id_corso_prova";
+    private String anno_accademico =  "2019/2020";
+    private String codice ="ABC";
+    private String descrizione = "descrizione_prova";
+    private String docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
 
     private String testo = "testo di prova";
     private String link = null;
@@ -85,111 +90,122 @@ public class CorsoStudenteActivityTest {
 
     @Before
     public void setUp() throws Exception {
-        String anno_accademico =  "2019/2020";
-        String codice ="ABC";
-        String descrizione = "descrizione_prova";
-        String docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
+        String pwdStud = "passwordProva";
         IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(1000);
 
-        mAuth.signInWithEmailAndPassword(mail, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(mailDoc, pwdDoc).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "login ok");
-            }
-        });
+            public void onSuccess(AuthResult authResult) {
+                Log.d(TAG, "login docente ok");
 
-        // bisogna creare il corso
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference corsi = db.collection("Corsi");
+                // bisogna creare il corso
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference corsi = db.collection("Corsi");
 
-        Map<String, Object> corso = new HashMap<>();
-        corso.put("anno_accademico", anno_accademico);
-        corso.put("codice", codice);
-        corso.put("descrizione", descrizione);
-        corso.put("docente", docente);
-        corso.put("lista_post", lista_post);
-        corso.put("lista_studenti", lista_studenti);
-        corso.put("nome_corso", nome_corso);
+                Map<String, Object> corso = new HashMap<>();
+                corso.put("anno_accademico", anno_accademico);
+                corso.put("codice", codice);
+                corso.put("descrizione", descrizione);
+                corso.put("docente", docente);
+                corso.put("lista_post", lista_post);
+                corso.put("lista_studenti", lista_studenti);
+                corso.put("nome_corso", nome_corso);
 
-        corsi.document(id_corso).set(corso).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Log.d(TAG, "Corsi: creazione corso ok");
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    CollectionReference studenti = db.collection("Studenti");
-                    studenti.document(id_studente)
-                            .update("lista_corsi", FieldValue.arrayUnion(id_corso))
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Log.d(TAG, "caricamento corso nella lista_corsi dello studente ok");
-                                    }else{
-                                        Log.d(TAG, "ERRORE caricamento corso nella lista_corsi dello studente");
-                                    }
-                                }
-                            });
-                }else{
-                    Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
-                }
-            }
-        });
-
-        corsi.document(id_studente)
-                .update("lista_studenti", FieldValue.arrayUnion(id_studente))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                corsi.document(id_corso).set(corso).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            Log.d(TAG, "caricamento studente nella lista_studenti del corso ok");
-                        }else{
-                            Log.d(TAG, "ERRORE caricamento studente nella lista_studenti del corso");
-                        }
-                    }
-                });
+                            Log.d(TAG, "Corsi: creazione corso ok");
 
-        // bisogna creare il post
-        CollectionReference posts = db.collection("Post");
-        Map<String, Object> post = new HashMap<>();
-        post.put("testo", testo);
-        post.put("link", link);
-        post.put("pdf", pdf);
-        post.put("tag", tag);
-        post.put("lista_commenti", lista_commenti);
-        post.put("data", data);
-        post.put("corso", id_corso);
-        posts.document(id_post).set(post).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Log.d(TAG, "Post: creazione post ok");
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    CollectionReference corsi = db.collection("Corsi");
-                    corsi.document(id_corso)
-                            .update("lista_post", FieldValue.arrayUnion(id_post))
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            // bisogna creare il post
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            CollectionReference posts = db.collection("Post");
+                            Map<String, Object> post = new HashMap<>();
+                            post.put("testo", testo);
+                            post.put("link", link);
+                            post.put("pdf", pdf);
+                            post.put("tag", tag);
+                            post.put("lista_commenti", lista_commenti);
+                            post.put("data", data);
+                            post.put("corso", id_corso);
+                            posts.document(id_post).set(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        Log.d(TAG, "caricamento post nella lista_post corso ok");
+                                        Log.d(TAG, "Post: creazione post ok");
+                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                        CollectionReference corsi = db.collection("Corsi");
+                                        corsi.document(id_corso)
+                                                .update("lista_post", FieldValue.arrayUnion(id_post))
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if(task.isSuccessful()){
+                                                            Log.d(TAG, "caricamento post nella lista_post corso ok");
+                                                        }else{
+                                                            Log.d(TAG, "ERRORE caricamento post nella lista_post corso");
+                                                        }
+                                                    }
+                                                });
                                     }else{
-                                        Log.d(TAG, "ERRORE caricamento post nella lista_post corso");
+                                        Log.d(TAG, "Post: FALLIMENTO creazione post");
                                     }
                                 }
                             });
-                }else{
-                    Log.d(TAG, "Post: FALLIMENTO creazione post");
-                }
+
+                            CollectionReference corsi = db.collection("Corsi");
+                            corsi.document(id_studente)
+                                    .update("lista_studenti", FieldValue.arrayUnion(id_studente))
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful()){
+                                                Log.d(TAG, "caricamento studente nella lista_studenti del corso ok");
+
+                                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                                CollectionReference studenti = db.collection("Studenti");
+                                                studenti.document(id_studente)
+                                                        .update("lista_corsi", FieldValue.arrayUnion(id_corso))
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful()){
+                                                                    Log.d(TAG, "caricamento corso nella lista_corsi dello studente ok");
+                                                                }else{
+                                                                    Log.d(TAG, "ERRORE caricamento corso nella lista_corsi dello studente");
+                                                                }
+                                                            }
+                                                        });
+                                            }else{
+                                                Log.d(TAG, "ERRORE caricamento studente nella lista_studenti del corso");
+                                            }
+                                        }
+                                    });
+                        }else{
+                            Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
+                        }
+                    }
+                });
             }
         });
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(6000);
+
+        mAuth.signOut();
+        mAuth.signInWithEmailAndPassword(mailStud, pwdStud).addOnSuccessListener(new OnSuccessListener<AuthResult>(){
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                Log.d(TAG, "login studente ok");
+            }
+        });
+        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
+        Thread.sleep(2000);
+
 
         Intent i = new Intent();
         Bundle bundle = new Bundle();
@@ -203,7 +219,7 @@ public class CorsoStudenteActivityTest {
         bundle.putString("id", id_studente);
         bundle.putString("nome", nome_studente);
         bundle.putString("cognome", cognome_studente);
-        bundle.putString("email", mail);
+        bundle.putString("email", mailStud);
         bundle.putString("matricola", matricola);
         lista_corsi.add(id_corso);
         bundle.putStringArrayList("id_corsi", lista_corsi);
@@ -216,54 +232,63 @@ public class CorsoStudenteActivityTest {
 
     @After
     public void tearDown() throws Exception {
-        // cancellare il corso
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference corsi = db.collection("Corsi");
+        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
+        mAuth.signInWithEmailAndPassword(mailDoc, pwdDoc).addOnSuccessListener(new OnSuccessListener<AuthResult>(){
+            @Override
+            public void onSuccess(AuthResult authResult) {
 
-        corsi.document(id_corso)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Corsi: cancellazione corso ok");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Corsi: ERRORE cancellazione corso");
-                    }
-                });
+                // cancellare il corso
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference corsi = db.collection("Corsi");
 
-        // cancellare il post
-        CollectionReference posts = db.collection("Post");
-        posts.document(id_post)
-                .delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "Post: cancellazione post ok");
-                        } else {
-                            Log.d(TAG, "Post: ERRORE cancellazione post");
-                        }
-                    }
-                });
+                corsi.document(id_corso)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "Corsi: cancellazione corso ok");
 
-        // cancellare il corso dalla lista_corsi a cui lo studente è iscritto
-        CollectionReference studenti = db.collection("Studenti");
-        studenti.document(id_studente)
-                .update("lista_corsi", FieldValue.arrayRemove(id_corso))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "Studente: cancellazione corso dalla lista ok");
-                        } else {
-                            Log.d(TAG, "Studente: ERRORE cancellazione corso dalla lista");
-                        }
-                    }
-                });
+                                // cancellare il post
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                CollectionReference posts = db.collection("Post");
+                                posts.document(id_post)
+                                        .delete()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d(TAG, "Post: cancellazione post ok");
+                                                } else {
+                                                    Log.d(TAG, "Post: ERRORE cancellazione post");
+                                                }
+                                            }
+                                        });
+
+                                // cancellare il corso dalla lista_corsi a cui lo studente è iscritto
+                                CollectionReference studenti = db.collection("Studenti");
+                                studenti.document(id_studente)
+                                        .update("lista_corsi", FieldValue.arrayRemove(id_corso))
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d(TAG, "Studente: cancellazione corso dalla lista ok");
+                                                } else {
+                                                    Log.d(TAG, "Studente: ERRORE cancellazione corso dalla lista");
+                                                }
+                                            }
+                                        });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, "Corsi: ERRORE cancellazione corso");
+                            }
+                        });
+            }
+        });
+
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(4000);
@@ -283,6 +308,9 @@ public class CorsoStudenteActivityTest {
         onView(withId(R.id.recycler_view_post_studente)).check(matches(isDisplayed()));
         onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar_studente))))
                 .check(matches(withText(nome_corso)));
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
+        mAuth.signOut();
     }
 
     // Verifica che la selezione di un elemento porta alla PostActivity, che mostra i dettagli corretti
@@ -296,6 +324,8 @@ public class CorsoStudenteActivityTest {
         onView(withId(R.id.tagTextView)).check(matches(withText(tag)));
         onView(withId(R.id.testoPostTextView)).check(matches(withText(testo)));
         onView(withId(R.id.data_textView)).check(matches(withText(new SimpleDateFormat(activityTestRule.getActivity().getResources().getString(R.string.formato_data)).format(data))));
+        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
+        mAuth.signOut();
     }
 
     // Verifica della presenza della Navigation Bar con gli elementi corretti
@@ -304,33 +334,32 @@ public class CorsoStudenteActivityTest {
         onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.studente_nav_header)).check(matches(isDisplayed()));
         onView(withId(R.id.nome_cognome_nav_header)).check(matches(withText(nome_studente + " " + cognome_studente)));
-        onView(withId(R.id.email_nav_header)).check(matches(withText(mail)));
+        onView(withId(R.id.email_nav_header)).check(matches(withText(mailStud)));
         onView(withId(R.id.matricola_nav_header)).check(matches(withText(matricola)));
         onView(withId(R.id.nav_view_corso_studente)).check(matches(isDisplayed()));
+        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
+        mAuth.signOut();
     }
 
     // Verifica che il click su ogni elemento del menu porti alla Activity giusta
     @Test
-    public void test_SelectItem_isTheCorrectStudenteActivityVisible(){
+    public void test_SelectItem_isTheCorrectStudenteActivityVisible() throws InterruptedException {
         onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.nav_view_corso_studente)).perform(NavigationViewActions.navigateTo(R.id.nav_post_corso));
+        Thread.sleep(3000);
         onView(withId(R.id.fragment_container_corso_studente)).check(matches(isDisplayed()));
+        Thread.sleep(1000);
 
         onView(withId(R.id.nav_view_corso_studente)).perform(NavigationViewActions.navigateTo(R.id.nav_cancellazione_dal_corso));
+        Thread.sleep(3000);
         onView(withText(activityTestRule.getActivity().getResources().getString(R.string.Dialog_titolo_conferma_cancellazione))).check(matches(isDisplayed()));
         pressBack();
+        Thread.sleep(1000);
 
         onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.nav_view_corso_studente)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
+        Thread.sleep(3000);
         onView(withId(R.id.main)).check(matches(isDisplayed()));
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-
-        mAuth.signInWithEmailAndPassword(mail, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "login ok");
-            }
-        });
     }
 }
