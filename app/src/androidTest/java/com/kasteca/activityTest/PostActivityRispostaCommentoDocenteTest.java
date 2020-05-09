@@ -17,7 +17,6 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -80,7 +79,6 @@ public class PostActivityRispostaCommentoDocenteTest {
 
     private String preparazione= null;
     private String ready = "no";
-    private String result= null;
 
 
     @Rule

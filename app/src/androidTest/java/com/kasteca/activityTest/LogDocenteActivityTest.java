@@ -55,6 +55,7 @@ public class LogDocenteActivityTest {
     private String surnameDocente = "CognomeDocenteProva";
     private String idDocente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
 
+
     private String idCorso;
 
 

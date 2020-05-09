@@ -16,7 +16,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -61,7 +60,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -270,7 +268,7 @@ public class PostActivity extends AppCompatActivity {
         // si setta la grandezza della pop window a seconda delle dimensioni del dispositivo  size.y - 400
         popWindow = new PopupWindow(inflatedView, size.x - 50,WindowManager.LayoutParams.WRAP_CONTENT, true );
         // si setta come background una forma rettangolare con gli angoli arrotondati
-        popWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_shape));
+        popWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_shape,null));
         // si vuole vedere la testiera e scrivere nell'EditText
         // lo si fa solo se il booleano passato al metodo come argomento è true
         if(isAddCommentClicked){
@@ -569,7 +567,7 @@ public class PostActivity extends AppCompatActivity {
         //popWindow.setContentView(inflatedView);
 
         // si setta come background una forma rettangolare con gli angoli arrotondati
-        popWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_shape));
+        popWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.popup_shape,null));
 
         //Per fare in modo che la popup si ricostruisca nel modo corretto
         popWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);

@@ -81,7 +81,6 @@ public class PostActivityRispostaCommentoStudenteTest {
 
     private String preparazione= null;
     private String ready = "no";
-    private String result= null;
 
 
     @Rule
