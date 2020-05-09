@@ -67,8 +67,8 @@
 
         <EditText
             android:id="@+id/writeComment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="40dp"
             android:background="#00000000"
             android:focusable="true"
@@ -88,6 +88,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginRight="38dp"
+            android:layout_marginLeft="10dp"
             android:background="@color/cardview_light_background"
             android:rotation="180"
             android:tint="@color/colorTitle"

@@ -79,39 +79,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="8dp"
-        android:layout_marginRight="10dp"
         android:layout_marginBottom="19dp"
         android:gravity="center"
-        android:minHeight="50dp"
+        android:minHeight="70dp"
         android:orientation="horizontal">
 
         <EditText
             android:id="@+id/writeRisposta"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="40dp"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
             android:background="#00000000"
             android:focusable="true"
+            android:layout_marginLeft="10dp"
             android:focusableInTouchMode="true"
+            android:gravity="center"
+
             android:hint="@string/scrivi_commento"
             android:inputType="text"
             android:padding="5dp"
             android:textColor="#000000"
             android:textColorHint="#9F9C9C"
             android:textSize="14sp"
+
             android:windowSoftInputMode="adjustPan"
-            android:isScrollContainer="true" />
+            android:isScrollContainer="true"
+            />
 
         <ImageButton
             android:id="@+id/send_risposta_button"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_marginRight="38dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
             android:background="@color/cardview_light_background"
             android:rotation="180"
+            android:focusable="true"
             android:tint="@color/colorTitle"
             app:srcCompat="@android:drawable/ic_menu_send" />
 
