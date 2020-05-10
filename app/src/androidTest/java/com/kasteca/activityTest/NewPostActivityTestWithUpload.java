@@ -230,15 +230,6 @@ public class NewPostActivityTestWithUpload {
 
         onView(withText(R.string.upload_successo)).inRoot(new ToastMatcher()).check(matches(isDisplayed()));
 
-
-
-
-        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(2000);
-
-
-
-
     }
 
     // Verifica che cliccando sul bottone di upload, viene effetivamente mandato al server un post

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.OpenableColumns;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -221,7 +222,13 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
                     public void onSuccess(DocumentReference documentReference) {
                         addPostToCorso(documentReference.getId());
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.upload_successo), Toast.LENGTH_LONG).show();
-                        finish();
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        }, 3500);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
