@@ -203,6 +203,12 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
 
     // Metodo chiamato per aggiungere il nuovo post al Database remoto
     public void uploadPostToDatabase(){
+        testo_post_text.setEnabled(false);
+        link_text.setEnabled(false);
+        tags_spinner.setEnabled(false);
+        findViewById(R.id.pdfButton).setEnabled(false);
+        findViewById(R.id.uploadButton).setEnabled(false);
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference postsRef = db.collection("Post");
 
@@ -223,6 +229,7 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
                         addPostToCorso(documentReference.getId());
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.upload_successo), Toast.LENGTH_LONG).show();
 
+
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -234,6 +241,11 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        testo_post_text.setEnabled(true);
+                        link_text.setEnabled(true);
+                        tags_spinner.setEnabled(true);
+                        findViewById(R.id.pdfButton).setEnabled(true);
+                        findViewById(R.id.uploadButton).setEnabled(true);
                         showAlert(getResources().getString(R.string.upload_post_error));
                     }
                 });

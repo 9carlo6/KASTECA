@@ -38,6 +38,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
 
@@ -228,7 +229,11 @@ public class NewPostActivityTestWithUpload {
         closeSoftKeyboard();
         onView(withId(R.id.uploadButton)).perform(click());
 
-        onView(withText(R.string.upload_successo)).inRoot(new ToastMatcher()).check(matches(isDisplayed()));
+        try {
+            onView(withText(R.string.upload_successo)).inRoot(new ToastMatcher()).check(matches(isDisplayed()));
+        }catch(NoMatchingViewException e){
+            onView(withText(R.string.upload_post_error)).check(matches(isDisplayed()));
+        }
 
     }
 
