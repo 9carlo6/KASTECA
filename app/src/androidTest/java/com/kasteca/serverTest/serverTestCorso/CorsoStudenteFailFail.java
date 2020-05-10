@@ -13,6 +13,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -41,6 +42,7 @@ public class CorsoStudenteFailFail {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneNotDocente() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
@@ -87,6 +89,7 @@ public class CorsoStudenteFailFail {
     Fallimento modifica
      */
     @Test
+    @Ignore("This test will be ignored")
     public void updateStudenteNonConsentito() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
@@ -118,6 +121,7 @@ public class CorsoStudenteFailFail {
     Fallimento eliminazione.
      */
     @Test
+    @Ignore("This test will be ignored")
     public void deliteStudente() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");

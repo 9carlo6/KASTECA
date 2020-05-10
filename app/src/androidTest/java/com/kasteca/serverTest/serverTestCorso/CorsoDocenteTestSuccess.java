@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -15,6 +16,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -24,6 +27,8 @@ import java.util.Map;
 
 import static junit.framework.TestCase.assertEquals;
 
+
+@RunWith(JUnit4.class)
 public class CorsoDocenteTestSuccess {
 
     private final static String TAG="Testing-Corso-Success";
@@ -161,6 +166,7 @@ public class CorsoDocenteTestSuccess {
     private void login() throws RuntimeException,InterruptedException{
         if (preparazione.equalsIgnoreCase("notLogged")) {
             //preparazione = null;
+            FirebaseApp.initializeApp(this);
             FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
             mAuth.signOut();
 

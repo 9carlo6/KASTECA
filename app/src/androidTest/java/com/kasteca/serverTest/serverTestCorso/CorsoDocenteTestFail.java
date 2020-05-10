@@ -3,7 +3,6 @@ package com.kasteca.serverTest.serverTestCorso;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.widget.TextViewCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -14,6 +13,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -56,6 +56,7 @@ public class CorsoDocenteTestFail {
      */
 
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneYearOverSize() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
@@ -99,6 +100,7 @@ public class CorsoDocenteTestFail {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneDescrizioneOverSize() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
@@ -150,6 +152,7 @@ public class CorsoDocenteTestFail {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneCodiceOverSize() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
@@ -198,6 +201,7 @@ public class CorsoDocenteTestFail {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneCodiceLenghtZero()throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
@@ -246,6 +250,7 @@ public class CorsoDocenteTestFail {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneNomeCorsoOverSize()throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
@@ -300,6 +305,7 @@ public class CorsoDocenteTestFail {
     Fallimento modifica
      */
     @Test
+    @Ignore("This test will be ignored")
     public void updateDocenteNonProprietario() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");
@@ -334,6 +340,7 @@ public class CorsoDocenteTestFail {
     Fallimento eliminazione
      */
     @Test
+    @Ignore("This test will be ignored")
     public void deliteDocenteNonProprietario() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");

@@ -13,6 +13,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
@@ -37,6 +38,7 @@ public class CorsoStudenteTestSuccess {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void readSuccess() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsiReference = db.collection("Corsi");

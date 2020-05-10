@@ -36,7 +36,6 @@ android {
         resultsDir "$rootDir/test-results"
 
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
-
         unitTests.all {
             jacoco{
                 includeNoLocationClasses = true
