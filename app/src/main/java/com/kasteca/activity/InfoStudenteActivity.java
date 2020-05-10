@@ -18,15 +18,15 @@ public class InfoStudenteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_studente);
 
-        TextView nome_studente_text = findViewById(R.id.textViewNomeStudente);
-        TextView email_studente_text = findViewById(R.id.textViewEmailStudente);
-        TextView matricola_studente_text = findViewById(R.id.textViewMatricolaStudente);
+        TextView nomeStudenteText = findViewById(R.id.textViewNomeStudente);
+        TextView emailStudenteText = findViewById(R.id.textViewEmailStudente);
+        TextView matricolaStudenteText = findViewById(R.id.textViewMatricolaStudente);
 
         bundleStudente = getIntent().getExtras();
         if(bundleStudente != null) {
-            nome_studente_text.setText(bundleStudente.getString("nome_cognome"));
-            email_studente_text.setText(bundleStudente.getString("email"));
-            matricola_studente_text.setText(bundleStudente.getString("matricola"));
+            nomeStudenteText.setText(bundleStudente.getString("nome_cognome"));
+            emailStudenteText.setText(bundleStudente.getString("email"));
+            matricolaStudenteText.setText(bundleStudente.getString("matricola"));
         }
 
     }

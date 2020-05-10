@@ -307,7 +307,7 @@ public class CorsoStudenteActivityTest {
         onView(withId(R.id.fragment_container_corso_studente)).check(matches(isDisplayed()));
         onView(withId(R.id.recycler_view_post_studente)).check(matches(isDisplayed()));
         onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar_studente))))
-                .check(matches(withText(nome_corso)));
+                .check(matches(withText(nome_corso+" "+anno_accademico)));
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
         mAuth.signOut();

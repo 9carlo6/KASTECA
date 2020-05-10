@@ -234,7 +234,7 @@ public class CorsoDocenteActivityTest {
         onView(withId(R.id.fragment_container_corso_docente)).check(matches(isDisplayed()));
         onView(withId(R.id.recycler_view_post_docente)).check(matches(isDisplayed()));
         onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar_docente))))
-                .check(matches(withText(nome_corso)));
+                .check(matches(withText(nome_corso+" "+anno_accademico)));
     }
 
     // Verifica che la selezione di un elemento porta alla PostActivity, che mostra i dettagli corretti

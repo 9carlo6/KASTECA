@@ -90,11 +90,11 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                                         // prendo il documento del corso specifico e scarico gli id degli studenti caricandoli nell'arraylist lista_codici_studenti
                                         if(documentiCorsi.getId().equals(id_corso)){
                                             ArrayList<?> ar = (ArrayList<?>) documentiCorsi.get("lista_studenti");
-                                            ArrayList<String> lista_studenti = new ArrayList<>();
+                                            ArrayList<String> listaStudenti = new ArrayList<>();
                                             for(Object x : ar){
-                                                lista_studenti.add((String) x);
+                                                listaStudenti.add((String) x);
                                             }
-                                            lista_codici_studenti = lista_studenti;
+                                            lista_codici_studenti = listaStudenti;
 
                                             // scarico i dati relativi a tutti gli studenti e li carico nella lista studenti
                                             FirebaseFirestore dbs = FirebaseFirestore.getInstance();
@@ -157,11 +157,11 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                         // prendo il documento del corso specifico e scarico gli id degli studenti caricandoli nell'arraylist lista_codici_studenti
                         if(documentiCorsi.getId().equals(id_corso)){
                             ArrayList<?> ar = (ArrayList<?>) documentiCorsi.get("lista_studenti");
-                            ArrayList<String> lista_studenti = new ArrayList<>();
+                            ArrayList<String> listaStudenti = new ArrayList<>();
                             for(Object x : ar){
-                                lista_studenti.add((String) x);
+                                listaStudenti.add((String) x);
                             }
-                            lista_codici_studenti = lista_studenti;
+                            lista_codici_studenti = listaStudenti;
 
                             // scarico i dati relativi a tutti gli studenti e li carico nella lista studenti
                             FirebaseFirestore dbs = FirebaseFirestore.getInstance();

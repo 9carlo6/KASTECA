@@ -33,17 +33,17 @@ public class InfoRichiestaStudenteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_richiesta_studente);
 
-        TextView nome_studente_text = findViewById(R.id.textViewRichiestaNomeStudente);
-        TextView email_studente_text = findViewById(R.id.textViewRichiestaEmailStudente);
-        TextView matricola_studente_text = findViewById(R.id.textViewRichiestaMatricolaStudente);
-        TextView data_richiesta_text = findViewById(R.id.textViewDataRichiesta);
+        TextView nomeStudenteText = findViewById(R.id.textViewRichiestaNomeStudente);
+        TextView emailStudenteText = findViewById(R.id.textViewRichiestaEmailStudente);
+        TextView matricolaStudenteText = findViewById(R.id.textViewRichiestaMatricolaStudente);
+        TextView dataRichiestaText = findViewById(R.id.textViewDataRichiesta);
 
         Bundle bundleStudente = getIntent().getExtras();
         if(bundleStudente != null) {
-            nome_studente_text.setText(bundleStudente.getString("nome_cognome"));
-            email_studente_text.setText(bundleStudente.getString("email"));
-            matricola_studente_text.setText(bundleStudente.getString("matricola"));
-            data_richiesta_text.setText(bundleStudente.getString("data_richiesta"));
+            nomeStudenteText.setText(bundleStudente.getString("nome_cognome"));
+            emailStudenteText.setText(bundleStudente.getString("email"));
+            matricolaStudenteText.setText(bundleStudente.getString("matricola"));
+            dataRichiestaText.setText(bundleStudente.getString("data_richiesta"));
 
             id_studente = bundleStudente.getString("id_studente");
             codice_corso = bundleStudente.getString("codice_corso");

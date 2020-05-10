@@ -36,8 +36,8 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String LOG = "LogStudente activity";
-        Log.e(LOG,"inizializzazione activity");
+        String log = "LogStudente activity";
+        Log.e(log,"inizializzazione activity");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_studente);
@@ -55,7 +55,7 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         toggle.syncState();
 
 
-        Log.e(LOG," Recupero bundle");
+        Log.e(log," Recupero bundle");
 
         //recuper lo studente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleStudente = getIntent().getExtras();
@@ -69,16 +69,16 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         }
 
         View header=navigationView.getHeaderView(0);
-        TextView nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
-        TextView email_TextView = header.findViewById(R.id.email_nav_header);
-        TextView matricola_TextView = header.findViewById(R.id.matricola_nav_header);
+        TextView nomeCognomeTextView = header.findViewById(R.id.nome_cognome_nav_header);
+        TextView emailTextView = header.findViewById(R.id.email_nav_header);
+        TextView matricolaTextView = header.findViewById(R.id.matricola_nav_header);
         //setto le info del menu a tendina con i dati relativi al docente
-        nome_cognome_TextView.setText(MessageFormat.format("{0} {1}", studente.getNome(), studente.getCognome()));
-        email_TextView.setText(studente.getEmail());
-        matricola_TextView.setText(studente.getMatricola());
+        nomeCognomeTextView.setText(MessageFormat.format("{0} {1}", studente.getNome(), studente.getCognome()));
+        emailTextView.setText(studente.getEmail());
+        matricolaTextView.setText(studente.getMatricola());
 
         //da eliminare
-        Log.e(LOG,"Cambiamento Fragment");
+        Log.e(log,"Cambiamento Fragment");
         //Avvio il fragment con i corsi dello studente.
 
         //refreshing della lista dei corsi.

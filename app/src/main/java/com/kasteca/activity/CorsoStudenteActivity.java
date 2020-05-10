@@ -88,13 +88,13 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
 
 
         View header=navigationView.getHeaderView(0);
-        TextView nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
-        TextView email_TextView = header.findViewById(R.id.email_nav_header);
-        TextView matricola_TextView = header.findViewById(R.id.matricola_nav_header);
+        TextView nomeCognomeTextView = header.findViewById(R.id.nome_cognome_nav_header);
+        TextView emailTextView = header.findViewById(R.id.email_nav_header);
+        TextView matricolaTextView = header.findViewById(R.id.matricola_nav_header);
         //setto le info del menu a tendina con i dati relativi al docente
-        nome_cognome_TextView.setText(MessageFormat.format("{0} {1}", studente.getNome(), studente.getCognome()));
-        email_TextView.setText(studente.getEmail());
-        matricola_TextView.setText(studente.getMatricola());
+        nomeCognomeTextView.setText(MessageFormat.format("{0} {1}", studente.getNome(), studente.getCognome()));
+        emailTextView.setText(studente.getEmail());
+        matricolaTextView.setText(studente.getMatricola());
 
         navigationView.setCheckedItem(R.id.nav_post_corso);
 
