@@ -11,7 +11,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -26,25 +25,21 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.kasteca.R;
-import com.kasteca.fragment.PostDocenteFragment;
 import com.kasteca.fragment.PostStudenteFragment;
 import com.kasteca.object.Studente;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
+import java.text.MessageFormat;
+
 
 public class CorsoStudenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Studente studente;
     private String corso_id;
-    private String codice_corso;
     private String nome_corso;
     private String anno_accademico;
     private Bundle bundleStudente;
 
 
-    private TextView nome_cognome_TextView;
-    private TextView email_TextView;
-    private TextView matricola_TextView;
     private DrawerLayout drawer;
 
 
@@ -58,24 +53,25 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
 
         //Recupero dati dal bundle
         studente = new Studente();
-        studente.setId(bundleStudente.getString("id"));
-        studente.setNome( bundleStudente.getString("nome"));
-        studente.setCognome(bundleStudente.getString("cognome"));
-        studente.setEmail(bundleStudente.getString("email"));
-        studente.setMatricola(bundleStudente.getString("matricola"));
+        if(bundleStudente != null) {
+            studente.setId(bundleStudente.getString("id"));
+            studente.setNome(bundleStudente.getString("nome"));
+            studente.setCognome(bundleStudente.getString("cognome"));
+            studente.setEmail(bundleStudente.getString("email"));
+            studente.setMatricola(bundleStudente.getString("matricola"));
 
-        // recupero anche il codice del corso
-        corso_id = bundleStudente.getString("id_corso");
-        codice_corso = bundleStudente.getString("codice_corso");
-        nome_corso = bundleStudente.getString("nome_corso");
-        anno_accademico = bundleStudente.getString("anno_accademico");
+            // recupero anche il codice del corso
+            corso_id = bundleStudente.getString("id_corso");
+            nome_corso = bundleStudente.getString("nome_corso");
+            anno_accademico = bundleStudente.getString("anno_accademico");
+        }
 
         drawer = findViewById(R.id.corso_studente_drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view_corso_studente);
         navigationView.setNavigationItemSelectedListener(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar_studente);
-        toolbar.setTitle(nome_corso);
+        toolbar.setTitle(nome_corso + " " + anno_accademico);
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -92,11 +88,11 @@ public class CorsoStudenteActivity extends AppCompatActivity implements Navigati
 
 
         View header=navigationView.getHeaderView(0);
-        nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
-        email_TextView = header.findViewById(R.id.email_nav_header);
-        matricola_TextView = header.findViewById(R.id.matricola_nav_header);
+        TextView nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
+        TextView email_TextView = header.findViewById(R.id.email_nav_header);
+        TextView matricola_TextView = header.findViewById(R.id.matricola_nav_header);
         //setto le info del menu a tendina con i dati relativi al docente
-        nome_cognome_TextView.setText(studente.getNome() + " " + studente.getCognome());
+        nome_cognome_TextView.setText(MessageFormat.format("{0} {1}", studente.getNome(), studente.getCognome()));
         email_TextView.setText(studente.getEmail());
         matricola_TextView.setText(studente.getMatricola());
 

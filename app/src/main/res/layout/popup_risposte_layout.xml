@@ -91,7 +91,7 @@
             android:layout_height="40dp"
             android:background="#00000000"
             android:focusable="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:focusableInTouchMode="true"
             android:gravity="center"
 
@@ -104,7 +104,7 @@
 
             android:windowSoftInputMode="adjustPan"
             android:isScrollContainer="true"
-            />
+            android:importantForAutofill="no" />
 
         <ImageButton
             android:id="@+id/send_risposta_button"
@@ -113,11 +113,12 @@
             android:layout_gravity="center"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
-            android:background="@color/cardview_light_background"
+            android:background="@android:color/transparent"
             android:rotation="180"
             android:focusable="true"
             android:tint="@color/colorTitle"
-            app:srcCompat="@android:drawable/ic_menu_send" />
+            app:srcCompat="@android:drawable/ic_menu_send"
+            android:contentDescription="@string/desc_invio" />
 
     </LinearLayout>
 
@@ -125,7 +126,7 @@
 
         <TextView
             android:id="@+id/textTool"
-            android:text="Risposte"
+            android:text="@string/risposte"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -141,9 +142,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="?attr/homeAsUpIndicator"
-        android:layout_marginLeft="6dp"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="15dp"
-        />
+        android:contentDescription="@string/desc_indietro" />
 
 
 

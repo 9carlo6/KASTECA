@@ -2,7 +2,6 @@ package com.kasteca.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.kasteca.R;
-import com.kasteca.object.Studente;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,9 +11,6 @@ import android.widget.TextView;
 
 public class InfoStudenteActivity extends AppCompatActivity {
 
-    private TextView nome_studente_text;
-    private TextView email_studente_text;
-    private TextView matricola_studente_text;
     private Bundle bundleStudente;
 
     @Override
@@ -22,14 +18,16 @@ public class InfoStudenteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_studente);
 
-        nome_studente_text = findViewById(R.id.textViewNomeStudente);
-        email_studente_text = findViewById(R.id.textViewEmailStudente);
-        matricola_studente_text = findViewById(R.id.textViewMatricolaStudente);
+        TextView nome_studente_text = findViewById(R.id.textViewNomeStudente);
+        TextView email_studente_text = findViewById(R.id.textViewEmailStudente);
+        TextView matricola_studente_text = findViewById(R.id.textViewMatricolaStudente);
 
         bundleStudente = getIntent().getExtras();
-        nome_studente_text.setText(bundleStudente.getString("nome_cognome"));
-        email_studente_text.setText(bundleStudente.getString("email"));
-        matricola_studente_text.setText(bundleStudente.getString("matricola"));
+        if(bundleStudente != null) {
+            nome_studente_text.setText(bundleStudente.getString("nome_cognome"));
+            email_studente_text.setText(bundleStudente.getString("email"));
+            matricola_studente_text.setText(bundleStudente.getString("matricola"));
+        }
 
     }
 

@@ -17,7 +17,7 @@
         android:src="@drawable/logo_unisannio"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="44dp" />
+        android:contentDescription="@string/desc_unisannio" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -30,8 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="18dp"
-        android:layout_marginRight="16dp" />
+        android:contentDescription="@string/desc_kasteca" />
 
 
     <EditText
@@ -47,7 +46,8 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:ignore="Autofill"/>
 
     <EditText
         android:id="@+id/Password_Edit_Text"
@@ -62,7 +62,8 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Email_Edit_Text" />
+        app:layout_constraintTop_toBottomOf="@+id/Email_Edit_Text"
+        tools:ignore="Autofill"/>
 
     <Button
         android:id="@+id/button"

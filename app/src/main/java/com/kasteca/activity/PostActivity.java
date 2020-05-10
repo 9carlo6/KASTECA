@@ -18,6 +18,7 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -57,6 +58,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -75,20 +77,12 @@ public class PostActivity extends AppCompatActivity {
     private String nomeCognome;
     private String idDocente;
     private TextView testoView;
-    private TextView tagView;
-    private TextView nomeCognomeView;
-    private TextView dataView;
-    private TextView numeroCommentiView;
-    private TextView linkView;
     private TextView visuale;
     private PopupWindow popWindow;
     private CommentiAdapterFirestoreDocente adapter = null;
     private RecyclerView recyclerView;
-    private ImageButton inviaCommento;
     private EditText scriviCommento;
-    private ImageButton inviaRisposta;
     private EditText scriviRisposta;
-    private RisposteAdapterFirestoreDocente risposteAdapterFirestore= null;
     private View viewPop;
 
 
@@ -128,18 +122,17 @@ public class PostActivity extends AppCompatActivity {
         //Verifichiamo il current user per vedere se èp uno studente
         //Nel caso è uno studente salviamo il suo nome ed il suo cognome
 
-        nomeCognomeView = findViewById(R.id.nome_cognome_textView);
-        dataView = findViewById(R.id.data_textView);
-        tagView = findViewById(R.id.tagTextView);
+        TextView nomeCognomeView = findViewById(R.id.nome_cognome_textView);
+        TextView dataView = findViewById(R.id.data_textView);
+        TextView tagView = findViewById(R.id.tagTextView);
         testoView = findViewById(R.id.testoPostTextView);
-        numeroCommentiView = findViewById(R.id.commenti_numero_textView);
 
         nomeCognomeView.setText(nomeCognome);
-        SimpleDateFormat sdf = new SimpleDateFormat(getResources().getString(R.string.formato_data));
+        SimpleDateFormat sdf = new SimpleDateFormat(getResources().getString(R.string.formato_data), Locale.ITALY);
         if(post.getData() != null)  dataView.setText(sdf.format(post.getData()));
         testoView.setText(post.getTesto());
         tagView.setText(post.getTag());
-        linkView = findViewById(R.id.link_textView);
+        TextView linkView = findViewById(R.id.link_textView);
 
         if(post.getLink() == null){
             linkView.setVisibility(View.INVISIBLE);
@@ -215,13 +208,13 @@ public class PostActivity extends AppCompatActivity {
         final LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         viewPop=v;
         // si visualizza il layout del popup
-        final View inflatedView = layoutInflater.inflate(R.layout.popup_comments_layout, null,false);
+        final View inflatedView = layoutInflater.inflate(R.layout.popup_comments_layout, (ViewGroup) null,false);
         // si cerca la recycle view nel popup layout
         recyclerView = inflatedView.findViewById(R.id.recycler_view_commenti);
         // si cerca l'Edit Text nel popup layout
         scriviCommento = inflatedView.findViewById(R.id.writeComment);
         // si cerca il bottone per l'invio di un commento nel popup layout
-        inviaCommento = inflatedView.findViewById(R.id.send_commento_button);
+        ImageButton inviaCommento = inflatedView.findViewById(R.id.send_commento_button);
         // si rende il bottone disabilitato fino a che non viene scritta almeno una lettera nell'Edit Text
         // inviaCommento.setEnabled(false);
         visuale = inflatedView.findViewById(R.id.visuale);
@@ -418,6 +411,7 @@ public class PostActivity extends AppCompatActivity {
         FirestoreRecyclerOptions<Risposta> options = new FirestoreRecyclerOptions.Builder<Risposta>().setQuery(query, Risposta.class).build();
 
         //Controlliamo se è un docente o uno studente e scegliamo l'adapter
+        RisposteAdapterFirestoreDocente risposteAdapterFirestore = null;
         if(nomeCognomeStudente != null && idStudente!= null)
             risposteAdapterFirestore = new RisposteAdapterFirestoreStudente(options, idDocente, nomeCognome, nomeCognomeStudente, idStudente);
         else
@@ -488,7 +482,7 @@ public class PostActivity extends AppCompatActivity {
         final LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // si visualizza il layout del popup
-        final View inflatedView = layoutInflater.inflate(R.layout.popup_risposte_layout, null,false);
+        final View inflatedView = layoutInflater.inflate(R.layout.popup_risposte_layout, (ViewGroup) null,false);
         //settiamo il bottone per tornare ai commenti
         ImageView backButton= inflatedView.findViewById(R.id.back_to_comment);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -523,7 +517,7 @@ public class PostActivity extends AppCompatActivity {
         // si cerca l'Edit Text nel popup layout
         scriviRisposta = inflatedView.findViewById(R.id.writeRisposta);
         // si cerca il bottone per l'invio di un commento nel popup layout
-        inviaRisposta = inflatedView.findViewById(R.id.send_risposta_button);
+        ImageButton inviaRisposta = inflatedView.findViewById(R.id.send_risposta_button);
         visuale = inflatedView.findViewById(R.id.visuale);
 
         inviaRisposta.setOnClickListener(new View.OnClickListener() {

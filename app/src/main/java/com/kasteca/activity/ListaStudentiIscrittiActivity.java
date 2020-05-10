@@ -27,7 +27,6 @@ import java.util.List;
 
 public class ListaStudentiIscrittiActivity extends AppCompatActivity {
 
-    private String LOG ="DEBUG_LISTA_STUDENTE_ACTIVITY";
     private RecyclerView rv;
     private List<Studente> studenti;
     private String id_corso;
@@ -45,7 +44,7 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
         studenti = new ArrayList<>();
 
         // questo è il recyclerView per la lista degli studenti iscritti
-        rv = (RecyclerView)findViewById(R.id.rv_lista_studenti_iscritti);
+        rv = findViewById(R.id.rv_lista_studenti_iscritti);
 
         // se si è certi che le dimensioni non cambieranno allora si scrive questo
         rv.setHasFixedSize(true);
@@ -66,7 +65,7 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
                         studenti = new ArrayList<>();
-                        rv = (RecyclerView)findViewById(R.id.rv_lista_studenti_iscritti);
+                        rv = findViewById(R.id.rv_lista_studenti_iscritti);
 
                         // se si è certi che le dimensioni non cambieranno
                         rv.setHasFixedSize(true);
@@ -90,7 +89,12 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                                     for(DocumentSnapshot documentiCorsi :task.getResult()){
                                         // prendo il documento del corso specifico e scarico gli id degli studenti caricandoli nell'arraylist lista_codici_studenti
                                         if(documentiCorsi.getId().equals(id_corso)){
-                                            lista_codici_studenti = (ArrayList<String>) documentiCorsi.get("lista_studenti");
+                                            ArrayList<?> ar = (ArrayList<?>) documentiCorsi.get("lista_studenti");
+                                            ArrayList<String> lista_studenti = new ArrayList<>();
+                                            for(Object x : ar){
+                                                lista_studenti.add((String) x);
+                                            }
+                                            lista_codici_studenti = lista_studenti;
 
                                             // scarico i dati relativi a tutti gli studenti e li carico nella lista studenti
                                             FirebaseFirestore dbs = FirebaseFirestore.getInstance();
@@ -105,7 +109,11 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                                                             for(String idStudente : lista_codici_studenti){
                                                                 // se trova un uguaglianza allora lo studente appartiene al corso e quindi viene aggiunto alla lista studenti da passare all'adapter
                                                                 if(idStudente.equals(document.getId())){
-                                                                    Studente studente = new Studente(document.getId(), document.get("nome").toString(), document.get("cognome").toString(),document.get("email").toString(), document.get("matricola").toString());
+                                                                    Studente studente = new Studente(document.getId(),
+                                                                            document.get("nome").toString(),
+                                                                            document.get("cognome").toString(),
+                                                                            document.get("email").toString(),
+                                                                            document.get("matricola").toString());
                                                                     //Toast.makeText(getApplicationContext(), document.get("nome").toString(), Toast.LENGTH_LONG).show();
                                                                     studenti.add(studente);
                                                                 }
@@ -148,7 +156,12 @@ public class ListaStudentiIscrittiActivity extends AppCompatActivity {
                     for(DocumentSnapshot documentiCorsi :task.getResult()){
                         // prendo il documento del corso specifico e scarico gli id degli studenti caricandoli nell'arraylist lista_codici_studenti
                         if(documentiCorsi.getId().equals(id_corso)){
-                            lista_codici_studenti = (ArrayList<String>) documentiCorsi.get("lista_studenti");
+                            ArrayList<?> ar = (ArrayList<?>) documentiCorsi.get("lista_studenti");
+                            ArrayList<String> lista_studenti = new ArrayList<>();
+                            for(Object x : ar){
+                                lista_studenti.add((String) x);
+                            }
+                            lista_codici_studenti = lista_studenti;
 
                             // scarico i dati relativi a tutti gli studenti e li carico nella lista studenti
                             FirebaseFirestore dbs = FirebaseFirestore.getInstance();

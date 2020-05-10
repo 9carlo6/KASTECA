@@ -2,7 +2,6 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -28,14 +27,12 @@
                     android:layout_above="@+id/matricola_studente_richiesta"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="15dp"
-                    android:text="nome"
+                    android:text="@string/Name_Text"
                     android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="15dp" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/matricola_studente_richiesta"
@@ -44,11 +41,10 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="10dp"
-                    android:text="data"
+                    android:text="@string/data_richiesta_text"
                     android:textColor="@color/common_google_signin_btn_text_dark_focused"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginLeft="40dp" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

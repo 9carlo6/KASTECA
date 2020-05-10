@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +23,8 @@ import com.kasteca.fragment.CorsiDocenteFragment;
 import com.kasteca.fragment.CreazioneCorsoFragment;
 import com.kasteca.object.Docente;
 import com.kasteca.R;
-import com.kasteca.util.EspressoIdlingResource;
+
+import java.text.MessageFormat;
 
 public class LogDocenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -34,9 +34,7 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
     private DrawerLayout drawer;
     private Bundle bundleDocente;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private Docente docente;
 
-    private TextView nome_cognome_TextView;
     private TextView email_TextView;
 
     private CorsiDocenteFragment cf=null;
@@ -62,23 +60,25 @@ public class LogDocenteActivity extends AppCompatActivity implements NavigationV
 
         //recupero il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleDocente = getIntent().getExtras();
-        docente = new Docente();
-        docente.setId(bundleDocente.getString("id"));
-        docente.setNome(bundleDocente.getString("nome"));
-        docente.setCognome(bundleDocente.getString("cognome"));
-        docente.setEmail(bundleDocente.getString("email"));
+        Docente docente = new Docente();
+        if(bundleDocente != null) {
+            docente.setId(bundleDocente.getString("id"));
+            docente.setNome(bundleDocente.getString("nome"));
+            docente.setCognome(bundleDocente.getString("cognome"));
+            docente.setEmail(bundleDocente.getString("email"));
+        }
 
         View header=navigationView.getHeaderView(0);
-        nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
+        TextView nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
         email_TextView = header.findViewById(R.id.email_nav_header);
         //setto le info del menu a tendina con i dati relativi al docente
-        nome_cognome_TextView.setText(docente.getNome() + " " + docente.getCognome());
+        nome_cognome_TextView.setText(MessageFormat.format("{0} {1}", docente.getNome(), docente.getCognome()));
         email_TextView.setText(docente.getEmail());
 
         navigationView.setCheckedItem(R.id.nav_corsi_docente);
 
         //refreshing della lista dei corsi.
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout_lista_corsi_docente);
+        swipeRefreshLayout = findViewById(R.id.swipeLayout_lista_corsi_docente);
         //swipeRefreshLayout.setColorSchemeResources(R.color.refresh, R.color.refresh1, R.color.refresh2);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

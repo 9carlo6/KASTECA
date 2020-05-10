@@ -12,43 +12,29 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.ui.AppBarConfiguration;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kasteca.R;
-import com.kasteca.fragment.CorsiDocenteFragment;
-import com.kasteca.fragment.CorsiStudenteFragment;
 import com.kasteca.fragment.PostDocenteFragment;
 import com.kasteca.object.Docente;
-import com.kasteca.object.Post;
+
+import java.text.MessageFormat;
+
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class CorsoDocenteActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private final String LOG="DEBUG_CORSO_ACTIVITY";
-
-    private CardView option_Post;
-
-    private AppBarConfiguration mAppBarConfiguration;
-
-    private FloatingActionButton fab;
     private DrawerLayout drawer;
     private Bundle bundleCorso;
-    private Docente docente;
     private String id_corso;
     private String codice_corso;
     private String nome_corso;
     private String anno_accademico;
 
-    private TextView nome_cognome_TextView;
-    private TextView email_TextView;
-
-    private CorsiDocenteFragment cf=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,20 +45,23 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
 
         // recupero il docente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleCorso = getIntent().getExtras();
-        docente = new Docente();
-        docente.setId(bundleCorso.getString("id_docente"));
-        docente.setNome(bundleCorso.getString("nome_docente"));
-        docente.setCognome(bundleCorso.getString("cognome_docente"));
-        docente.setEmail(bundleCorso.getString("email_docente"));
+        Docente docente = new Docente();
+        if(bundleCorso != null) {
+            docente.setId(bundleCorso.getString("id_docente"));
+            docente.setNome(bundleCorso.getString("nome_docente"));
+            docente.setCognome(bundleCorso.getString("cognome_docente"));
+            docente.setEmail(bundleCorso.getString("email_docente"));
 
-        // recupero anche il codice del corso
-        id_corso = bundleCorso.getString("id_corso");
-        codice_corso = bundleCorso.getString("codice_corso");
-        nome_corso = bundleCorso.getString("nome_corso");
-        anno_accademico = bundleCorso.getString("anno_accademico");
+
+            // recupero anche il codice del corso
+            id_corso = bundleCorso.getString("id_corso");
+            codice_corso = bundleCorso.getString("codice_corso");
+            nome_corso = bundleCorso.getString("nome_corso");
+            anno_accademico = bundleCorso.getString("anno_accademico");
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar_docente);
-        toolbar.setTitle(nome_corso);
+        toolbar.setTitle(nome_corso + " " + anno_accademico);
         setSupportActionBar(toolbar);
 
 
@@ -93,15 +82,15 @@ public class CorsoDocenteActivity extends AppCompatActivity implements Navigatio
         }
 
         View header=navigationView.getHeaderView(0);
-        nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
-        email_TextView = header.findViewById(R.id.email_nav_header);
+        TextView nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
+        TextView email_TextView = header.findViewById(R.id.email_nav_header);
         //setto le info del menu a tendina con i dati relativi al docente
-        nome_cognome_TextView.setText(docente.getNome() + " " + docente.getCognome());
+        nome_cognome_TextView.setText(MessageFormat.format("{0} {1}", docente.getNome(), docente.getCognome()));
         email_TextView.setText(docente.getEmail());
 
         navigationView.setCheckedItem(R.id.nav_post_corso);
 
-        fab = findViewById(R.id.fab_add_post);
+        FloatingActionButton fab = findViewById(R.id.fab_add_post);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

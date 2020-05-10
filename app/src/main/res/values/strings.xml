@@ -11,6 +11,8 @@
     <string name="Login_Failed">Login fallito</string>
     <string name="Dialog_neutral_button_login_failed">OK</string>
     <string name="Login_Successful">Login eseguito con successo!</string>
+    <string name="desc_unisannio">Logo Unisannio</string>
+    <string name="desc_kasteca">Logo app</string>
 
     <!-- stringhe per la RegistrationActivity -->
     <string name="Registration_Failed">Registrazione fallita</string>
@@ -22,28 +24,21 @@
     <string name="Create_Account_Text">CREA ACCOUNT</string>
     <string name="Already_A_Member_Text">Sei già iscritto? Vai al Login</string>
     <string name="Not_Correct_Fields">I campi non sono stati riempiti correttamente</string>
+    <string name="dominio_unisannio">\u0040unisannio.it</string>
+    <string name="dominio_studenti_unisannio">\u0040studenti.unisannio.it</string>
 
     <!-- stringhe per la LogDocenteActivity -->
-    <string name="title_activity_main2">Main2Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="menu_home">Home</string>
     <string name="menu_corsi">Corsi</string>
     <string name="menu_aggiungi_corso">Aggiungi Corso</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
     <string name="nome_drower">nome</string>
     <string name="email_drower">email</string>
+    <string name="desc_profilo">Immagine profilo</string>
 
     <!-- stringhe per la CorsoDocenteActivity -->
     <string name="menu_post">Post</string>
+    <string name="desc_icona">Icona contenuto</string>
     <string name="menu_visualizza_studenti_iscritti">Visualizza Studenti iscritti</string>
     <string name="menu_visualizza_richieste_studente">Visualizza Richieste Studenti</string>
 
@@ -55,7 +50,7 @@
     <string name="Dialog_button_no_conferma_cancellazione">No</string>
     <string name="Dialog_titolo_corretta_cancellazione">La cancellazione è avvenuta con successo</string>
     <string name="Dialog_titolo_incorretta_cancellazione">La cancellazione non è avvenuta con successo, riprova</string>
-    <string name="Dialog_button_ok_cancellazione">Ok</string>
+    <string name="Dialog_button_ok_cancellazione">OK</string>
 
 
 
@@ -65,7 +60,6 @@
     <string name="email_studente_text">Email</string>
     <string name="matricol_studente_text">Matricola</string>
     <string name="invia_email_button">Invia Email</string>
-    <string name="cancella_studente_button">Cancella Studente</string>
 
     <!-- stringhe per la LogStudenteActivity -->
     <string name="menu_iscrizione_corso">Iscrizione ad un Corso</string>
@@ -101,18 +95,17 @@
     <!-- stringhe per la NewPostActivity -->
     <string name="testo_post">Scrivi qualcosa</string>
     <string name="link">Link</string>
-    <string name="pdf">Pdf</string>
     <string name="spinner_tag">Tag</string>
     <string name="upload_failed">Upload fallito</string>
     <string name="missing_data">Perfavore, inserisci i dati mancanti.</string>
-    <string name="file_non_trovato">Non è stato trovato il file pdf. Il post non è stato caricato</string>
     <string name="upload_pdf_fallito">Non è stato possibile caricare il pdf. Il post non è stato caricato</string>
     <string name="upload_pdf_successo">Il pdf è stato caricato.</string>
     <string name="upload_successo">Il post è stato caricato.</string>
+    <string name="desc_pdf">Icona pdf</string>
+    <string name="desc_upload">Icona upload</string>
 
     <!-- stringhe per il PostDocenteFragment-->
     <string name="get_failed">Fallimento recupero dati</string>
-    <string name="get_posts_failed">Non è stato possibile recuperare i post del corso.</string>
 
     <!-- stringhe per il PostStudenteFragment-->
     <string name="get_docente_failed">Non è stato possibile recuperare il docente del corso.</string>
@@ -126,6 +119,9 @@
     <string name="formato_data">dd/MM/yyyy HH:mm</string>
     <string name="titolo">File Download</string>
     <string name="modifica_button">Modifica</string>
+    <string name="desc_invio">Icona invio</string>
+    <string name="desc_indietro">icona indietro</string>
+    <string name="risposte">Risposte</string>
 
     <!-- stringhe per l'item Risposta-->
     <string name="eliminaRisposta">Elimina</string>
@@ -136,5 +132,13 @@
     <string name="rispondi">Rispondi</string>
     <string name="elimina">Elimina</string>
     <string name="visualizza_risposte">Visualizza tutte le risposte</string>
-    <string name="scrivi_commento">Scrivi un commento...</string>
+    <string name="scrivi_commento">Scrivi un commento…</string>
+
+    <!-- stringhe per CreazioneCorsoFragment -->
+    <string name="conferma">Conferma</string>
+    <string name="inserimento_info">Inserisci le informazioni del nuovo corso:</string>
+    <string name="hint_nome_corso">Nome del corso</string>
+    <string name="hint_codice">Codice</string>
+    <string name="hint_descrizione">Descrizione</string>
+
 </resources>

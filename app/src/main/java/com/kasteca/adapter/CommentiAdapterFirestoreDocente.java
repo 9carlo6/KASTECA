@@ -11,6 +11,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.kasteca.R;
 import com.kasteca.object.Commento;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -55,7 +56,7 @@ public class CommentiAdapterFirestoreDocente extends FirestoreRecyclerAdapter<Co
         }
 
         holder.text_commento.setText(model.getTesto());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ITALY);
         holder.data.setText(sdf.format(model.getData()));
 
     }

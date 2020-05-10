@@ -6,7 +6,6 @@ package com.kasteca.activity;
         import androidx.appcompat.widget.Toolbar;
         import androidx.core.view.GravityCompat;
         import androidx.drawerlayout.widget.DrawerLayout;
-        import androidx.navigation.ui.AppBarConfiguration;
         import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
         import android.content.Intent;
@@ -19,33 +18,25 @@ package com.kasteca.activity;
 
         import com.google.android.material.navigation.NavigationView;
         import com.google.firebase.auth.FirebaseAuth;
-        import com.kasteca.fragment.CorsiDocenteFragment;
         import com.kasteca.R;
         import com.kasteca.fragment.CorsiStudenteFragment;
         import com.kasteca.object.Studente;
 
-        import java.util.ArrayList;
+        import java.text.MessageFormat;
 
 public class LogStudenteActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
-    private String LOG ="LogStudente activity";
-
-    private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Bundle bundleStudente;
     private Studente studente;
 
-    private TextView nome_cognome_TextView;
-    private TextView email_TextView;
-    private TextView matricola_TextView;
-
     int LAUNCH_RICHIESTA_ISCRIZIONE_ACTIVITY = 1;
-    private CorsiStudenteFragment csf=null;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String LOG = "LogStudente activity";
         Log.e(LOG,"inizializzazione activity");
 
         super.onCreate(savedInstanceState);
@@ -68,19 +59,21 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
 
         //recuper lo studente autenticato dall'intent inviato dalla MainActivity e creo una nuova istanza docente
         bundleStudente = getIntent().getExtras();
-        studente = new Studente();
-        studente.setId(bundleStudente.getString("id"));
-        studente.setNome(bundleStudente.getString("nome"));
-        studente.setCognome(bundleStudente.getString("cognome"));
-        studente.setEmail(bundleStudente.getString("email"));
-        studente.setMatricola(bundleStudente.getString("matricola"));
+        if(bundleStudente != null) {
+            studente = new Studente();
+            studente.setId(bundleStudente.getString("id"));
+            studente.setNome(bundleStudente.getString("nome"));
+            studente.setCognome(bundleStudente.getString("cognome"));
+            studente.setEmail(bundleStudente.getString("email"));
+            studente.setMatricola(bundleStudente.getString("matricola"));
+        }
 
         View header=navigationView.getHeaderView(0);
-        nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
-        email_TextView = header.findViewById(R.id.email_nav_header);
-        matricola_TextView = header.findViewById(R.id.matricola_nav_header);
+        TextView nome_cognome_TextView = header.findViewById(R.id.nome_cognome_nav_header);
+        TextView email_TextView = header.findViewById(R.id.email_nav_header);
+        TextView matricola_TextView = header.findViewById(R.id.matricola_nav_header);
         //setto le info del menu a tendina con i dati relativi al docente
-        nome_cognome_TextView.setText(studente.getNome() + " " + studente.getCognome());
+        nome_cognome_TextView.setText(MessageFormat.format("{0} {1}", studente.getNome(), studente.getCognome()));
         email_TextView.setText(studente.getEmail());
         matricola_TextView.setText(studente.getMatricola());
 
@@ -89,7 +82,7 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
         //Avvio il fragment con i corsi dello studente.
 
         //refreshing della lista dei corsi.
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout_lista_corsi_studente);
+        swipeRefreshLayout = findViewById(R.id.swipeLayout_lista_corsi_studente);
         //swipeRefreshLayout.setColorSchemeResources(R.color.refresh, R.color.refresh1, R.color.refresh2);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -110,7 +103,7 @@ public class LogStudenteActivity extends AppCompatActivity  implements Navigatio
     }
 
     private void caricamentoFragmentCorsi(){
-        csf= new CorsiStudenteFragment();
+        CorsiStudenteFragment csf = new CorsiStudenteFragment();
         csf.setArguments(bundleStudente);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_studente, csf).commit();
     }

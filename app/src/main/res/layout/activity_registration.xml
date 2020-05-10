@@ -14,25 +14,24 @@
         android:layout_height="76dp"
         android:layout_marginStart="44dp"
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="44dp"
         android:src="@drawable/logo_unisannio"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/desc_unisannio" />
 
     <ImageView
         android:id="@+id/imageViewLogoKasteca"
         android:layout_width="350dp"
         android:layout_height="97dp"
         android:layout_marginStart="18dp"
-        android:layout_marginLeft="18dp"
         android:layout_marginTop="72dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:src="@drawable/logo_kasteca"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.41"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/desc_kasteca" />
 
     <Switch
         android:id="@+id/switchDocenteStudente"
@@ -50,6 +49,7 @@
 
     <EditText
         android:id="@+id/editTextNome"
+        tools:ignore="Autofill"
         android:layout_width="286dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -68,6 +68,7 @@
 
     <EditText
         android:id="@+id/editTextCognome"
+        tools:ignore="Autofill"
         android:layout_width="286dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -86,6 +87,7 @@
 
     <EditText
         android:id="@+id/editTextEmail"
+        tools:ignore="Autofill"
         android:layout_width="286dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -103,6 +105,7 @@
 
     <EditText
         android:id="@+id/editTextPassword"
+        tools:ignore="Autofill"
         android:layout_width="286dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -121,14 +124,14 @@
 
     <EditText
         android:id="@+id/editTextMatricola"
+        tools:ignore="Autofill"
         android:layout_width="286dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:hint="@string/Matricola_Text"
+        android:inputType="text"
         android:textColor="@color/colorGeneralText"
         android:textSize="18sp"
         android:visibility="invisible"

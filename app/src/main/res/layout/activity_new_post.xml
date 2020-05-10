@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/new_post_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:backgroundTint="@color/colorBackground">
+    android:background="@color/colorBackground">
 
     <EditText
         android:id="@+id/text_post_Edit_Text"
+        tools:ignore="Autofill"
         android:layout_width="286dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="49dp"
         android:layout_marginTop="59dp"
         android:layout_marginEnd="49dp"
-        android:gravity="top|left"
+        android:gravity="top|start"
         android:hint="@string/testo_post"
         android:inputType="textMultiLine"
         android:lines="8"
@@ -31,12 +32,14 @@
 
     <EditText
         android:id="@+id/link_Edit_Text"
+        tools:ignore="Autofill"
         android:layout_width="286dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="49dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="49dp"
         android:hint="@string/link"
+        android:inputType="text"
         android:textColor="@color/colorGeneralText"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -59,7 +62,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/link_Edit_Text"
         app:layout_constraintVertical_bias="0.152"
-        app:srcCompat="@drawable/pdf_icon_foreground" />
+        app:srcCompat="@drawable/pdf_icon_foreground"
+        android:contentDescription="@string/desc_pdf" />
 
     <ImageButton
         android:id="@+id/uploadButton"
@@ -72,7 +76,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tags_spinner"
-        app:srcCompat="@drawable/upload_icon_foreground" />
+        app:srcCompat="@drawable/upload_icon_foreground"
+        android:contentDescription="@string/desc_upload" />
 
     <Spinner
         android:id="@+id/tags_spinner"

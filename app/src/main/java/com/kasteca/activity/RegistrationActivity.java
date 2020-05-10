@@ -58,7 +58,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         isDocente = true; // variabile booleana per verificare se la registrazione riguarda un docente o uno studente
 
-        email_edit_text.setText("@unisannio.it"); // il campo email viene inizialmente settato con il dominio unisannio legato ai professori
+        email_edit_text.setText(getResources().getString(R.string.dominio_unisannio)); // il campo email viene inizialmente settato con il dominio unisannio legato ai professori
 
         // testo che rimanda alla MainActivity
         account_already_exists_text.setOnClickListener(new View.OnClickListener(){
@@ -74,12 +74,12 @@ public class RegistrationActivity extends AppCompatActivity {
                 if(isChecked){
                     matricola_edit_text.setVisibility(View.VISIBLE);
                     isDocente = false;
-                    email_edit_text.setText("@studenti.unisannio.it");
+                    email_edit_text.setText(getResources().getString(R.string.dominio_studenti_unisannio));
                 }
                 else{
                     matricola_edit_text.setVisibility(View.INVISIBLE);
                     isDocente = false;
-                    email_edit_text.setText("@unisannio.it");
+                    email_edit_text.setText(getResources().getString(R.string.dominio_unisannio));
                 }
             }
         });
@@ -136,7 +136,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
+                            if (task.isSuccessful() && task.getResult() != null && task.getResult().getUser() != null) {
                                 userID = task.getResult().getUser().getUid();
 
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -169,7 +169,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
+                            if (task.isSuccessful() && task.getResult() != null && task.getResult().getUser() != null) {
                                 userID = task.getResult().getUser().getUid();
 
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();

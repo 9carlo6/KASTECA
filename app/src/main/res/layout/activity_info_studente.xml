@@ -12,12 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="167dp"
-        android:layout_marginLeft="167dp"
         android:layout_marginTop="176dp"
         android:layout_marginEnd="168dp"
-        android:layout_marginRight="168dp"
         android:text="@string/nome_studente_text"
-        android:textSize="15dp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +30,7 @@
         android:layout_marginEnd="169dp"
         android:layout_marginRight="169dp"
         android:text="@string/email_studente_text"
-        android:textSize="15dp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewMatricolaStudente" />
@@ -47,7 +45,7 @@
         android:layout_marginEnd="142dp"
         android:layout_marginRight="142dp"
         android:text="@string/matricol_studente_text"
-        android:textSize="15dp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewNomeStudente" />

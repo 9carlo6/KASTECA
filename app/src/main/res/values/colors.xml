@@ -4,13 +4,11 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorWhiteRed">#F5F5F5</color>
-    <color name="colorRedBackground">#e53935</color>
 
     <color name="colorTitle">#437C90</color>
     <color name="colorBackground">#E8F7EE</color>
     <color name="colorGeneralText">#255957</color>
     <color name="colorButton">#64B6AC</color>
-    <color name="colorOther">#C0FDFB</color>
 
     <color name="refresh">#008000</color>
     <color name="refresh1">#008080</color>

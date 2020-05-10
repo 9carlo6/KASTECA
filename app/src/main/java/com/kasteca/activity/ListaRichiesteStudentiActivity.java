@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,13 +22,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.kasteca.R;
 import com.kasteca.adapter.ListaRichiesteStudentiAdapter;
-import com.kasteca.adapter.ListaStudentiIscrittiAdapter;
 import com.kasteca.object.Richiesta;
 import com.kasteca.object.Studente;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ListaRichiesteStudentiActivity extends AppCompatActivity {
@@ -58,7 +54,7 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
         lista_studenti = new ArrayList<>();
 
         // questo è il recyclerView per la lista delle richieste
-        rv = (RecyclerView) findViewById(R.id.rv_lista_richieste_studenti);
+        rv = findViewById(R.id.rv_lista_richieste_studenti);
 
         // se si è certi che le dimensioni non cambieranno allora si scrive questo
         rv.setHasFixedSize(true);
@@ -68,7 +64,7 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
 
 
         // questa parte serve in caso di refresh della pagina per questo è ripetitiva
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout_lista_richieste_studenti);
+        final SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeLayout_lista_richieste_studenti);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh, R.color.refresh1, R.color.refresh2);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -79,7 +75,7 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
                         lista_richieste = new ArrayList<>();
-                        rv = (RecyclerView) findViewById(R.id.rv_lista_richieste_studenti);
+                        rv = findViewById(R.id.rv_lista_richieste_studenti);
 
                         // se si è certi che le dimensioni non cambieranno
                         rv.setHasFixedSize(true);
@@ -118,7 +114,7 @@ public class ListaRichiesteStudentiActivity extends AppCompatActivity {
                     for(DocumentSnapshot documentiRichieste :task.getResult()){
                         lista_richieste.add(new Richiesta(documentiRichieste.getId().toString(),
                                 codice_corso,
-                                (Date) documentiRichieste.getDate("data"),
+                                documentiRichieste.getDate("data"),
                                 documentiRichieste.get("stato_richiesta").toString()));
                         lista_codici_studenti.add(documentiRichieste.get("studente").toString());
                     }

@@ -1,6 +1,5 @@
 package com.kasteca.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +12,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.kasteca.R;
 import com.kasteca.object.Post;
 
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAdapterFirestore.ViewHolder> {
 
@@ -33,20 +32,19 @@ public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAda
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.post_item, parent, false);
-        PostAdapterFirestore.ViewHolder vh = new PostAdapterFirestore.ViewHolder(v);
-        return vh;
+        return new PostAdapterFirestore.ViewHolder(v);
     }
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull final Post model) {
         if(model.getTesto().length() > 20){
-            holder.text_post.setText(model.getTesto().trim().substring(0, 21) + "...");
+            holder.text_post.setText(MessageFormat.format("{0}...", model.getTesto().trim().substring(0, 21)));
         }
         else{
             holder.text_post.setText(model.getTesto().trim());
         }
         holder.tag.setText(model.getTag());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ITALY);
         holder.data.setText(sdf.format(model.getData()));
 
         if(model.getPdf() != null){
@@ -61,15 +59,13 @@ public class PostAdapterFirestore extends FirestoreRecyclerAdapter<Post, PostAda
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public CardView cv;
-        public ImageView icon_post;
-        public TextView text_post;
+        private ImageView icon_post;
+        private TextView text_post;
         public TextView tag;
         public TextView data;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
-            cv = v.findViewById(R.id.card_view_post);
             icon_post = v.findViewById(R.id.icon_post);
             text_post = v.findViewById(R.id.text_post);
             tag = v.findViewById(R.id.text_tag);

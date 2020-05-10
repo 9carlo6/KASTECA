@@ -11,6 +11,7 @@ import com.kasteca.R;
 import com.kasteca.object.Risposta;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class RisposteAdapterFirestoreStudente extends RisposteAdapterFirestoreDocente {
 
@@ -64,7 +65,7 @@ public class RisposteAdapterFirestoreStudente extends RisposteAdapterFirestoreDo
 
         }
         holder.textCommento.setText(model.getTesto());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ITALY);
         holder.data.setText(sdf.format(model.getData()));
 
     }

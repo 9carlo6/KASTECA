@@ -5,12 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.HashMap;
+import java.text.MessageFormat;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -20,11 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.kasteca.R;
 import com.kasteca.activity.InfoStudenteActivity;
 import com.kasteca.object.Studente;
@@ -32,24 +28,23 @@ import com.kasteca.object.Studente;
 
 public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStudentiIscrittiAdapter.StudenteViewHolder>{
 
-    private HashMap<String,Studente> studente_selezionato;
     private Bundle studente;
     private String idCorso;
 
-    public static class StudenteViewHolder extends RecyclerView.ViewHolder {
+    static class StudenteViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView nome_studente;
         TextView matricola_studente;
 
         StudenteViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv_lista_studenti_iscritti);
-            nome_studente = (TextView)itemView.findViewById(R.id.nome_studente);
-            matricola_studente = (TextView)itemView.findViewById(R.id.matricola_studente);
+            cv = itemView.findViewById(R.id.cv_lista_studenti_iscritti);
+            nome_studente = itemView.findViewById(R.id.nome_studente);
+            matricola_studente = itemView.findViewById(R.id.matricola_studente);
         }
     }
 
-    List<Studente> studenti;
+    private List<Studente> studenti;
 
     public ListaStudentiIscrittiAdapter(List<Studente> studenti, String idCorso){
         this.studenti = studenti;
@@ -61,23 +56,22 @@ public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStud
         return studenti.size();
     }
 
+    @NonNull
     @Override
     public StudenteViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.linear_layout_lista_studenti_iscritti, viewGroup, false);
-        StudenteViewHolder pvh = new StudenteViewHolder(v);
-        return pvh;
+        return new StudenteViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final StudenteViewHolder studenteViewHolder, final int i) {
 
-        studenteViewHolder.nome_studente.setText(studenti.get(i).getNome() + " " + studenti.get(i).getCognome());
+        studenteViewHolder.nome_studente.setText(MessageFormat.format("{0} {1}", studenti.get(i).getNome(), studenti.get(i).getCognome()));
         studenteViewHolder.matricola_studente.setText(studenti.get(i).getMatricola());
 
         studenteViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                studente_selezionato= new HashMap<>();
 
                 Intent nuovointent= new Intent(studenteViewHolder.itemView.getContext(), InfoStudenteActivity.class);
 
@@ -127,7 +121,7 @@ public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStud
     }
 
 
-    public void cancellazioneStudente(final String idStudente){
+    private void cancellazioneStudente(final String idStudente){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference corsi = db.collection("Corsi");
 
@@ -154,7 +148,7 @@ public class ListaStudentiIscrittiAdapter extends RecyclerView.Adapter<ListaStud
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 

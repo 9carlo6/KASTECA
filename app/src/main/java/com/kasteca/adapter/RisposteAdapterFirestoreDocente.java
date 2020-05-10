@@ -16,6 +16,7 @@ import com.kasteca.R;
 import com.kasteca.object.Risposta;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class RisposteAdapterFirestoreDocente extends FirestoreRecyclerAdapter<Risposta, RisposteAdapterFirestoreDocente.ViewHolder> {
     private final String LOG= "RISPOSTE_ADAPTER";
@@ -63,7 +64,7 @@ public class RisposteAdapterFirestoreDocente extends FirestoreRecyclerAdapter<Ri
 
         }
         holder.textCommento.setText(model.getTesto());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ITALY);
         holder.data.setText(sdf.format(model.getData()));
 
     }

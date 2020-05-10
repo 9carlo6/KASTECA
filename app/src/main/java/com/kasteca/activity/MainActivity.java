@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         prefs= getPreferences(MODE_PRIVATE);
         email_edit_text = findViewById(R.id.Email_Edit_Text);
         password_edit_text = findViewById(R.id.Password_Edit_Text);
-        password_edit_text.setText("password");// lo teniamo per velocizzare, ma andra cancellato.
         email_edit_text.setText(prefs.getString(LAST_USER,""));
         loginButton = findViewById(R.id.button);
 
@@ -170,7 +169,12 @@ public class MainActivity extends AppCompatActivity {
 
                                                     Log.e("LOGIC","Inizializzazione array di corsi.");
                                                     //Array con tutti i corsi a cui è iscritto lo studente
-                                                    studente.putStringArrayList("id_corsi",(ArrayList<String>) document.getData().get("lista_corsi"));
+                                                    ArrayList<?> ar = (ArrayList<?>) document.getData().get("lista_corsi");
+                                                    ArrayList<String> lista_corsi = new ArrayList<>();
+                                                    for(Object x : ar){
+                                                        lista_corsi.add((String) x);
+                                                    }
+                                                    studente.putStringArrayList("id_corsi", lista_corsi);
                                                     //Log.e("LOGIC","Array dei corsi: "+studente.get("id_corsi").toString());
 
                                                     intent.putExtras(studente);

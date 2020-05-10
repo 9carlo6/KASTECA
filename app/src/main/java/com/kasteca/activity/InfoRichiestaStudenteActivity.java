@@ -8,7 +8,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,44 +18,37 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.kasteca.R;
-import com.kasteca.adapter.ListaRichiesteStudentiAdapter;
-import com.kasteca.object.Richiesta;
-import com.kasteca.object.Studente;
 
-import java.util.Date;
+import java.util.Objects;
 
 public class InfoRichiestaStudenteActivity extends AppCompatActivity {
 
-    private TextView nome_studente_text;
-    private TextView email_studente_text;
-    private TextView matricola_studente_text;
-    private TextView data_richiesta_text;
-    private Bundle bundleStudente;
-
-    private String codice_corso;
     private String id_studente;
     private String id_richiesta;
     private String id_corso;
+    private String codice_corso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_richiesta_studente);
 
-        nome_studente_text = findViewById(R.id.textViewRichiestaNomeStudente);
-        email_studente_text = findViewById(R.id.textViewRichiestaEmailStudente);
-        matricola_studente_text = findViewById(R.id.textViewRichiestaMatricolaStudente);
-        data_richiesta_text = findViewById(R.id.textViewDataRichiesta);
+        TextView nome_studente_text = findViewById(R.id.textViewRichiestaNomeStudente);
+        TextView email_studente_text = findViewById(R.id.textViewRichiestaEmailStudente);
+        TextView matricola_studente_text = findViewById(R.id.textViewRichiestaMatricolaStudente);
+        TextView data_richiesta_text = findViewById(R.id.textViewDataRichiesta);
 
-        bundleStudente = getIntent().getExtras();
-        nome_studente_text.setText(bundleStudente.getString("nome_cognome"));
-        email_studente_text.setText(bundleStudente.getString("email"));
-        matricola_studente_text.setText(bundleStudente.getString("matricola"));
-        data_richiesta_text.setText(bundleStudente.getString("data_richiesta"));
+        Bundle bundleStudente = getIntent().getExtras();
+        if(bundleStudente != null) {
+            nome_studente_text.setText(bundleStudente.getString("nome_cognome"));
+            email_studente_text.setText(bundleStudente.getString("email"));
+            matricola_studente_text.setText(bundleStudente.getString("matricola"));
+            data_richiesta_text.setText(bundleStudente.getString("data_richiesta"));
 
-        id_studente = bundleStudente.getString("id_studente");
-        codice_corso = bundleStudente.getString("codice_corso");
-        id_richiesta = bundleStudente.getString("id_richiesta");
+            id_studente = bundleStudente.getString("id_studente");
+            codice_corso = bundleStudente.getString("codice_corso");
+            id_richiesta = bundleStudente.getString("id_richiesta");
+        }
 
 
         // vado a prendere l'id del corso dal database
@@ -66,7 +58,7 @@ public class InfoRichiestaStudenteActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    for(DocumentSnapshot document :task.getResult()){
+                    for(DocumentSnapshot document : Objects.requireNonNull(task.getResult())){
                         id_corso = document.getId();
                     }
                 }else{

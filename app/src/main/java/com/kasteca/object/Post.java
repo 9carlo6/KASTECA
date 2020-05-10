@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class Post implements Parcelable, Comparable {
 
@@ -18,7 +19,7 @@ public class Post implements Parcelable, Comparable {
     private Date data;
     private String link;
     private String pdf;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ITALY);
 
     //Costruttori
     public Post(String id, String tag, String testo, String corso, Date data, String link, String pdf) {
