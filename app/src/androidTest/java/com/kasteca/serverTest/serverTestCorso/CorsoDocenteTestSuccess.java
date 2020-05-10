@@ -166,7 +166,6 @@ public class CorsoDocenteTestSuccess {
     private void login() throws RuntimeException,InterruptedException{
         if (preparazione.equalsIgnoreCase("notLogged")) {
             //preparazione = null;
-            FirebaseApp.initializeApp(this);
             FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
             mAuth.signOut();
 
