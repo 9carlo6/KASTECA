@@ -270,7 +270,7 @@ public class CorsoDocenteActivityTest {
                                 0)),
                 1),
                 isDisplayed())).perform(click());
-        onView(allOf(withId(R.id.corso_drawer_layout))).check(matches(isDisplayed()));
+        onView(withId(R.id.corso_drawer_layout)).check(matches(isDisplayed()));
 
         // Verifica 2
         onView(allOf(withContentDescription("Open navigation drawer"), isDisplayed())).perform(click());
