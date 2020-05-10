@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -65,6 +66,7 @@ public class RisposteDocenteTestSuccess {
 
 
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneEliminazioneDocenteSuccesso() {
         //Testo la creazione di una risposta con dati al suo interno corretti
         result= null;
@@ -110,6 +112,7 @@ public class RisposteDocenteTestSuccess {
 
 
     @Test
+    @Ignore("This test will be ignored")
     public void letturaDocenteSuccesso() {
         //Setto il risultato a null
         result= null;
@@ -136,6 +139,7 @@ public class RisposteDocenteTestSuccess {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void modificaDocenteSuccesso(){
         //Setto il risultato a null
         result= null;

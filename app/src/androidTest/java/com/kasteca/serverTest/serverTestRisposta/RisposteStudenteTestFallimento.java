@@ -15,6 +15,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Date;
@@ -23,33 +24,32 @@ import java.util.Map;
 
 import static junit.framework.TestCase.assertEquals;
 
-public class RisposteDocenteTestFallimento {
-    private final static String TAG="Testing-Risposte-Fail";
+public class RisposteStudenteTestFallimento {
 
-    private String mailDoc = "docenteProva@unisannio.it";
-    private String pwdDoc = "passwordProva";
+    private final String TAG="Testing-Risposte-Backend";
 
-    private String idDocente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
+    private final String mailStu = "studenteProva@studenti.unisannio.it";
+    private final String pwdStu = "passwordProva";
+    private final String idStudente="SotSWWJIZHNALPZ32EAARRed9RG2";
 
-    private String idCommento = "FWoOCqujjKsffuFHJ9ql";
-    private String idRispostaDaLeggere = "zd5JNL8hZvmW1CK0O5ex";
-    private final String idRispostaNonDocente= "gpeq156bQS2lLwmSvfUt";
+
+    private final String idCommento = "FWoOCqujjKsffuFHJ9ql";
+    private final String idRispostaDaLeggere = "gpeq156bQS2lLwmSvfUt";
+    private final String idRispostaNonStudente = "zd5JNL8hZvmW1CK0O5ex";
 
 
     private String preparazione= "notLogged";
     private String result= null;
     private int counter=0;
 
-
     @Before
     public void signInDocente() throws InterruptedException {
         login();
     }
 
-/*
-    Test sul Fallimento della creazione di una Risposta
- */
+
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneTestoNull(){
         result= null;
 
@@ -60,7 +60,7 @@ public class RisposteDocenteTestFallimento {
         newRisposta.put("testo", null);
         newRisposta.put("data", new Date());
         newRisposta.put("commento", idCommento);
-        newRisposta.put("proprietario", idDocente);
+        newRisposta.put("proprietario", idStudente);
 
         risposteReference.add(newRisposta)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -91,6 +91,7 @@ public class RisposteDocenteTestFallimento {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneTestoOverSize(){
         result= null;
 
@@ -105,23 +106,23 @@ public class RisposteDocenteTestFallimento {
         newRisposta.put("testo", testoOversize);
         newRisposta.put("data", new Date());
         newRisposta.put("commento", idCommento);
-        newRisposta.put("proprietario", idDocente);
+        newRisposta.put("proprietario", idStudente);
 
         risposteReference.add(newRisposta).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
 
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        CollectionReference risposteReference = db.collection("Risposte_Commenti");
-                        risposteReference.document(documentReference.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                //cancello la risposta creata
-                                result="fail";
-                            }
-                        });
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference risposteReference = db.collection("Risposte_Commenti");
+                risposteReference.document(documentReference.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //cancello la risposta creata
+                        result="fail";
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 result="success";
@@ -135,6 +136,7 @@ public class RisposteDocenteTestFallimento {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneDataNull(){
         result= null;
 
@@ -145,7 +147,7 @@ public class RisposteDocenteTestFallimento {
         newRisposta.put("testo", "test");
         newRisposta.put("data", null);
         newRisposta.put("commento", idCommento);
-        newRisposta.put("proprietario", idDocente);
+        newRisposta.put("proprietario", idStudente);
 
         risposteReference.add(newRisposta)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -176,8 +178,9 @@ public class RisposteDocenteTestFallimento {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneProprietarioNull(){
-        result = null;
+        result= null;
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference risposteReference = db.collection("Risposte_Commenti");
@@ -218,6 +221,7 @@ public class RisposteDocenteTestFallimento {
 
 
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneCommentoNull(){
         result= null;
 
@@ -228,7 +232,7 @@ public class RisposteDocenteTestFallimento {
         newRisposta.put("testo", "test");
         newRisposta.put("data", new Date());
         newRisposta.put("commento", null);
-        newRisposta.put("proprietario", idDocente);
+        newRisposta.put("proprietario", idStudente);
 
         risposteReference.add(newRisposta)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -259,6 +263,7 @@ public class RisposteDocenteTestFallimento {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void creazioneCommentoNotExist(){
         result= null;
 
@@ -269,7 +274,7 @@ public class RisposteDocenteTestFallimento {
         newRisposta.put("testo", "test");
         newRisposta.put("data", new Date());
         newRisposta.put("commento","commentoNonEsistente");
-        newRisposta.put("proprietario", idDocente);
+        newRisposta.put("proprietario", idStudente);
 
         risposteReference.add(newRisposta)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -303,6 +308,7 @@ public class RisposteDocenteTestFallimento {
     Test fallimento modifica di una risposta
      */
     @Test
+    @Ignore("This test will be ignored")
     public void modificaTestoNull(){
         result= null;
 
@@ -326,6 +332,7 @@ public class RisposteDocenteTestFallimento {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void modificaTestoOverSize(){
         result= null;
 
@@ -353,24 +360,25 @@ public class RisposteDocenteTestFallimento {
     }
 
     @Test
+    @Ignore("This test will be ignored")
     public void modificaNonDalProprietario(){
-        //Effettuiamo il login con un account diverso da quello che ha creato la risposta
+        //Usiamo un id di una risposta non appartenente allo studente
         result=null;
 
         //Proviamo a fare una rischiesta di modifica
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference risposteReference = db.collection("Risposte_Commenti");
-        risposteReference.document(idRispostaNonDocente).update("testo","modificaNonDalProprietario")
+        risposteReference.document(idRispostaNonStudente).update("testo","modificaNonDalProprietario")
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         result="fail";
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        result="success";
-                    }
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                result="success";
+            }
         });
 
         while(result == null);
@@ -384,12 +392,13 @@ public class RisposteDocenteTestFallimento {
     Test fallimento eliminazione di una risposta
      */
     @Test
+    @Ignore("This test will be ignored")
     public void eliminazioneProprietazioDiverso(){
 
-        //Effettuiamo richiesta di eliminazione di una risposta non di questo Docente
+        //Effettuiamo richiesta di eliminazione per una risposta che non appartiene allo studente.
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference risposteReference = db.collection("Risposte_Commenti");
-        risposteReference.document(idRispostaNonDocente).delete()
+        risposteReference.document(idRispostaNonStudente).delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -407,10 +416,6 @@ public class RisposteDocenteTestFallimento {
         result=null;
     }
 
-    /*
-    Test fallimento lettura NON SONO ESEGUIBILI: perchè loggiamo in firebase con gli unici account disponibili che sono
-    o studente o docente. Si potrebbe creare un account di test non studente o docente.
-     */
 
 
 
@@ -420,7 +425,7 @@ public class RisposteDocenteTestFallimento {
             FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
             mAuth.signOut();
 
-            mAuth.signInWithEmailAndPassword(mailDoc, pwdDoc).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            mAuth.signInWithEmailAndPassword(mailStu, pwdStu).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                 @Override
                 public void onSuccess(AuthResult authResult) {
                     preparazione = "ok";
