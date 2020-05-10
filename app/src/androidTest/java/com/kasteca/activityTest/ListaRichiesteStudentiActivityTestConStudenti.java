@@ -20,6 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.kasteca.R;
 import com.kasteca.activity.InfoRichiestaStudenteActivity;
 import com.kasteca.activity.ListaRichiesteStudentiActivity;
 
@@ -39,8 +40,10 @@ import java.util.Map;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.swipeDown;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
@@ -269,6 +272,10 @@ public class ListaRichiesteStudentiActivityTestConStudenti {
         listaRichiesteStudentiActivityActivityTestRule.launchActivity(i);
 
         Thread.sleep(2000);
+
+        onView(withId(R.id.rv_lista_richieste_studenti)).perform(swipeDown());
+
+        Thread.sleep(6000);
 
         ViewInteraction textView1 = onView(withText("NomeProva CognomeProva"));
         textView1.check(matches(isDisplayed()));
