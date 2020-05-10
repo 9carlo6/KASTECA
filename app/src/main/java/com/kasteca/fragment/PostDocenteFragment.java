@@ -76,18 +76,6 @@ public class PostDocenteFragment extends Fragment{
         return view;
     }
 
-    // Metodo in caso di recupero fallito dei post di un corso
-    public void showAlert(String s){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
-        alertDialog.setTitle(getResources().getString(R.string.get_failed));
-        alertDialog.setMessage(s);
-        alertDialog.setNeutralButton(getResources().getString(R.string.Dialog_neutral_button_login_failed), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        alertDialog.show();
-    }
 
 
    @Override

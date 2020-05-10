@@ -53,6 +53,7 @@ import static org.hamcrest.Matchers.instanceOf;
 @RunWith(AndroidJUnit4.class)
 public class CorsoDocenteActivityTest {
     private String mail = "docenteprova@unisannio.it";
+    private String pwd = "passwordProva";
 
     private ArrayList<String> lista_post = new ArrayList<>();
     private ArrayList<String>  lista_studenti = new ArrayList<>();
@@ -82,8 +83,6 @@ public class CorsoDocenteActivityTest {
         IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
 
-
-        String pwd = "passwordProva";
         mAuth.signInWithEmailAndPassword(mail, pwd).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
@@ -256,5 +255,55 @@ public class CorsoDocenteActivityTest {
     public void test_ClickFab_isNewPostActivityVisible(){
         onView(withId(R.id.fab_add_post)).perform(click());
         onView(withId(R.id.new_post_layout)).check(matches(isDisplayed()));
+    }
+
+    // Verifica che venga mostrato il fragment PostDocenteActivity quando
+    // si selezione l'elemento Post nella Navigation Bar
+    @Test
+    public void test_isPostDocenteActivityVisible_onSelectItemInNavigationBar(){
+        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.menu_post)).perform(click());
+        onView(withId(R.id.corso_drawer_layout)).check(matches(isDisplayed()));
+    }
+
+    // Verifica che venga mostrato l'alert dialog sulla mancanza di richieste
+    // quando si selezione l'elemento Visualizza richieste nella Navigation Bar
+    @Test
+    public void test_isAllertDialogNessunaRichiestaVisible_onSelectItemInNavigationBar() throws InterruptedException {
+        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.menu_visualizza_richieste_studente)).perform(click());
+
+        Thread.sleep(2000);
+
+        onView(withText(R.string.nessuna_richiesta)).check(matches(isDisplayed()));
+    }
+
+    // Verifica che venga mostrato l'alert dialog sulla mancanza di studenti iscritti
+    // quando si selezione l'elemento Visualizza Studenti iscritti nella Navigation Bar
+    @Test
+    public void test_isAllertDialogNessunoStudenteVisible_onSelectItemInNavigationBar() throws InterruptedException {
+        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.menu_visualizza_studenti_iscritti)).perform(click());
+
+        Thread.sleep(2000);
+
+        onView(withText(R.string.nessuno_studente_iscritto)).check(matches(isDisplayed()));
+    }
+
+    // Verifica che venga mostrata la MainActivity
+    // quando si selezione l'elemento Logout nella Navigation Bar
+    @Test
+    public void test_isMainActivityVisible_onSelectItemInNavigationBar() throws InterruptedException {
+        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.logout)).perform(click());
+
+        Thread.sleep(2000);
+
+        onView(withId(R.id.main)).check(matches(isDisplayed()));
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
+        mAuth.signInWithEmailAndPassword(mail, pwd);
+
+        Thread.sleep(2000);
     }
 }

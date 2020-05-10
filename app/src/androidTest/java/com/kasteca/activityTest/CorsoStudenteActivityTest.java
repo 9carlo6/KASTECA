@@ -332,4 +332,31 @@ public class CorsoStudenteActivityTest {
         onView(withId(R.id.matricola_nav_header)).check(matches(withText(matricola)));
         onView(withId(R.id.nav_view_corso_studente)).check(matches(isDisplayed()));
     }
+
+    // Verifica che venga mostrato il fragment PostStudenteActivity quando
+    // si selezione l'elemento Post nella Navigation Bar
+    @Test
+    public void test_isPostStudenteActivityVisible_onSelectItemInNavigationBar(){
+        onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.menu_post)).perform(click());
+        onView(withId(R.id.corso_studente_drawer_layout)).check(matches(isDisplayed()));
+    }
+
+    // Verifica che venga mostrato l'alert dialog di conferma cancellazione
+    // quando si selezione l'elemento Abbandona Corso nella Navigation Bar
+    @Test
+    public void test_isAllertDialogConfermaVisible_onSelectItemInNavigationBar(){
+        onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.menu_cancellazione_dal_corso)).perform(click());
+        onView(withText(R.string.Dialog_titolo_conferma_cancellazione)).check(matches(isDisplayed()));
+    }
+
+    // Verifica che venga mostrata la MainActivity
+    // quando si selezione l'elemento Logout nella Navigation Bar
+    @Test
+    public void test_isMainActivityVisible_onSelectItemInNavigationBar(){
+        onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.logout)).perform(click());
+        onView(withId(R.id.main)).check(matches(isDisplayed()));
+    }
 }
