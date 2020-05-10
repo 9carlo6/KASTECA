@@ -170,11 +170,11 @@ public class MainActivity extends AppCompatActivity {
                                                     Log.e("LOGIC","Inizializzazione array di corsi.");
                                                     //Array con tutti i corsi a cui è iscritto lo studente
                                                     ArrayList<?> ar = (ArrayList<?>) document.getData().get("lista_corsi");
-                                                    ArrayList<String> lista_corsi = new ArrayList<>();
+                                                    ArrayList<String> listaCorsi = new ArrayList<>();
                                                     for(Object x : ar){
-                                                        lista_corsi.add((String) x);
+                                                        listaCorsi.add((String) x);
                                                     }
-                                                    studente.putStringArrayList("id_corsi", lista_corsi);
+                                                    studente.putStringArrayList("id_corsi", listaCorsi);
                                                     //Log.e("LOGIC","Array dei corsi: "+studente.get("id_corsi").toString());
 
                                                     intent.putExtras(studente);
