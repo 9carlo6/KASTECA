@@ -51,6 +51,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.swipeDown;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -270,7 +271,12 @@ public class ListaStudentiIscrittiActivityTestConStudenti {
 
         Thread.sleep(2000);
 
+        onView(withId(R.id.rv_lista_studenti_iscritti)).perform(swipeDown());
+
+        Thread.sleep(6000);
+
         ViewInteraction textView1 = onView(withText("NomeProva CognomeProva"));
+
         textView1.check(matches(isDisplayed()));
     }
 

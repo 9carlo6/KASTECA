@@ -1,5 +1,6 @@
 package com.kasteca.activityTest;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,21 +61,36 @@ public class RichiestaIscrizioneActivityTestCodiceCorsoEsatto {
 
     private static final String TAG = "DEBUG_RICHIESTA_ISCRIZIONE";
 
+    private String mailDoc = "docenteProva@unisannio.it";
+    private String pwdDoc = "passwordProva";
+    private String mailStu = "studenteProva@studenti.unisannio.it";
+    private String pwdStu = "passwordProva";
+    private String codice_corso = "codice";
+    private String id_studente = "SotSWWJIZHNALPZ32EAARRed9RG2";
+    private String id_docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
+
     @Rule
-    public ActivityTestRule<RichiestaIscrizioneActivity> richiestaIscrizioneActivityActivityTestRule = new ActivityTestRule<>(RichiestaIscrizioneActivity.class);
+    public ActivityTestRule<RichiestaIscrizioneActivity> richiestaIscrizioneActivityActivityTestRules = new ActivityTestRule<>(RichiestaIscrizioneActivity.class, false, false);
 
     @Before()
     public void singIn() throws InterruptedException {
-        IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
-
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        //EspressoIdlingResource.increment();
-        mAuth.signInWithEmailAndPassword("studenteprova@studenti.unisannio.it", "passwordProva").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signOut();
+
+        Thread.sleep(1000);
+
+        mAuth.signInWithEmailAndPassword(mailDoc, pwdDoc).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Log.d(TAG, "Login eseguito con successo");
+                    Log.d(TAG, "Login Docente eseguito con successo");
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     CollectionReference corsi = db.collection("Corsi");
@@ -80,11 +98,15 @@ public class RichiestaIscrizioneActivityTestCodiceCorsoEsatto {
                     Log.d(TAG, "entrato");
                     //EspressoIdlingResource.increment();
 
-                    Map<String, Object> obj = new HashMap<>();
-                    obj.put("anno_accademico", "anno_accademico_prova" );
-                    obj.put("codice", "codice_corso_prova");
+                    Date date= new Date();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+
+                    Map<String,Object> obj= new HashMap<>();
+                    obj.put("anno_accademico", calendar.get(Calendar.YEAR)+"/"+(calendar.get(Calendar.YEAR)+1));
+                    obj.put("codice", codice_corso);
                     obj.put("descrizione", "descrizione_prova");
-                    obj.put("docente", "docente_prova");
+                    obj.put("docente", id_docente);
                     obj.put("lista_post", new ArrayList<String>());
                     obj.put("lista_studenti", new ArrayList<String>());
                     obj.put("nome_corso", "nome_corso_prova");
@@ -94,98 +116,148 @@ public class RichiestaIscrizioneActivityTestCodiceCorsoEsatto {
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
                                 Log.d(TAG, "Corsi: creazione corso ok");
-                                //EspressoIdlingResource.decrement();
+
+                                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+                                mAuth.signOut();
+
+                                try {
+                                    Thread.sleep(3000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                                mAuth.signInWithEmailAndPassword(mailStu, pwdStu).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                    @Override
+                                    public void onSuccess(AuthResult authResult) {
+
+                                        Log.d(TAG, "Login Studente eseguito con successo");
+
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                        Log.d(TAG, "Fallimento Login Studente");
+
+                                    }
+                                });
+
                             }else{
                                 Log.d(TAG, "Corsi: FALLIMENTO creazione corso");
-                                //EspressoIdlingResource.decrement();
                             }
                         }
                     });
 
                 }else{
-                    Log.d(TAG, "Login fallito");
-                    //EspressoIdlingResource.decrement();
+                    Log.d(TAG, "Login Docente fallito");
                 }
             }
         });
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(3000);
+        Thread.sleep(5000);
 
     }
 
     @After()
     public void logOut() throws InterruptedException {
-        IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference corsi = db.collection("Corsi");
+        Thread.sleep(1000);
 
-        //EspressoIdlingResource.increment();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        // cancellazione del corso
-        corsi.document("id_corso_prova")
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Corsi: cancellazione corso ok");
-                        //EspressoIdlingResource.decrement();
+        mAuth.signOut();
 
-                        // cancellazionde della richiesta
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
+        mAuth.signInWithEmailAndPassword(mailDoc, pwdDoc).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                Log.d(TAG, "LOGOUT: Login Docente eseguito con successo");
 
-                        //EspressoIdlingResource.increment();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-                        richieste_iscrizione.whereEqualTo("codice_corso", "codice_corso_prova").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference corsi = db.collection("Corsi");
+
+                //EspressoIdlingResource.increment();
+
+                // cancellazione del corso
+                corsi.document("id_corso_prova")
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                String id_documento_richiesta_iscrizone = new String();
-                                if(task.isSuccessful()){
-                                    Log.d(TAG, "Richieste_Iscrizione: get document ok");
-                                    //EspressoIdlingResource.decrement();
-                                    for(DocumentSnapshot document :  task.getResult()){
-                                        id_documento_richiesta_iscrizone = document.getId();
-                                    }
-                                    FirebaseFirestore db1 = FirebaseFirestore.getInstance();
-                                    CollectionReference richieste = db1.collection("Richieste_Iscrizione");
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "Corsi: cancellazione corso ok");
 
-                                    //EspressoIdlingResource.increment();
-
-                                    richieste.document(id_documento_richiesta_iscrizone)
-                                            .delete()
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Log.d(TAG, "Richieste Iscrizione: DocumentSnapshot successfully deleted!");
-                                                    //EspressoIdlingResource.decrement();
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.w(TAG, "Richieste Iscrizione: Error deleting document", e);
-                                                    //EspressoIdlingResource.decrement();
-                                                }
-                                            });
-                                }else{
-                                    Log.w(TAG, "Richieste_Iscrizione: error get document");
-                                    //EspressoIdlingResource.decrement();
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
                                 }
+
+                                // cancellazionde della richiesta
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                CollectionReference richieste_iscrizione = db.collection("Richieste_Iscrizione");
+
+                                richieste_iscrizione.whereEqualTo("codice_corso", codice_corso).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        String id_documento_richiesta_iscrizone = new String();
+                                        if(task.isSuccessful()){
+                                            Log.d(TAG, "Richieste_Iscrizione: get document ok");
+                                            //EspressoIdlingResource.decrement();
+                                            for(DocumentSnapshot document :  task.getResult()){
+                                                id_documento_richiesta_iscrizone = document.getId();
+                                            }
+                                            FirebaseFirestore db1 = FirebaseFirestore.getInstance();
+                                            CollectionReference richieste = db1.collection("Richieste_Iscrizione");
+
+                                            richieste.document(id_documento_richiesta_iscrizone)
+                                                    .delete()
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            Log.d(TAG, "Richieste Iscrizione: DocumentSnapshot successfully deleted!");
+                                                            //EspressoIdlingResource.decrement();
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Log.w(TAG, "Richieste Iscrizione: Error deleting document", e);
+                                                            //EspressoIdlingResource.decrement();
+                                                        }
+                                                    });
+                                        }else{
+                                            Log.w(TAG, "Richieste_Iscrizione: error get document");
+                                            //EspressoIdlingResource.decrement();
+                                        }
+                                    }
+                                });
+
+                                //EspressoIdlingResource.decrement();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Corsi: errore nella cancellazione del corso", e);
+                                //EspressoIdlingResource.decrement();
                             }
                         });
 
-                        //EspressoIdlingResource.decrement();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Corsi: errore nella cancellazione del corso", e);
-                        //EspressoIdlingResource.decrement();
-                    }
-                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "LOGOUT: Login Docente fallito");
+
+            }
+        });
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(5000);
@@ -195,6 +267,13 @@ public class RichiestaIscrizioneActivityTestCodiceCorsoEsatto {
     @Test()
     public void RichiestaIscrizioneActivityTestCodiceCorsoEsatto() throws InterruptedException {
 
+        Intent i = new Intent();
+        i.putExtra("id_studente", id_studente);
+
+        richiestaIscrizioneActivityActivityTestRules.launchActivity(i);
+
+        Thread.sleep(1000);
+
         ViewInteraction appCompatEditText5 = onView(
                 allOf(withId(R.id.Codice_Corso_Edit_Text),
                         childAtPosition(
@@ -203,10 +282,10 @@ public class RichiestaIscrizioneActivityTestCodiceCorsoEsatto {
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatEditText5.perform(replaceText("codice_corso_prova"), closeSoftKeyboard());
+        appCompatEditText5.perform(replaceText(codice_corso), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText6 = onView(
-                allOf(withId(R.id.Codice_Corso_Edit_Text), withText("codice_corso_prova"),
+                allOf(withId(R.id.Codice_Corso_Edit_Text), withText(codice_corso),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -226,7 +305,7 @@ public class RichiestaIscrizioneActivityTestCodiceCorsoEsatto {
         appCompatButton2.perform(click());
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        //Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
     private static Matcher<View> childAtPosition(

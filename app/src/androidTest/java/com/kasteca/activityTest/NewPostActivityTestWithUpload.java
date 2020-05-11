@@ -18,7 +18,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.kasteca.R;
 import com.kasteca.activity.NewPostActivity;
@@ -39,7 +38,9 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.intent.Intents;
+import androidx.test.rule.ActivityTestRule;
 
 import static android.app.Activity.RESULT_OK;
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -75,7 +76,7 @@ public class NewPostActivityTestWithUpload {
     private String id_post = null;
 
     @Rule
-    public IntentsTestRule<NewPostActivity> intentsTestRule = new IntentsTestRule<>(NewPostActivity.class, false, false);
+    public ActivityTestRule<NewPostActivity> activityTestRule = new ActivityTestRule<>(NewPostActivity.class, false, false);
 
     @Before
     public void setUp() throws Exception {
@@ -124,10 +125,11 @@ public class NewPostActivityTestWithUpload {
 
         Intent i = new Intent();
         i.putExtra("corso_id", id_corso);
-        intentsTestRule.launchActivity(i);
+        activityTestRule.launchActivity(i);
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(2000);
+        Intents.init();
     }
 
     @After
@@ -145,8 +147,12 @@ public class NewPostActivityTestWithUpload {
                         Log.d(TAG, "Corsi: recuperato l'id del post caricato");
 
                         //cancellare il post
-                        ArrayList<String> listaPost = (ArrayList<String>) documentSnapshot.getData().get("lista_post");
-                        if(((listaPost != null) &&!listaPost.isEmpty())){
+                        ArrayList<?> ar = (ArrayList<?>) documentSnapshot.getData().get("lista_post");
+                        ArrayList<String> listaPost = new ArrayList<>();
+                        for(Object x : ar){
+                            listaPost.add((String) x);
+                        }
+                        if((!listaPost.isEmpty())){
                             id_post = listaPost.get(0);
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                             CollectionReference posts = db.collection("Post");
@@ -194,6 +200,7 @@ public class NewPostActivityTestWithUpload {
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
         Thread.sleep(2000);
+        Intents.release();
     }
 
     // Verifica che lo spinner funziona correttamente
@@ -222,16 +229,11 @@ public class NewPostActivityTestWithUpload {
         closeSoftKeyboard();
         onView(withId(R.id.uploadButton)).perform(click());
 
-        onView(withText(R.string.upload_successo)).inRoot(new ToastMatcher()).check(matches(isDisplayed()));
-
-
-
-
-        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(2000);
-
-
-
+        try {
+            onView(withText(R.string.upload_successo)).inRoot(new ToastMatcher()).check(matches(isDisplayed()));
+        }catch(NoMatchingViewException e){
+            onView(withText(R.string.upload_post_error)).check(matches(isDisplayed()));
+        }
 
     }
 

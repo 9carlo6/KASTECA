@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,10 +19,6 @@ import com.kasteca.R;
 import com.kasteca.activity.CorsoDocenteActivity;
 import com.kasteca.util.EspressoIdlingResource;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -46,13 +39,11 @@ import androidx.test.rule.ActivityTestRule;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -78,7 +69,7 @@ public class CorsoDocenteActivityTest {
     private String pdf = null;
     private String tag = "esercizio";
     private ArrayList<String>  lista_commenti = new ArrayList<>();
-    private Date data = new Date(0);
+    private Date data = new Date();
     private String id_post = "id_post_prova";
 
     private String nome_docente = "NomeDocenteProva";
@@ -91,7 +82,6 @@ public class CorsoDocenteActivityTest {
     public void setUp() throws InterruptedException {
         IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-
 
         mAuth.signInWithEmailAndPassword(mail, pwd).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
@@ -258,98 +248,6 @@ public class CorsoDocenteActivityTest {
         onView(withId(R.id.nav_view_corso_docente)).check(matches(isDisplayed()));
     }
 
-    // Verifica della presenza della Navigation Bar con gli elementi corretti
-    @Test
-    public void test_SelectItem_isTheCorrectDocenteActivityVisible() throws InterruptedException {
-
-        // Verifica 1
-        onView(allOf(withContentDescription("Open navigation drawer"), isDisplayed())).perform(click());
-        onView(allOf(childAtPosition(
-                allOf(withId(R.id.design_navigation_view),
-                        childAtPosition(withId(R.id.nav_view_corso_docente),
-                                0)),
-                1),
-                isDisplayed())).perform(click());
-        onView(allOf(withId(R.id.corso_drawer_layout))).check(matches(isDisplayed()));
-
-        // Verifica 2
-        onView(allOf(withContentDescription("Open navigation drawer"), isDisplayed())).perform(click());
-        onView(allOf(childAtPosition(
-                allOf(withId(R.id.design_navigation_view),
-                        childAtPosition(withId(R.id.nav_view_corso_docente),
-                                0)),
-                2),
-                isDisplayed())).perform(click());
-
-        Thread.sleep(3000);
-
-        onView(allOf(IsInstanceOf.<View>instanceOf(android.widget.TextView.class), withText(activityTestRule.getActivity().getResources().getString(R.string.nessuno_studente_iscritto)),
-                        isDisplayed())).check(matches(withText("Non ci sono studenti iscritti al corso")));
-
-        pressBack();
-        Thread.sleep(1000);
-
-        //Verifica 3
-        onView(allOf(withContentDescription("Open navigation drawer"), isDisplayed())).perform(click());
-        onView(allOf(childAtPosition(
-                allOf(withId(R.id.design_navigation_view),
-                        childAtPosition(withId(R.id.nav_view_corso_docente),
-                                0)),
-                3),
-                isDisplayed())).perform(click());
-
-        Thread.sleep(1000);
-
-        onView(allOf(IsInstanceOf.<View>instanceOf(android.widget.TextView.class), withText("Non ci sono nuove richieste"),
-                        isDisplayed())).check(matches(withText("Non ci sono nuove richieste")));
-
-        pressBack();
-        Thread.sleep(1000);
-
-        // Verifica 4
-        onView(allOf(withContentDescription("Open navigation drawer"), isDisplayed())).perform(click());
-        onView(allOf(childAtPosition(
-                allOf(withId(R.id.design_navigation_view),
-                        childAtPosition(withId(R.id.nav_view_corso_docente),
-                                0)),
-                4),
-                isDisplayed())).perform(click());
-
-        Thread.sleep(1000);
-
-        onView(allOf(withId(R.id.main), isDisplayed())).check(matches(isDisplayed()));
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-
-        mAuth.signInWithEmailAndPassword(mail, pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "login ok");
-            }
-        });
-
-        // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(3000);
-    }
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
-    }
 
 
     // Verifica che cliccando sul Floating Button si apra la NewPostActivity
@@ -357,5 +255,55 @@ public class CorsoDocenteActivityTest {
     public void test_ClickFab_isNewPostActivityVisible(){
         onView(withId(R.id.fab_add_post)).perform(click());
         onView(withId(R.id.new_post_layout)).check(matches(isDisplayed()));
+    }
+
+    // Verifica che venga mostrato il fragment PostDocenteActivity quando
+    // si selezione l'elemento Post nella Navigation Bar
+    @Test
+    public void test_isPostDocenteActivityVisible_onSelectItemInNavigationBar(){
+        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.menu_post)).perform(click());
+        onView(withId(R.id.corso_drawer_layout)).check(matches(isDisplayed()));
+    }
+
+    // Verifica che venga mostrato l'alert dialog sulla mancanza di richieste
+    // quando si selezione l'elemento Visualizza richieste nella Navigation Bar
+    @Test
+    public void test_isAllertDialogNessunaRichiestaVisible_onSelectItemInNavigationBar() throws InterruptedException {
+        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.menu_visualizza_richieste_studente)).perform(click());
+
+        Thread.sleep(2000);
+
+        onView(withText(R.string.nessuna_richiesta)).check(matches(isDisplayed()));
+    }
+
+    // Verifica che venga mostrato l'alert dialog sulla mancanza di studenti iscritti
+    // quando si selezione l'elemento Visualizza Studenti iscritti nella Navigation Bar
+    @Test
+    public void test_isAllertDialogNessunoStudenteVisible_onSelectItemInNavigationBar() throws InterruptedException {
+        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.menu_visualizza_studenti_iscritti)).perform(click());
+
+        Thread.sleep(2000);
+
+        onView(withText(R.string.nessuno_studente_iscritto)).check(matches(isDisplayed()));
+    }
+
+    // Verifica che venga mostrata la MainActivity
+    // quando si selezione l'elemento Logout nella Navigation Bar
+    @Test
+    public void test_isMainActivityVisible_onSelectItemInNavigationBar() throws InterruptedException {
+        onView(withId(R.id.corso_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.logout)).perform(click());
+
+        Thread.sleep(2000);
+
+        onView(withId(R.id.main)).check(matches(isDisplayed()));
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
+        mAuth.signInWithEmailAndPassword(mail, pwd);
+
+        Thread.sleep(2000);
     }
 }

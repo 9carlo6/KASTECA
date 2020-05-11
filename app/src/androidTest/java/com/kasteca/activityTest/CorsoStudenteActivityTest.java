@@ -33,14 +33,13 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.contrib.DrawerActions;
-import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -233,6 +232,7 @@ public class CorsoStudenteActivityTest {
     @After
     public void tearDown() throws Exception {
         FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
+        mAuth.signOut();
         mAuth.signInWithEmailAndPassword(mailDoc, pwdDoc).addOnSuccessListener(new OnSuccessListener<AuthResult>(){
             @Override
             public void onSuccess(AuthResult authResult) {
@@ -308,9 +308,6 @@ public class CorsoStudenteActivityTest {
         onView(withId(R.id.recycler_view_post_studente)).check(matches(isDisplayed()));
         onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar_studente))))
                 .check(matches(withText(nome_corso+" "+anno_accademico)));
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-        mAuth.signOut();
     }
 
     // Verifica che la selezione di un elemento porta alla PostActivity, che mostra i dettagli corretti
@@ -324,8 +321,6 @@ public class CorsoStudenteActivityTest {
         onView(withId(R.id.tagTextView)).check(matches(withText(tag)));
         onView(withId(R.id.testoPostTextView)).check(matches(withText(testo)));
         onView(withId(R.id.data_textView)).check(matches(withText(new SimpleDateFormat(activityTestRule.getActivity().getResources().getString(R.string.formato_data)).format(data))));
-        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-        mAuth.signOut();
     }
 
     // Verifica della presenza della Navigation Bar con gli elementi corretti
@@ -337,29 +332,53 @@ public class CorsoStudenteActivityTest {
         onView(withId(R.id.email_nav_header)).check(matches(withText(mailStud)));
         onView(withId(R.id.matricola_nav_header)).check(matches(withText(matricola)));
         onView(withId(R.id.nav_view_corso_studente)).check(matches(isDisplayed()));
-        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
-        mAuth.signOut();
     }
 
-    // Verifica che il click su ogni elemento del menu porti alla Activity giusta
+    // Verifica che venga mostrato il fragment PostStudenteActivity quando
+    // si selezione l'elemento Post nella Navigation Bar
     @Test
-    public void test_SelectItem_isTheCorrectStudenteActivityVisible() throws InterruptedException {
+    public void test_isPostStudenteActivityVisible_onSelectItemInNavigationBar(){
         onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view_corso_studente)).perform(NavigationViewActions.navigateTo(R.id.nav_post_corso));
-        Thread.sleep(3000);
-        onView(withId(R.id.fragment_container_corso_studente)).check(matches(isDisplayed()));
-        Thread.sleep(1000);
+        onView(withText(R.string.menu_post)).perform(click());
+        onView(withId(R.id.corso_studente_drawer_layout)).check(matches(isDisplayed()));
+    }
 
-        onView(withId(R.id.nav_view_corso_studente)).perform(NavigationViewActions.navigateTo(R.id.nav_cancellazione_dal_corso));
-        Thread.sleep(3000);
-        onView(withText(activityTestRule.getActivity().getResources().getString(R.string.Dialog_titolo_conferma_cancellazione))).check(matches(isDisplayed()));
-        pressBack();
-        Thread.sleep(1000);
-
+    // Verifica che venga mostrato l'alert dialog di conferma cancellazione
+    // quando si selezione l'elemento Abbandona Corso nella Navigation Bar
+    @Test
+    public void test_isAllertDialogConfermaVisible_onSelectItemInNavigationBar_responseNo(){
         onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
-        onView(withId(R.id.nav_view_corso_studente)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
-        Thread.sleep(3000);
+        onView(withText(R.string.menu_cancellazione_dal_corso)).perform(click());
+        onView(withText(R.string.Dialog_titolo_conferma_cancellazione)).check(matches(isDisplayed()));
+        onView(withText(R.string.Dialog_button_no_conferma_cancellazione)).perform(click());
+        onView(withId(R.id.corso_studente_drawer_layout)).check(matches(isDisplayed()));
+    }
+
+    // Verifica che venga mostrato l'alert dialog di conferma cancellazione
+    // quando si selezione l'elemento Abbandona Corso nella Navigation Bar
+    @Test
+    public void test_isAllertDialogConfermaVisible_onSelectItemInNavigationBar_responseSi() throws InterruptedException {
+        onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.menu_cancellazione_dal_corso)).perform(click());
+        onView(withText(R.string.Dialog_titolo_conferma_cancellazione)).check(matches(isDisplayed()));
+        onView(withText(R.string.Dialog_button_si_conferma_cancellazione)).perform(click());
+
+        Thread.sleep(2000);
+
+        try {
+            onView(withText(R.string.Dialog_titolo_corretta_cancellazione)).check(matches(isDisplayed()));
+        }catch(NoMatchingViewException e){
+            onView(withText(R.string.Dialog_titolo_incorretta_cancellazione)).check(matches(isDisplayed()));
+        }
+        onView(withText(R.string.Dialog_button_ok_cancellazione)).perform(click());
+    }
+
+    // Verifica che venga mostrata la MainActivity
+    // quando si selezione l'elemento Logout nella Navigation Bar
+    @Test
+    public void test_isMainActivityVisible_onSelectItemInNavigationBar(){
+        onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.logout)).perform(click());
         onView(withId(R.id.main)).check(matches(isDisplayed()));
-
     }
 }

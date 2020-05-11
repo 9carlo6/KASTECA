@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.kasteca.activityTest.CorsoDocenteActivityTest" tests="114" failures="0" errors="0" skipped="40" time="1352.0" timestamp="2020-05-11T09:29:06" hostname="localhost">
+  <properties>
+    <property name="device" value="SM-A520F - 8.0.0" />
+    <property name="flavor" value="" />
+    <property name="project" value="app" />
+  </properties>
+  <testcase name="test_isPostDocenteActivityVisible_onSelectItemInNavigationBar" classname="com.kasteca.activityTest.CorsoDocenteActivityTest" time="11.454" />
+  <testcase name="test_isNavigationBarDocenteOpenableAndCorrect" classname="com.kasteca.activityTest.CorsoDocenteActivityTest" time="10.218" />
+  <testcase name="test_isAllertDialogNessunaRichiestaVisible_onSelectItemInNavigationBar" classname="com.kasteca.activityTest.CorsoDocenteActivityTest" time="13.263" />
+  <testcase name="test_SelectItem_isPostActivityVisible" classname="com.kasteca.activityTest.CorsoDocenteActivityTest" time="10.467" />
+  <testcase name="test_isAllertDialogNessunoStudenteVisible_onSelectItemInNavigationBar" classname="com.kasteca.activityTest.CorsoDocenteActivityTest" time="13.088" />
+  <testcase name="test_isCorsoDocenteActivityOnView" classname="com.kasteca.activityTest.CorsoDocenteActivityTest" time="9.735" />
+  <testcase name="test_isMainActivityVisible_onSelectItemInNavigationBar" classname="com.kasteca.activityTest.CorsoDocenteActivityTest" time="15.084" />
+  <testcase name="test_ClickFab_isNewPostActivityVisible" classname="com.kasteca.activityTest.CorsoDocenteActivityTest" time="10.504" />
+  <testcase name="test_isNavigationBarStudenteOpenableAndCorrect" classname="com.kasteca.activityTest.CorsoStudenteActivityTest" time="17.262" />
+  <testcase name="test_isAllertDialogConfermaVisible_onSelectItemInNavigationBar_responseNo" classname="com.kasteca.activityTest.CorsoStudenteActivityTest" time="18.589" />
+  <testcase name="test_isAllertDialogConfermaVisible_onSelectItemInNavigationBar_responseSi" classname="com.kasteca.activityTest.CorsoStudenteActivityTest" time="21.325" />
+  <testcase name="test_isPostStudenteActivityVisible_onSelectItemInNavigationBar" classname="com.kasteca.activityTest.CorsoStudenteActivityTest" time="17.853" />
+  <testcase name="test_SelectItem_isPostActivityVisible" classname="com.kasteca.activityTest.CorsoStudenteActivityTest" time="17.534" />
+  <testcase name="test_isCorsoStudenteActivityOnView" classname="com.kasteca.activityTest.CorsoStudenteActivityTest" time="16.868" />
+  <testcase name="test_isMainActivityVisible_onSelectItemInNavigationBar" classname="com.kasteca.activityTest.CorsoStudenteActivityTest" time="17.961" />
+  <testcase name="creazioneCorsoControlloGrafica" classname="com.kasteca.activityTest.CreazioneCorsoFragmentTest" time="16.592" />
+  <testcase name="creazioneCorsoSuccess" classname="com.kasteca.activityTest.CreazioneCorsoFragmentTest" time="20.039" />
+  <testcase name="creazioneCorsoCodiceUtilizzato" classname="com.kasteca.activityTest.CreazioneCorsoFragmentTest" time="20.003" />
+  <testcase name="creazioneCorsoNoName" classname="com.kasteca.activityTest.CreazioneCorsoFragmentTest" time="18.146" />
+  <testcase name="creazioneCorsoNoCodice" classname="com.kasteca.activityTest.CreazioneCorsoFragmentTest" time="18.184" />
+  <testcase name="creazioneCorsoNoDescrizione" classname="com.kasteca.activityTest.CreazioneCorsoFragmentTest" time="18.1" />
+  <testcase name="InfoRichiestaActivityTestRifiutaRichiesta" classname="com.kasteca.activityTest.InfoRichiestaStudenteActivityTest" time="20.25" />
+  <testcase name="InfoRichiestaActivityTestAccettaRichiesta" classname="com.kasteca.activityTest.InfoRichiestaStudenteActivityTest" time="20.296" />
+  <testcase name="InfoStudenteActivityInvioEmailTest" classname="com.kasteca.activityTest.InfoStudenteActivityInvioEmailTest" time="20.411" />
+  <testcase name="InfoStudenteActivityTest" classname="com.kasteca.activityTest.InfoStudenteActivityTest" time="17.937" />
+  <testcase name="ListaRichiesteStudentiActivityTestConStudenti" classname="com.kasteca.activityTest.ListaRichiesteStudentiActivityTestConStudenti" time="26.272" />
+  <testcase name="ListaRichiesteStudentiActivityTestSenzaStudenti" classname="com.kasteca.activityTest.ListaRichiesteStudentiActivityTestSenzaStudenti" time="20.018" />
+  <testcase name="ListaStudentiIscrittiActivityTestConStudenti" classname="com.kasteca.activityTest.ListaStudentiIscrittiActivityTestConStudenti" time="24.346" />
+  <testcase name="ListaStudentiIscrittiActivityTestRimozioneStudenteConfermata" classname="com.kasteca.activityTest.ListaStudentiIscrittiActivityTestRimozioneStudente" time="19.236" />
+  <testcase name="ListaStudentiIscrittiActivityTestRimozioneStudenteNegata" classname="com.kasteca.activityTest.ListaStudentiIscrittiActivityTestRimozioneStudente" time="19.15" />
+  <testcase name="ListaStudentiIscrittiActivityTestSenzaStudenti" classname="com.kasteca.activityTest.ListaStudentiIscrittiActivityTestSenzaStudenti" time="9.767" />
+  <testcase name="controlloLayoutTest" classname="com.kasteca.activityTest.LogDocenteActivityTest" time="13.806" />
+  <testcase name="aggiornamentoRecycleViewTest" classname="com.kasteca.activityTest.LogDocenteActivityTest" time="27.825" />
+  <testcase name="controlloLayoutTest" classname="com.kasteca.activityTest.LogStudenteActivityTest" time="8.948" />
+  <testcase name="aggiornamentoRecycleViewTest" classname="com.kasteca.activityTest.LogStudenteActivityTest" time="35.021" />
+  <testcase name="C_mainActivityLoginFailTest" classname="com.kasteca.activityTest.MainActivityTest" time="2.706" />
+  <testcase name="A_mainActivityCorrectLoginStudente" classname="com.kasteca.activityTest.MainActivityTest" time="4.637" />
+  <testcase name="B_mainActivityCorrectLoginDocenteTest" classname="com.kasteca.activityTest.MainActivityTest" time="5.282" />
+  <testcase name="test_upload" classname="com.kasteca.activityTest.NewPostActivityTestWithUpload" time="17.254" />
+  <testcase name="test_uploadWithPdf" classname="com.kasteca.activityTest.NewPostActivityTestWithUpload" time="22.39" />
+  <testcase name="test_isSpinnerCorrect" classname="com.kasteca.activityTest.NewPostActivityTestWithUpload" time="16.864" />
+  <testcase name="test_isActivityOnView" classname="com.kasteca.activityTest.NewPostActivityTestWithoutUpload" time="1.647" />
+  <testcase name="test_isUploadDenied_WithEmptyText" classname="com.kasteca.activityTest.NewPostActivityTestWithoutUpload" time="2.982" />
+  <testcase name="test_validateFileIntent" classname="com.kasteca.activityTest.NewPostActivityTestWithoutUpload" time="1.876" />
+  <testcase name="creazioneModificaEliminazioneCommentoStudente" classname="com.kasteca.activityTest.PostActivityCommentoStudenteTest" time="28.956" />
+  <testcase name="creazioneModificaEliminazioneCommentoDocente" classname="com.kasteca.activityTest.PostActivityRispostaCommentoDocenteTest" time="28.358" />
+  <testcase name="controllInteface" classname="com.kasteca.activityTest.PostActivityRispostaCommentoDocenteTest" time="16.063" />
+  <testcase name="creazioneModificaEliminazioneRispostaDocente" classname="com.kasteca.activityTest.PostActivityRispostaCommentoDocenteTest" time="28.401" />
+  <testcase name="creazioneModificaEliminazioneRisposta" classname="com.kasteca.activityTest.PostActivityRispostaCommentoStudenteTest" time="30.783" />
+  <testcase name="controllInteface" classname="com.kasteca.activityTest.PostActivityRispostaCommentoStudenteTest" time="18.809" />
+  <testcase name="fallimentoRegistrazioneDocenteTestNoPassword" classname="com.kasteca.activityTest.RegistrazioneActivityDocenteTest" time="5.673" />
+  <testcase name="fallimentoRegistrazioneDocenteTestNoName" classname="com.kasteca.activityTest.RegistrazioneActivityDocenteTest" time="5.568" />
+  <testcase name="fallimentoRegistrazioneDocenteTestNoEmail" classname="com.kasteca.activityTest.RegistrazioneActivityDocenteTest" time="6.9" />
+  <testcase name="fallimentoRegistrazioneDocenteTestWrongEmail" classname="com.kasteca.activityTest.RegistrazioneActivityDocenteTest" time="6.617" />
+  <testcase name="fallimentoRegistrazioneDocenteTestNoSurname" classname="com.kasteca.activityTest.RegistrazioneActivityDocenteTest" time="5.378" />
+  <testcase name="registrazioneDocenteTest" classname="com.kasteca.activityTest.RegistrazioneActivityDocenteTest" time="5.722" />
+  <testcase name="fallimentoRegistrazioneStudenteTestNoSurname" classname="com.kasteca.activityTest.RegistrazioneActivityStudenteTest" time="7.475" />
+  <testcase name="fallimentoRegistrazioneStudenteTestNoPassword" classname="com.kasteca.activityTest.RegistrazioneActivityStudenteTest" time="7.981" />
+  <testcase name="registrazioneStudenteTest" classname="com.kasteca.activityTest.RegistrazioneActivityStudenteTest" time="8.26" />
+  <testcase name="fallimentoRegistrazioneStudenteTestNoMatricola" classname="com.kasteca.activityTest.RegistrazioneActivityStudenteTest" time="6.657" />
+  <testcase name="fallimentoRegistrazioneStudenteTestNoEmail" classname="com.kasteca.activityTest.RegistrazioneActivityStudenteTest" time="6.546" />
+  <testcase name="fallimentoRegistrazioneStudenteTestWrongEmail" classname="com.kasteca.activityTest.RegistrazioneActivityStudenteTest" time="6.773" />
+  <testcase name="fallimentoRegistrazioneStudenteTestNoName" classname="com.kasteca.activityTest.RegistrazioneActivityStudenteTest" time="7.708" />
+  <testcase name="RichiestaIscrizioneActivityTestCodiceCorsoEsatto" classname="com.kasteca.activityTest.RichiestaIscrizioneActivityTestCodiceCorsoEsatto" time="19.497" />
+  <testcase name="RichiestaIscrizioneActivityTestCodiceCorsoNonEsistente" classname="com.kasteca.activityTest.RichiestaIscrizioneActivityTestCodiceCorsoNonEsistente" time="4.652" />
+  <testcase name="RichiestaIscrizioneActivityTestRichiestaGiaInviata" classname="com.kasteca.activityTest.RichiestaIscrizioneActivityTestRichiestaGiaInviata" time="16.774" />
+  <testcase name="RichiesteIscrizioneTestErroreCodiceNull" classname="com.kasteca.serverTest.RichiesteIscrizioneTest" time="15.078" />
+  <testcase name="RichiesteIscrizioneTestOk" classname="com.kasteca.serverTest.RichiesteIscrizioneTest" time="15.091" />
+  <testcase name="RichiesteIscrizioneTestErroreIdStudenteSbagliato" classname="com.kasteca.serverTest.RichiesteIscrizioneTest" time="15.09" />
+  <testcase name="RichiesteIscrizioneTestErroreDataNull" classname="com.kasteca.serverTest.RichiesteIscrizioneTest" time="15.093" />
+  <testcase name="RichiesteIscrizioneTestErroreStatoSbagliato" classname="com.kasteca.serverTest.RichiesteIscrizioneTest" time="15.094" />
+  <testcase name="modificaDocenteSuccesso" classname="com.kasteca.serverTest.serverTestCommento.CommentiDocenteTestSuccess" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="letturaDocenteSuccesso" classname="com.kasteca.serverTest.serverTestCommento.CommentiDocenteTestSuccess" time="0.001">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneEliminazioneDocenteSuccesso" classname="com.kasteca.serverTest.serverTestCommento.CommentiDocenteTestSuccess" time="0.026">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneNomeCorsoOverSize" classname="com.kasteca.serverTest.serverTestCorso.CorsoDocenteTestFail" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneYearOverSize" classname="com.kasteca.serverTest.serverTestCorso.CorsoDocenteTestFail" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="deliteDocenteNonProprietario" classname="com.kasteca.serverTest.serverTestCorso.CorsoDocenteTestFail" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneCodiceOverSize" classname="com.kasteca.serverTest.serverTestCorso.CorsoDocenteTestFail" time="0.001">
+    <skipped />
+  </testcase>
+  <testcase name="updateDocenteNonProprietario" classname="com.kasteca.serverTest.serverTestCorso.CorsoDocenteTestFail" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneDescrizioneOverSize" classname="com.kasteca.serverTest.serverTestCorso.CorsoDocenteTestFail" time="0.026">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneCodiceLenghtZero" classname="com.kasteca.serverTest.serverTestCorso.CorsoDocenteTestFail" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneEliminazioneSuccess" classname="com.kasteca.serverTest.serverTestCorso.CorsoDocenteTestSuccess" time="4.138" />
+  <testcase name="updateSuccess" classname="com.kasteca.serverTest.serverTestCorso.CorsoDocenteTestSuccess" time="4.142" />
+  <testcase name="readSuccess" classname="com.kasteca.serverTest.serverTestCorso.CorsoDocenteTestSuccess" time="4.138" />
+  <testcase name="updateStudenteNonConsentito" classname="com.kasteca.serverTest.serverTestCorso.CorsoStudenteFailFail" time="0.028">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneNotDocente" classname="com.kasteca.serverTest.serverTestCorso.CorsoStudenteFailFail" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="deliteStudente" classname="com.kasteca.serverTest.serverTestCorso.CorsoStudenteFailFail" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="readSuccess" classname="com.kasteca.serverTest.serverTestCorso.CorsoStudenteTestSuccess" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneTestoOverSize" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestFallimento" time="0.001">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneProprietarioNull" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestFallimento" time="0.001">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneCommentoNull" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestFallimento" time="0.026">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneDataNull" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestFallimento" time="0.001">
+    <skipped />
+  </testcase>
+  <testcase name="modificaTestoOverSize" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneCommentoNotExist" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="eliminazioneProprietazioDiverso" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="modificaNonDalProprietario" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneTestoNull" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="modificaTestoNull" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="modificaDocenteSuccesso" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestSuccess" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="letturaDocenteSuccesso" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestSuccess" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneEliminazioneDocenteSuccesso" classname="com.kasteca.serverTest.serverTestRisposta.RisposteDocenteTestSuccess" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="letturaStudente" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudentTestSuccess" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="modificaStudente" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudentTestSuccess" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneEliminazioneStudenteSuccesso" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudentTestSuccess" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneTestoOverSize" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneProprietarioNull" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneCommentoNull" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneDataNull" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="modificaTestoOverSize" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneCommentoNotExist" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="eliminazioneProprietazioDiverso" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="modificaNonDalProprietario" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudenteTestFallimento" time="0.031">
+    <skipped />
+  </testcase>
+  <testcase name="creazioneTestoNull" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+  <testcase name="modificaTestoNull" classname="com.kasteca.serverTest.serverTestRisposta.RisposteStudenteTestFallimento" time="0.0">
+    <skipped />
+  </testcase>
+</testsuite>

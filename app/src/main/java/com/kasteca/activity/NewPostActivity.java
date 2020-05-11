@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.OpenableColumns;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -202,6 +203,12 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
 
     // Metodo chiamato per aggiungere il nuovo post al Database remoto
     public void uploadPostToDatabase(){
+        testo_post_text.setEnabled(false);
+        link_text.setEnabled(false);
+        tags_spinner.setEnabled(false);
+        findViewById(R.id.pdfButton).setEnabled(false);
+        findViewById(R.id.uploadButton).setEnabled(false);
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference postsRef = db.collection("Post");
 
@@ -221,12 +228,24 @@ public class NewPostActivity extends AppCompatActivity implements AdapterView.On
                     public void onSuccess(DocumentReference documentReference) {
                         addPostToCorso(documentReference.getId());
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.upload_successo), Toast.LENGTH_LONG).show();
-                        finish();
+
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        }, 3500);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        testo_post_text.setEnabled(true);
+                        link_text.setEnabled(true);
+                        tags_spinner.setEnabled(true);
+                        findViewById(R.id.pdfButton).setEnabled(true);
+                        findViewById(R.id.uploadButton).setEnabled(true);
                         showAlert(getResources().getString(R.string.upload_post_error));
                     }
                 });

@@ -14,6 +14,8 @@ import com.kasteca.R;
 import com.kasteca.activity.NewPostActivity;
 
 import org.hamcrest.Matcher;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,8 +24,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
 import static android.app.Activity.RESULT_OK;
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -45,8 +49,17 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class NewPostActivityTestWithoutUpload {
     @Rule
-    public IntentsTestRule<NewPostActivity> intentsTestRule = new IntentsTestRule<>(NewPostActivity.class);
+    public ActivityTestRule<NewPostActivity> activityTestRule = new ActivityTestRule<>(NewPostActivity.class);
 
+    @Before
+    public void setUp(){
+        Intents.init();
+    }
+
+    @After
+    public void tearDown(){
+        Intents.release();
+    }
 
     // Verifica che Activity visibile, con tutti gli elementi grafici previsti
     @Test
