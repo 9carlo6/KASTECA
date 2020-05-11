@@ -70,7 +70,7 @@ public class RichiestaIscrizioneActivityTestCodiceCorsoEsatto {
     private String id_docente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
 
     @Rule
-    public ActivityTestRule<RichiestaIscrizioneActivity> richiestaIscrizioneActivityActivityTestRule = new ActivityTestRule<>(RichiestaIscrizioneActivity.class, false, false);
+    public ActivityTestRule<RichiestaIscrizioneActivity> richiestaIscrizioneActivityActivityTestRules = new ActivityTestRule<>(RichiestaIscrizioneActivity.class, false, false);
 
     @Before()
     public void singIn() throws InterruptedException {
@@ -156,12 +156,14 @@ public class RichiestaIscrizioneActivityTestCodiceCorsoEsatto {
         });
 
         // thread non va bene!!! Occorre utilizzare l'interfaccia IdlingResource
-        Thread.sleep(3000);
+        Thread.sleep(5000);
 
     }
 
     @After()
     public void logOut() throws InterruptedException {
+
+        Thread.sleep(1000);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -268,7 +270,7 @@ public class RichiestaIscrizioneActivityTestCodiceCorsoEsatto {
         Intent i = new Intent();
         i.putExtra("id_studente", id_studente);
 
-        richiestaIscrizioneActivityActivityTestRule.launchActivity(i);
+        richiestaIscrizioneActivityActivityTestRules.launchActivity(i);
 
         Thread.sleep(1000);
 
