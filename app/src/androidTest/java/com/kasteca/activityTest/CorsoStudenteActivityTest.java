@@ -33,6 +33,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
@@ -345,10 +346,31 @@ public class CorsoStudenteActivityTest {
     // Verifica che venga mostrato l'alert dialog di conferma cancellazione
     // quando si selezione l'elemento Abbandona Corso nella Navigation Bar
     @Test
-    public void test_isAllertDialogConfermaVisible_onSelectItemInNavigationBar(){
+    public void test_isAllertDialogConfermaVisible_onSelectItemInNavigationBar_responseNo(){
         onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
         onView(withText(R.string.menu_cancellazione_dal_corso)).perform(click());
         onView(withText(R.string.Dialog_titolo_conferma_cancellazione)).check(matches(isDisplayed()));
+        onView(withText(R.string.Dialog_button_no_conferma_cancellazione)).perform(click());
+        onView(withId(R.id.corso_studente_drawer_layout)).check(matches(isDisplayed()));
+    }
+
+    // Verifica che venga mostrato l'alert dialog di conferma cancellazione
+    // quando si selezione l'elemento Abbandona Corso nella Navigation Bar
+    @Test
+    public void test_isAllertDialogConfermaVisible_onSelectItemInNavigationBar_responseSi() throws InterruptedException {
+        onView(withId(R.id.corso_studente_drawer_layout)).perform(DrawerActions.open());
+        onView(withText(R.string.menu_cancellazione_dal_corso)).perform(click());
+        onView(withText(R.string.Dialog_titolo_conferma_cancellazione)).check(matches(isDisplayed()));
+        onView(withText(R.string.Dialog_button_si_conferma_cancellazione)).perform(click());
+
+        Thread.sleep(2000);
+
+        try {
+            onView(withText(R.string.Dialog_titolo_corretta_cancellazione)).check(matches(isDisplayed()));
+        }catch(NoMatchingViewException e){
+            onView(withText(R.string.Dialog_titolo_incorretta_cancellazione)).check(matches(isDisplayed()));
+        }
+        onView(withText(R.string.Dialog_button_ok_cancellazione)).perform(click());
     }
 
     // Verifica che venga mostrata la MainActivity
