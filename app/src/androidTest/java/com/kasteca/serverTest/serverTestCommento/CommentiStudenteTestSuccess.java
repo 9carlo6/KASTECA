@@ -30,14 +30,14 @@ import androidx.annotation.NonNull;
 import static junit.framework.TestCase.assertEquals;
 
 @RunWith(JUnit4.class)
-public class CommentiDocenteTestSuccess {
+public class CommentiStudenteTestSuccess {
     private final static String TAG="Testing-Commenti-Backend";
 
 
-    private String mailDoc = "docenteProva@unisannio.it";
-    private String pwdDoc = "passwordProva";
+    private String mailStud = "studenteprova@studenti.unisannio.it";
+    private String pwdStud= "passwordProva";
 
-    private String idDocente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
+    private String idStudente = "SotSWWJIZHNALPZ32EAARRed9RG2";
 
     private String idPost = "Jw37QTjNbSf4MTbEvHzi";
     private String idCommentoDaLeggere = "FWoOCqujjKsffuFHJ9ql";
@@ -73,7 +73,7 @@ public class CommentiDocenteTestSuccess {
         newCommento.put("testo", "test");
         newCommento.put("data", new Date());
         newCommento.put("post", idPost);
-        newCommento.put("proprietarioCommento", idDocente);
+        newCommento.put("proprietarioCommento", idStudente);
         newCommento.put("lista_risposte", new ArrayList<String>());
 
         risposteReference.add(newCommento)
@@ -108,7 +108,7 @@ public class CommentiDocenteTestSuccess {
 
 
     @Test
-    @Ignore("This test will be ignored")
+    //@Ignore("This test will be ignored")
     public void letturaDocenteSuccesso() {
         //Setto il risultato a null
         result= null;
@@ -120,14 +120,7 @@ public class CommentiDocenteTestSuccess {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(((String) documentSnapshot.getData().get("testo")).equals("prova") &&
-                                ((String) documentSnapshot.getData().get("proprietarioCommento")).equals(idDocente) &&
-                                ((String) documentSnapshot.getData().get("post")).equals(idPost)) {
                             result = "success";
-                        }
-                        else{
-                            result = "false";
-                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -175,7 +168,7 @@ public class CommentiDocenteTestSuccess {
             FirebaseAuth mAuth = FirebaseAuth.getInstance(); // crea un istanza di FirebaseAuth (serve per l'autenticazione)
             mAuth.signOut();
 
-            mAuth.signInWithEmailAndPassword(mailDoc, pwdDoc).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            mAuth.signInWithEmailAndPassword(mailStud, pwdStud).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                 @Override
                 public void onSuccess(AuthResult authResult) {
                     preparazione = "ok";
@@ -204,5 +197,7 @@ public class CommentiDocenteTestSuccess {
                 preparazione = "notLogged";      //Riporto preparazione nello stato iniziale potrebbe essere riutilizzata.
 
         }
+
     }
+
 }

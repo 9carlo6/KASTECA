@@ -1,12 +1,9 @@
-package com.kasteca.serverTest.serverTestCorso;
+package com.kasteca.serverTest.serverTestPost;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -26,20 +23,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+
 import static junit.framework.TestCase.assertEquals;
 
-
 @RunWith(JUnit4.class)
-public class CorsoDocenteTestSuccess {
-
-    private final static String TAG="Testing-Corso-Success";
+public class PostDocenteTestSuccess {
+    private final static String TAG="Testing-Post-Success";
 
     private String mailDoc = "docenteProva@unisannio.it";
     private String pwdDoc = "passwordProva";
 
-    private String idDocente = "xXqhMcCwc3R5RibdcLtTOuoMVgm1";
-
-    private String idCorsoDaLeggere = "G193crk8g3jzzAm9Nfiq";
+    private String idCorso = "G193crk8g3jzzAm9Nfiq";
+    private String idPostDaLeggere = "Jw37QTjNbSf4MTbEvHzi";
 
 
 
@@ -57,30 +53,26 @@ public class CorsoDocenteTestSuccess {
     @Ignore("This test will be ignored")
     public void creazioneEliminazioneSuccess() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference corsiReference = db.collection("Corsi");
+        CollectionReference postReference = db.collection("Post");
 
         Map<String,Object> documentSend= new HashMap<>();
-        documentSend.put("nome_corso","test");
-        documentSend.put("codice","test");
-        documentSend.put("descrizione","test");
-        documentSend.put("docente",idDocente);
-        documentSend.put("lista_post", Arrays.asList());
-        documentSend.put("lista_studenti",Arrays.asList());
+        documentSend.put("testo","test");
+        documentSend.put("tag","esercizio");
+        documentSend.put("link",null);
+        documentSend.put("pdf",null);
+        documentSend.put("corso",idCorso);
+        documentSend.put("lista_commenti", Arrays.asList());
+        documentSend.put("data", new Date());
 
-        Date date= new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        documentSend.put("anno_accademico",calendar.get(Calendar.YEAR)+"/"+(calendar.get(Calendar.YEAR)+1));
-
-        corsiReference.add(documentSend).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        postReference.add(documentSend).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(TAG, "DocumentSnapshot successfully written!");
 
                 //cancelliamo il corso
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                CollectionReference corsiReference = db.collection("Corsi");
-                corsiReference.document(documentReference.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                CollectionReference postReference = db.collection("Post");
+                postReference.document(documentReference.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         result="success";
@@ -110,8 +102,8 @@ public class CorsoDocenteTestSuccess {
     @Ignore("This test will be ignored")
     public void readSuccess() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference corsiReference = db.collection("Corsi");
-        corsiReference.document(idCorsoDaLeggere).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        CollectionReference postReference = db.collection("Post");
+        postReference.document(idPostDaLeggere).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 result="success";
@@ -141,8 +133,8 @@ public class CorsoDocenteTestSuccess {
     @Ignore("This test will be ignored")
     public void updateSuccess() throws InterruptedException{
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference corsiReference = db.collection("Corsi");
-        corsiReference.document(idCorsoDaLeggere).update("descrizione","testModificato").addOnSuccessListener(new OnSuccessListener<Void>() {
+        CollectionReference postReference = db.collection("Post");
+        postReference.document(idPostDaLeggere).update("testo","testModificato").addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 result="success";
@@ -203,5 +195,4 @@ public class CorsoDocenteTestSuccess {
 
         }
     }
-
 }
